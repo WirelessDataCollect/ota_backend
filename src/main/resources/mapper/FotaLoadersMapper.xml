@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruili.fota.dao.mapper.FotaLoadersMapper">
+  <resultMap id="BaseResultMap" type="com.ruili.fota.dao.po.FotaLoaders">
+    <result column="gid" jdbcType="INTEGER" property="gid" />
+    <result column="imei" jdbcType="VARCHAR" property="imei" />
+    <result column="imsi" jdbcType="VARCHAR" property="imsi" />
+    <result column="csq" jdbcType="INTEGER" property="csq" />
+    <result column="load_status" jdbcType="INTEGER" property="loadStatus" />
+    <result column="online_status" jdbcType="INTEGER" property="onlineStatus" />
+    <result column="gmtcreate" jdbcType="TIMESTAMP" property="gmtcreate" />
+    <result column="gmtupdate" jdbcType="TIMESTAMP" property="gmtupdate" />
+    <result column="gmtmodified" jdbcType="TIMESTAMP" property="gmtmodified" />
+  </resultMap>
+  <insert id="insert" parameterType="com.ruili.fota.dao.po.FotaLoaders">
+    insert into fota_loaders (gid, imei, imsi, 
+      csq, load_status, online_status, 
+      gmtcreate, gmtupdate, gmtmodified
+      )
+    values (#{gid,jdbcType=INTEGER}, #{imei,jdbcType=VARCHAR}, #{imsi,jdbcType=VARCHAR}, 
+      #{csq,jdbcType=INTEGER}, #{loadStatus,jdbcType=INTEGER}, #{onlineStatus,jdbcType=INTEGER}, 
+      #{gmtcreate,jdbcType=TIMESTAMP}, #{gmtupdate,jdbcType=TIMESTAMP}, #{gmtmodified,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ruili.fota.dao.po.FotaLoaders">
+    insert into fota_loaders
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="gid != null">
+        gid,
+      </if>
+      <if test="imei != null">
+        imei,
+      </if>
+      <if test="imsi != null">
+        imsi,
+      </if>
+      <if test="csq != null">
+        csq,
+      </if>
+      <if test="loadStatus != null">
+        load_status,
+      </if>
+      <if test="onlineStatus != null">
+        online_status,
+      </if>
+      <if test="gmtcreate != null">
+        gmtcreate,
+      </if>
+      <if test="gmtupdate != null">
+        gmtupdate,
+      </if>
+      <if test="gmtmodified != null">
+        gmtmodified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="gid != null">
+        #{gid,jdbcType=INTEGER},
+      </if>
+      <if test="imei != null">
+        #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="imsi != null">
+        #{imsi,jdbcType=VARCHAR},
+      </if>
+      <if test="csq != null">
+        #{csq,jdbcType=INTEGER},
+      </if>
+      <if test="loadStatus != null">
+        #{loadStatus,jdbcType=INTEGER},
+      </if>
+      <if test="onlineStatus != null">
+        #{onlineStatus,jdbcType=INTEGER},
+      </if>
+      <if test="gmtcreate != null">
+        #{gmtcreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtupdate != null">
+        #{gmtupdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtmodified != null">
+        #{gmtmodified,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruili.fota.dao.mapper.FotaImagesMapper">
+  <resultMap id="BaseResultMap" type="com.ruili.fota.dao.po.FotaImages">
+    <result column="gid" jdbcType="INTEGER" property="gid" />
+    <result column="firmid" jdbcType="VARCHAR" property="firmid" />
+    <result column="md5" jdbcType="VARCHAR" property="md5" />
+    <result column="uploader" jdbcType="VARCHAR" property="uploader" />
+    <result column="uploadertel" jdbcType="VARCHAR" property="uploadertel" />
+    <result column="firmversion" jdbcType="VARCHAR" property="firmversion" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="gmtcreate" jdbcType="TIMESTAMP" property="gmtcreate" />
+  </resultMap>
+
+</mapper>

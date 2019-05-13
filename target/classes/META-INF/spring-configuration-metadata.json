@@ -1,0 +1,30 @@
+{
+  "groups": [
+    {
+      "name": "netty",
+      "type": "com.ruili.fota.netty.InitNetty",
+      "sourceType": "com.ruili.fota.netty.InitNetty"
+    }
+  ],
+  "properties": [
+    {
+      "name": "netty.backlog",
+      "type": "java.lang.Integer",
+      "sourceType": "com.ruili.fota.netty.InitNetty",
+      "defaultValue": 0
+    },
+    {
+      "name": "netty.nodelay",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.ruili.fota.netty.InitNetty",
+      "defaultValue": false
+    },
+    {
+      "name": "netty.port",
+      "type": "java.lang.Integer",
+      "sourceType": "com.ruili.fota.netty.InitNetty",
+      "defaultValue": 0
+    }
+  ],
+  "hints": []
+}
