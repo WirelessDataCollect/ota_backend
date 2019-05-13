@@ -2,9 +2,39 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruili.fota.dao.mapper.FotaUsersMapper">
   <resultMap id="BaseResultMap" type="com.ruili.fota.dao.po.FotaUsers">
-    <id column="gid" jdbcType="INTEGER" property="gid" />
-    <id column="username" jdbcType="VARCHAR" property="username" />
+    <result column="gid" jdbcType="INTEGER" property="gid" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="password" jdbcType="VARCHAR" property="password" />
   </resultMap>
-
+  <insert id="insert" parameterType="com.ruili.fota.dao.po.FotaUsers">
+    insert into fota_users (gid, username, password
+      )
+    values (#{gid,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ruili.fota.dao.po.FotaUsers">
+    insert into fota_users
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="gid != null">
+        gid,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="gid != null">
+        #{gid,jdbcType=INTEGER},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
 </mapper>

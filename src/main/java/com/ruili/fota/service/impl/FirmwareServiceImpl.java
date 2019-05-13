@@ -1,7 +1,6 @@
 package com.ruili.fota.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.ruili.fota.common.utils.Md5Tools;
 import com.ruili.fota.common.utils.UUIDTools;
@@ -15,8 +14,6 @@ import com.ruili.fota.dao.entity.FotaProcessEntity;
 import com.ruili.fota.dao.mapper.FotaImagesMapper;
 import com.ruili.fota.dao.mapper.FotaLoadHistoryMapper;
 import com.ruili.fota.dao.mapper.FotaLoadersMapper;
-import com.ruili.fota.dao.po.FotaImages;
-import com.ruili.fota.dao.po.FotaLoadHistory;
 import com.ruili.fota.netty.FotaProcessMap;
 import com.ruili.fota.netty.NettyChannelMap;
 import com.ruili.fota.netty.pk.FirmCheckPK;
@@ -134,8 +131,11 @@ public class FirmwareServiceImpl implements FirmwareService {
             LoadProcessBO processBO = new LoadProcessBO(entity);
             return processBO;
         }else {
-
-            return entity;
+            Example example = new Example(FotaLoadHistory.class);
+            Example.Criteria criteria = example.createCriteria();
+            criteria.andEqualTo("requestId",requestId);
+            FotaLoadHistory history = fotaLoadHistoryMapper.selectOneByExample(example);
+            return history.;
         }
 
     }

@@ -5,7 +5,6 @@ import com.ruili.fota.constant.LoadStatusEnum;
 import com.ruili.fota.constant.OnlineStatusEnum;
 import com.ruili.fota.netty.pk.RegisterPK;
 import com.ruili.fota.dao.mapper.FotaLoadersMapper;
-import com.ruili.fota.dao.po.FotaLoaders;
 import com.ruili.fota.service.LoadDeviceManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

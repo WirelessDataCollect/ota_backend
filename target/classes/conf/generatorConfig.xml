@@ -15,7 +15,7 @@
         </commentGenerator>
 
         <!--数据库链接URL，用户名、密码 -->
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/fota"
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://47.111.9.209:3306/fota"
                         userId="root"
                         password="12345678">
         </jdbcConnection>
@@ -47,12 +47,12 @@
         <!-- 要生成的表 tableName是数据库中的表名或视图名 domainObjectName是实体类名-->
 
 
-<!--        <table tableName="fota_images" enableCountByExample="false" enableUpdateByExample="false"-->
-<!--               enableDeleteByExample="false"-->
-<!--               enableSelectByExample="false" selectByExampleQueryId="false">-->
-<!--            <property name="useActualColumnNames" value="false"/>-->
-<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
-<!--        </table>-->
+        <table tableName="fota_images" enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false">
+            <property name="useActualColumnNames" value="false"/>
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
 
         <table tableName="fota_loaders" enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false"
@@ -61,18 +61,18 @@
             <generatedKey column="id" sqlStatement="JDBC"/>
         </table>
 
-<!--        <table tableName="fota_users" enableCountByExample="false" enableUpdateByExample="false"-->
-<!--               enableDeleteByExample="false"-->
-<!--               enableSelectByExample="false" selectByExampleQueryId="false">-->
-<!--            <property name="useActualColumnNames" value="false"/>-->
-<!--            <generatedKey column="id" sqlStatement="JDBC"/>-->
-<!--        </table>-->
-<!--        <table tableName="fota_load_history" enableCountByExample="false" enableUpdateByExample="false"-->
-<!--               enableDeleteByExample="false"-->
-<!--               enableSelectByExample="false" selectByExampleQueryId="false">-->
-<!--            <property name="useActualColumnNames" value="false"/>-->
-<!--            <generatedKey column="gid" sqlStatement="JDBC"/>-->
-<!--        </table>-->
+        <table tableName="fota_users" enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false">
+            <property name="useActualColumnNames" value="false"/>
+            <generatedKey column="id" sqlStatement="JDBC"/>
+        </table>
+        <table tableName="fota_load_history" enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false">
+            <property name="useActualColumnNames" value="false"/>
+            <generatedKey column="gid" sqlStatement="JDBC"/>
+        </table>
 
     </context>
 </generatorConfiguration>

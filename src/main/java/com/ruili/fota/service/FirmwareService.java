@@ -1,13 +1,8 @@
 package com.ruili.fota.service;
 
-import com.ruili.fota.constant.LoadStatusEnum;
 import com.ruili.fota.dao.bo.ConfigBO;
 import com.ruili.fota.dao.bo.ConfigResPO;
 import com.ruili.fota.dao.bo.LoadProcessBO;
-import com.ruili.fota.netty.pk.ConfigPK;
-import com.ruili.fota.dao.entity.FotaProcessEntity;
-import com.ruili.fota.dao.po.FotaImages;
-import com.ruili.fota.dao.po.FotaLoadHistory;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;

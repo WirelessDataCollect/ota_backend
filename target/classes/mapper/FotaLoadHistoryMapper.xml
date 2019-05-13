@@ -2,15 +2,77 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruili.fota.dao.mapper.FotaLoadHistoryMapper">
   <resultMap id="BaseResultMap" type="com.ruili.fota.dao.po.FotaLoadHistory">
-    <id column="gid" jdbcType="INTEGER" property="gid" />
+    <result column="gid" jdbcType="INTEGER" property="gid" />
     <result column="imei" jdbcType="VARCHAR" property="imei" />
     <result column="firmware_id" jdbcType="VARCHAR" property="firmwareId" />
-    <result column="status" jdbcType="CHAR" property="status" />
+    <result column="load_status" jdbcType="INTEGER" property="loadStatus" />
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="gmrcreate" jdbcType="TIMESTAMP" property="gmrcreate" />
     <result column="gmtupdate" jdbcType="TIMESTAMP" property="gmtupdate" />
     <result column="gmtmodified" jdbcType="TIMESTAMP" property="gmtmodified" />
   </resultMap>
-
+  <insert id="insert" keyColumn="gid" keyProperty="gid" parameterType="com.ruili.fota.dao.po.FotaLoadHistory" useGeneratedKeys="true">
+    insert into fota_load_history (imei, firmware_id, load_status, 
+      content, username, gmrcreate, 
+      gmtupdate, gmtmodified)
+    values (#{imei,jdbcType=VARCHAR}, #{firmwareId,jdbcType=VARCHAR}, #{loadStatus,jdbcType=INTEGER}, 
+      #{content,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{gmrcreate,jdbcType=TIMESTAMP}, 
+      #{gmtupdate,jdbcType=TIMESTAMP}, #{gmtmodified,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="gid" keyProperty="gid" parameterType="com.ruili.fota.dao.po.FotaLoadHistory" useGeneratedKeys="true">
+    insert into fota_load_history
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="imei != null">
+        imei,
+      </if>
+      <if test="firmwareId != null">
+        firmware_id,
+      </if>
+      <if test="loadStatus != null">
+        load_status,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="gmrcreate != null">
+        gmrcreate,
+      </if>
+      <if test="gmtupdate != null">
+        gmtupdate,
+      </if>
+      <if test="gmtmodified != null">
+        gmtmodified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="imei != null">
+        #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="firmwareId != null">
+        #{firmwareId,jdbcType=VARCHAR},
+      </if>
+      <if test="loadStatus != null">
+        #{loadStatus,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="gmrcreate != null">
+        #{gmrcreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtupdate != null">
+        #{gmtupdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtmodified != null">
+        #{gmtmodified,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
 </mapper>
