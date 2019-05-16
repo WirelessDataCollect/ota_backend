@@ -14,6 +14,7 @@ public class FotaProcessEntity {
 
     private String imei;
     private String requestId;//记录本次请求的id
+    private String firmwareId;
     private int packNumber;
     private int totalPack;
     private LoadStatusEnum statusEnum;
@@ -21,9 +22,10 @@ public class FotaProcessEntity {
     private ConfigBO configBO;
 
 
-    public FotaProcessEntity(String imei, String requestId, int packNumber, int totalPack, LoadStatusEnum statusEnum, ByteBuf firmwareByteBuf, ConfigBO configBO) {
+    public FotaProcessEntity(String imei, String requestId, String firmwareId, int packNumber, int totalPack, LoadStatusEnum statusEnum, ByteBuf firmwareByteBuf, ConfigBO configBO) {
         this.imei = imei;
         this.requestId = requestId;
+        this.firmwareId = firmwareId;
         this.packNumber = packNumber;
         this.totalPack = totalPack;
         this.statusEnum = statusEnum;
@@ -48,6 +50,14 @@ public class FotaProcessEntity {
 
     public void setImei(String imei) {
         this.imei = imei;
+    }
+
+    public String getFirmwareId() {
+        return firmwareId;
+    }
+
+    public void setFirmwareId(String firmwareId) {
+        this.firmwareId = firmwareId;
     }
 
     public int getPackNumber() {
@@ -97,6 +107,8 @@ public class FotaProcessEntity {
                 .append(imei).append('\"');
         sb.append(",\"requestId\":\"")
                 .append(requestId).append('\"');
+        sb.append(",\"firmwareId\":\"")
+                .append(firmwareId).append('\"');
         sb.append(",\"packNumber\":")
                 .append(packNumber);
         sb.append(",\"totalPack\":")

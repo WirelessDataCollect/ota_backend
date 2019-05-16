@@ -5,7 +5,9 @@ import com.ruili.fota.constant.result.BaseResp;
 import com.ruili.fota.constant.result.ResultStatus;
 import com.ruili.fota.dao.bo.ConfigBO;
 import com.ruili.fota.dao.entity.FotaEntity;
+import com.ruili.fota.dao.po.FotaImages;
 import com.ruili.fota.service.FirmwareService;
+import com.ruili.fota.service.LoadHistoryService;
 import com.ruili.fota.service.MongoService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -31,6 +33,8 @@ public class FirmwareController {
     private MongoService mongoService;
     @Autowired
     private FirmwareService firmwareService;
+    @Autowired
+    private LoadHistoryService loadHistoryService;
 
     @ApiOperation(value = "固件 上传 上传信息", tags = {"固件管理"}, notes = "上传固件版本号、固件对应设备类型、上传人，备注，返回插入条数以及响应状态")
     @ApiImplicitParams({
@@ -104,7 +108,7 @@ public class FirmwareController {
     public BaseResp historyQuery(@RequestParam("imei") String imei,
                                  @RequestParam("beginTime") String beginTime,
                                  @RequestParam("endTime") String endTime) {
-        return new BaseResp(ResultStatus.SUCCESS, firmwareService.queryLoadHistory(imei, beginTime, endTime));
+        return new BaseResp(ResultStatus.SUCCESS, loadHistoryService.queryLoadHistory(imei, beginTime, endTime));
     }
 
 }

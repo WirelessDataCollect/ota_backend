@@ -1,5 +1,6 @@
 package com.ruili.fota.netty;
 
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.SocketChannel;
 
 import java.util.Map;
@@ -23,6 +24,18 @@ public class NettyChannelMap {
     public static String remove(SocketChannel socketChannel){
         for (Map.Entry entry:map.entrySet()){
             if (entry.getValue()==socketChannel){
+                String key = (String)entry.getKey();
+                map.remove(entry.getKey());
+                return key;
+            }
+        }
+        return null;
+    }
+
+    //移除一条通道数据
+    public static String remove(ChannelHandlerContext ctx){
+        for (Map.Entry entry:map.entrySet()){
+            if (entry.getValue()==ctx){
                 String key = (String)entry.getKey();
                 map.remove(entry.getKey());
                 return key;

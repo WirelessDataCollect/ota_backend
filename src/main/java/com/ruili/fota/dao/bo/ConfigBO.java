@@ -83,11 +83,11 @@ public class ConfigBO {
         this.firmwareId = firmwareId;
     }
 
-    public String getMesaure() {
+    public String getMeasure() {
         return measure;
     }
 
-    public void setMesaure(String measure) {
+    public void setMeasure(String measure) {
         this.measure = measure;
     }
 

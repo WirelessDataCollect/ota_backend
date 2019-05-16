@@ -26,8 +26,8 @@ public class FotaProcessMap {
         return map.get(imei);
     }
 
-    public static FotaProcessEntity initStateFotaProcessEntity(String imei,String requestId, int totalPack, ByteBuf byteBuf, ConfigBO configBO) {
-        FotaProcessEntity fotaProcessEntity = new FotaProcessEntity(imei, requestId, 0, totalPack, LoadStatusEnum.LOAD_ON_STATUS, byteBuf, configBO);
+    public static FotaProcessEntity initStateFotaProcessEntity(String imei,String requestId,String firmwareId, int totalPack, ByteBuf byteBuf, ConfigBO configBO) {
+        FotaProcessEntity fotaProcessEntity = new FotaProcessEntity(imei, requestId,firmwareId, 0, totalPack, LoadStatusEnum.LOAD_ON_STATUS, byteBuf, configBO);
         add(imei, fotaProcessEntity);
         return get(imei);
     }

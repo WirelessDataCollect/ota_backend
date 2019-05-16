@@ -9,7 +9,7 @@ public class ConfigPK {
     private String SendID;
     private String imei;
     private String cannum;
-    private String mesaure;
+    private String measure;
     private int packSize;
 
     public ConfigPK(String recID, String sendID, String imei, String cannum, String mesaure, int packSize) {
@@ -17,7 +17,7 @@ public class ConfigPK {
         SendID = sendID;
         this.imei = imei;
         this.cannum = cannum;
-        this.mesaure = mesaure;
+        this.measure = mesaure;
         this.packSize = packSize;
     }
 
@@ -61,11 +61,11 @@ public class ConfigPK {
     }
 
     public String getMesaure() {
-        return mesaure;
+        return measure;
     }
 
     public void setMesaure(String mesaure) {
-        this.mesaure = mesaure;
+        this.measure = mesaure;
     }
 
     public int getPackSize() {
@@ -78,14 +78,22 @@ public class ConfigPK {
 
     @Override
     public String toString() {
-        return "ConfigPK{" +
-                "type='" + type + '\'' +
-                ", RecID='" + RecID + '\'' +
-                ", SendID='" + SendID + '\'' +
-                ", imei='" + imei + '\'' +
-                ", cannum='" + cannum + '\'' +
-                ", mesaure='" + mesaure + '\'' +
-                ", packSize=" + packSize +
-                '}';
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"type\":\"")
+                .append(type).append('\"');
+        sb.append(",\"RecID\":\"")
+                .append(RecID).append('\"');
+        sb.append(",\"SendID\":\"")
+                .append(SendID).append('\"');
+        sb.append(",\"imei\":\"")
+                .append(imei).append('\"');
+        sb.append(",\"cannum\":\"")
+                .append(cannum).append('\"');
+        sb.append(",\"measure\":\"")
+                .append(measure).append('\"');
+        sb.append(",\"packSize\":")
+                .append(packSize);
+        sb.append('}');
+        return sb.toString();
     }
 }

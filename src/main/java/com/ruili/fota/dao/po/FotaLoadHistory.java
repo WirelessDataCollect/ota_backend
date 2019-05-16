@@ -1,5 +1,7 @@
 package com.ruili.fota.dao.po;
 
+import com.ruili.fota.dao.entity.FotaProcessEntity;
+
 import java.util.Date;
 
 public class FotaLoadHistory {
@@ -11,7 +13,7 @@ public class FotaLoadHistory {
 
     private String firmwareId;
 
-    private String loadStatus;
+    private String loadProcess;
 
     private String configBo;
 
@@ -20,6 +22,26 @@ public class FotaLoadHistory {
     private Date gmtupdate;
 
     private Date gmtmodified;
+
+    public FotaLoadHistory(Integer gid, String imei, String requestId, String firmwareId, String loadProcess, String configBo, Date gmrcreate, Date gmtupdate, Date gmtmodified) {
+        this.gid = gid;
+        this.imei = imei;
+        this.requestId = requestId;
+        this.firmwareId = firmwareId;
+        this.loadProcess = loadProcess;
+        this.configBo = configBo;
+        this.gmrcreate = gmrcreate;
+        this.gmtupdate = gmtupdate;
+        this.gmtmodified = gmtmodified;
+    }
+
+    public FotaLoadHistory(FotaProcessEntity entity) {
+        this.imei = entity.getImei();
+        this.requestId = entity.getRequestId();
+        this.firmwareId = entity.getFirmwareId();
+        this.loadProcess = entity.getStatusEnum().toString();
+        this.configBo = entity.getConfigBO().toString();
+    }
 
     public Integer getGid() {
         return gid;
@@ -53,12 +75,12 @@ public class FotaLoadHistory {
         this.firmwareId = firmwareId == null ? null : firmwareId.trim();
     }
 
-    public String getLoadStatus() {
-        return loadStatus;
+    public String getLoadProcess() {
+        return loadProcess;
     }
 
-    public void setLoadStatus(String loadStatus) {
-        this.loadStatus = loadStatus == null ? null : loadStatus.trim();
+    public void setLoadProcess(String loadProcess) {
+        this.loadProcess = loadProcess == null ? null : loadProcess.trim();
     }
 
     public String getConfigBo() {

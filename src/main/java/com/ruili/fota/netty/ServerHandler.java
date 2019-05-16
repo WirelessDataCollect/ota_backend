@@ -2,10 +2,10 @@ package com.ruili.fota.netty;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.ruili.fota.dao.entity.FotaProcessEntity;
 import com.ruili.fota.netty.pk.*;
 import com.ruili.fota.service.FirmwareService;
 import com.ruili.fota.service.LoadDeviceManageService;
+import com.ruili.fota.service.LoadHistoryService;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -34,6 +34,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     private LoadDeviceManageService deviceManageService;
     @Autowired
     private FirmwareService firmwareService;
+    @Autowired
+    private LoadHistoryService loadHistoryService;
 
     /**
      * 是一个生命周期函数内发生的回调函数，当出现消息读取时自动执行调用
@@ -68,14 +70,16 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             System.out.println("===设备请求包===");
             System.out.println(msg.toString());
             System.out.println("===============");
-            RequestPK requestPK = JSON.parseObject(msg.toString(),RequestPK.class);
-            firmwareService.downloadFirmware(requestPK.getImei(),requestPK.getPacknum());
+            RequestPK requestPK = JSON.parseObject(msg.toString(), RequestPK.class);
+            firmwareService.downloadFirmware(requestPK.getImei(), requestPK.getPacknum());
         }
         if (ifContains(msg.toString(), CommandType.UPDATE_OK)) {
             System.out.println("===设备升级完成===");
             System.out.println(msg.toString());
             System.out.println("=================");
-            UpdateokPK pk = JSON.parseObject(msg.toString(),UpdateokPK.class);
+            UpdateokPK pk = JSON.parseObject(msg.toString(), UpdateokPK.class);
+            //插入数据库一条记录
+            loadHistoryService.insertLoadHistoryByProcessEntity(pk.getImei());
             //移除Map通道数据
             FotaProcessMap.removeByImei(pk.getImei());
         }
@@ -83,11 +87,11 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             System.out.println("===设备升级报错===");
             System.out.println(msg.toString());
             System.out.println("=================");
-            UpdateErrorPK errorPK = JSON.parseObject(msg.toString(),UpdateErrorPK.class);
-
+            UpdateErrorPK errorPK = JSON.parseObject(msg.toString(), UpdateErrorPK.class);
+            //插入数据库一条记录
+            loadHistoryService.insertLoadHistoryByProcessEntity(errorPK.getImei());
             //删除设备更新的配置内存，从头开始
             FotaProcessMap.removeByImei(errorPK.getImei());
-
         }
     }
 
@@ -107,7 +111,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         logger.error("***" + ctx.channel().remoteAddress() + " is inactive***");
-        System.err.println("***" + ctx.channel().remoteAddress() + " is inactive***");
         String imei = NettyChannelMap.remove((SocketChannel) ctx.channel());
         if (imei != null) {
             //设备离线记录

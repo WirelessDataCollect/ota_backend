@@ -9,6 +9,8 @@ import com.ruili.fota.constant.MongoDBEnum;
 import com.ruili.fota.dao.bo.ConfigBO;
 import com.ruili.fota.dao.bo.ConfigResPO;
 import com.ruili.fota.dao.bo.LoadProcessBO;
+import com.ruili.fota.dao.po.FotaImages;
+import com.ruili.fota.dao.po.FotaLoadHistory;
 import com.ruili.fota.netty.pk.ConfigPK;
 import com.ruili.fota.dao.entity.FotaProcessEntity;
 import com.ruili.fota.dao.mapper.FotaImagesMapper;
@@ -85,8 +87,10 @@ public class FirmwareServiceImpl implements FirmwareService {
         //生成唯一的请求id
         String requestId = UUIDTools.getUUID32();
         resPO.setRequestId(requestId);
-        FotaProcessMap.initStateFotaProcessEntity(configBO.getImei(), requestId, totalPackNum, responseBuf, configBO);
-        ConfigPK configPK = new ConfigPK(configBO.getRecID(), configBO.getSendID(), configBO.getImei(), configBO.getCannum(), configBO.getMesaure(), totalPackNum);
+        //设备可能存在掉电后平台无法检测还存储在
+        FotaProcessMap.initStateFotaProcessEntity(configBO.getImei(), requestId, configBO.getFirmwareId(), totalPackNum, responseBuf, configBO);
+        System.out.println(configBO);
+        ConfigPK configPK = new ConfigPK(configBO.getRecID(), configBO.getSendID(), configBO.getImei(), configBO.getCannum(), configBO.getMeasure(), totalPackNum);
         try {
             //下发配置包给设备
             socketChannel.writeAndFlush(getWriteBuf(configPK, socketChannel));
@@ -104,7 +108,14 @@ public class FirmwareServiceImpl implements FirmwareService {
         FotaProcessEntity entity = FotaProcessMap.get(imei);
         SocketChannel socketChannel = NettyChannelMap.get(imei);
         //获取到对应的包
-        ByteBuf sliceByteBuf = entity.getFirmwareByteBuf().copy(packNum * eachBatch * packageSegmentation, eachBatch * packageSegmentation);
+        ByteBuf sliceByteBuf;
+        if (packNum != entity.getTotalPack()) {
+            //当前不是最后一个包
+            sliceByteBuf = entity.getFirmwareByteBuf().copy(packNum * eachBatch * packageSegmentation, eachBatch * packageSegmentation);
+        } else {
+            //当前是最后一个包
+            sliceByteBuf = entity.getFirmwareByteBuf().copy(packNum * eachBatch * packageSegmentation, entity.getFirmwareByteBuf().readableBytes() % (eachBatch * packageSegmentation));
+        }
         //在下发前计算MD5值
         FirmCheckPK checkPK = new FirmCheckPK(md5Tools.getMD5(sliceByteBuf.copy()), packNum);
         //下发固件信息
@@ -127,36 +138,20 @@ public class FirmwareServiceImpl implements FirmwareService {
         //直接返回数据库中设备的当前状态
         FotaProcessEntity entity = FotaProcessMap.get(imei);
         //如果设备的升级过程还在进行，则在Map中取出升级状态
-        if (entity!=null){
+        if (entity != null) {
             LoadProcessBO processBO = new LoadProcessBO(entity);
             return processBO;
-        }else {
+        } else {
             Example example = new Example(FotaLoadHistory.class);
             Example.Criteria criteria = example.createCriteria();
-            criteria.andEqualTo("requestId",requestId);
+            criteria.andEqualTo("requestId", requestId);
             FotaLoadHistory history = fotaLoadHistoryMapper.selectOneByExample(example);
-            return history.;
+            LoadProcessBO processBO = JSON.parseObject(history.getLoadProcess(), LoadProcessBO.class);
+            return processBO;
         }
 
     }
 
-
-    @Override
-    public List<FotaLoadHistory> queryLoadHistory(String imei, String beginTime, String endTime) {
-        Example queryLoadHistoryExample = new Example(FotaLoadHistory.class);
-        Example.Criteria criteria = queryLoadHistoryExample.createCriteria();
-        if (beginTime != null || beginTime != "") {
-            criteria.andGreaterThanOrEqualTo("gmtCreate", beginTime);
-        }
-        if (endTime != null || endTime != "") {
-            criteria.andLessThanOrEqualTo("gmtCreate", endTime);
-        }
-        if (imei != null || imei != "") {
-            criteria.andEqualTo("imei", imei);
-        }
-        List<FotaLoadHistory> fotaLoadHistoryList = fotaLoadHistoryMapper.selectByExample(queryLoadHistoryExample);
-        return fotaLoadHistoryList;
-    }
 
     public <T> ByteBuf getWriteBuf(T res, SocketChannel channel) {
         String resString = JSON.toJSONString(res);

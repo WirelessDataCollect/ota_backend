@@ -3,6 +3,7 @@ package com.ruili.fota.service.impl;
 import com.ruili.fota.common.utils.DateTools;
 import com.ruili.fota.constant.LoadStatusEnum;
 import com.ruili.fota.constant.OnlineStatusEnum;
+import com.ruili.fota.dao.po.FotaLoaders;
 import com.ruili.fota.netty.pk.RegisterPK;
 import com.ruili.fota.dao.mapper.FotaLoadersMapper;
 import com.ruili.fota.service.LoadDeviceManageService;
@@ -35,6 +36,7 @@ public class LoadDeviceManageServiceImpl implements LoadDeviceManageService {
             fotaLoader.setCsq(registerPK.getCsq());
             fotaLoader.setLoadStatus(LoadStatusEnum.LOAD_NO_STATUS.getCode());
             fotaLoader.setOnlineStatus(OnlineStatusEnum.ONLINE_STATUS.getCode());
+            theFotaLoader.setGmtcreate(DateTools.currentTime());
             fotaLoader.setGmtupdate(DateTools.currentTime());
             fotaLoader.setGmtmodified(DateTools.currentTime());
             return fotaLoadersMapper.insert(fotaLoader);

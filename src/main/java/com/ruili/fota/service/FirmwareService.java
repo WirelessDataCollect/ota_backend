@@ -3,6 +3,7 @@ package com.ruili.fota.service;
 import com.ruili.fota.dao.bo.ConfigBO;
 import com.ruili.fota.dao.bo.ConfigResPO;
 import com.ruili.fota.dao.bo.LoadProcessBO;
+import com.ruili.fota.dao.po.FotaImages;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -43,16 +44,6 @@ public interface FirmwareService {
      */
     public LoadProcessBO downloadFirmwareReport(String imei, String requestId);
 
-
-    /**
-     * 查询设备升级历史记录
-     *
-     * @param imei
-     * @param beginTime
-     * @param endTime
-     * @return
-     */
-    public List<FotaLoadHistory> queryLoadHistory(String imei, String beginTime, String endTime);
 
 
 }

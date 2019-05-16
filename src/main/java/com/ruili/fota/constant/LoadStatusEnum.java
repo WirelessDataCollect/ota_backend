@@ -53,4 +53,14 @@ public enum LoadStatusEnum {
         return code;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"status\":\"")
+                .append(status).append('\"');
+        sb.append(",\"code\":")
+                .append(code);
+        sb.append('}');
+        return sb.toString();
+    }
 }
