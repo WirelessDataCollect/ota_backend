@@ -10,12 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class Test {
 
     public static void main(String[] args) {
-//        FotaProcessEntity entity = FotaProcessMap.initStateFotaProcessEntity("1",56);
-//        System.out.println("初始化的结构体");
-//        System.out.println(entity);
-//        entity.setPackNumber(23);
-//        System.out.println("变更后的结构体");
-//        System.out.println(FotaProcessMap.get("1"));
-//        System.out.println(50/24);
+        String raw = "hahahah0d0a";
+        System.out.println(raw.replace("0d0a","0a"));
     }
 }

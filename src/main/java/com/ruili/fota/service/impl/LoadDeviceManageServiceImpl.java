@@ -10,6 +10,8 @@ import com.ruili.fota.service.LoadDeviceManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class LoadDeviceManageServiceImpl implements LoadDeviceManageService {
 
@@ -50,5 +52,10 @@ public class LoadDeviceManageServiceImpl implements LoadDeviceManageService {
         FotaLoaders theFotaLoader = fotaLoadersMapper.selectOne(fotaLoader);
         theFotaLoader.setOnlineStatus(OnlineStatusEnum.OFFINE_STATUS.getCode());
         return fotaLoadersMapper.updateByPrimaryKeySelective(theFotaLoader);
+    }
+
+    @Override
+    public List<FotaLoaders> queryDeviceList() {
+        return fotaLoadersMapper.selectAll();
     }
 }

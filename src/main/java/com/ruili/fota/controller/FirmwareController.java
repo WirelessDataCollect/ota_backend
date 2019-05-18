@@ -5,6 +5,7 @@ import com.ruili.fota.constant.result.BaseResp;
 import com.ruili.fota.constant.result.ResultStatus;
 import com.ruili.fota.dao.bo.ConfigBO;
 import com.ruili.fota.dao.entity.FotaEntity;
+import com.ruili.fota.dao.mapper.FotaImagesMapper;
 import com.ruili.fota.dao.po.FotaImages;
 import com.ruili.fota.service.FirmwareService;
 import com.ruili.fota.service.LoadHistoryService;
@@ -34,7 +35,15 @@ public class FirmwareController {
     @Autowired
     private FirmwareService firmwareService;
     @Autowired
-    private LoadHistoryService loadHistoryService;
+    private FotaImagesMapper fotaImagesMapper;
+
+    @ApiOperation(value = "固件 查询 固件列表", tags = {"固件管理"}, notes = "进入固件文件管理时，查询固件列表")
+    @ApiImplicitParams({
+    })
+    @PostMapping(value = "/query")
+    public BaseResp firmwareQuery() {
+        return new BaseResp(ResultStatus.SUCCESS, fotaImagesMapper.selectAll());
+    }
 
     @ApiOperation(value = "固件 上传 上传信息", tags = {"固件管理"}, notes = "上传固件版本号、固件对应设备类型、上传人，备注，返回插入条数以及响应状态")
     @ApiImplicitParams({
@@ -55,8 +64,7 @@ public class FirmwareController {
     })
     @PostMapping(value = "/upload")
     public BaseResp firmUpload(@RequestParam("file") MultipartFile file) throws IOException {
-        FotaEntity fotaEntity = new FotaEntity(null, file.getOriginalFilename(), file.getSize(), file.getContentType(), file.getInputStream());
-        String firmwareId = mongoService.insertFirmwareAndGetImgId(fotaEntity);
+        String firmwareId = mongoService.insertFirmwareAndGetImgId(file);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("firmwareId", firmwareId);
         return new BaseResp(ResultStatus.SUCCESS, "返回固件唯一id", jsonObject);
@@ -95,20 +103,7 @@ public class FirmwareController {
     @PostMapping(value = "/downloadreport")
     public BaseResp downloadFireware(@RequestParam("imei") String imei,
                                      @RequestParam("requestId") String requestId) {
-        return new BaseResp(ResultStatus.SUCCESS, firmwareService.downloadFirmwareReport(imei,requestId));
-    }
-
-    @ApiOperation(value = "固件 下载 历史查询", tags = {"固件烧录"}, notes = "查询设备固件升级历史")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "imei", value = "升级设备的imei", required = true),
-            @ApiImplicitParam(name = "beginTime", value = "查询开始时间", required = true),
-            @ApiImplicitParam(name = "endTime", value = "查询结束时间", required = true)
-    })
-    @PostMapping(value = "/historyquery")
-    public BaseResp historyQuery(@RequestParam("imei") String imei,
-                                 @RequestParam("beginTime") String beginTime,
-                                 @RequestParam("endTime") String endTime) {
-        return new BaseResp(ResultStatus.SUCCESS, loadHistoryService.queryLoadHistory(imei, beginTime, endTime));
+        return new BaseResp(ResultStatus.SUCCESS, firmwareService.downloadFirmwareReport(imei, requestId));
     }
 
 }

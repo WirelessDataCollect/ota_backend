@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin
 public class TestController {
-
     @ApiOperation(value = "健康测试", tags = {"健康测试"}, notes = "健康返回msg='healthy'，可以作为ping测试接口")
     @GetMapping(value = "/healthy")
     public BaseResp healthy() {

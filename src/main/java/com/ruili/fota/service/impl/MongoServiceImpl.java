@@ -4,6 +4,7 @@ import com.mongodb.DB;
 import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSInputFile;
+import com.ruili.fota.common.utils.ByteUtils;
 import com.ruili.fota.common.utils.UUIDTools;
 import com.ruili.fota.constant.MongoDBEnum;
 import com.ruili.fota.dao.entity.FotaEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -39,17 +41,34 @@ public class MongoServiceImpl implements MongoService {
     }
 
     /**
-     * 插入图片并获取到图片的id
+     * 插入图片并获取到图片的id，需要判断固件文件的换行编码格式，windows换行'\r\n'，0x0d0a会造成后面md5值计算出错，需要转化为unix的\r和0x0a
      *
-     * @param fotaEntity
+     * @param rawfile
      * @return
      */
     @Override
-    public String insertFirmwareAndGetImgId(FotaEntity fotaEntity) {
+    public String insertFirmwareAndGetImgId(MultipartFile rawfile) throws IOException {
+        //稍后填充inputStream
+        FotaEntity fotaEntity = new FotaEntity(null, rawfile.getOriginalFilename(), rawfile.getSize(), rawfile.getContentType(), null);
+        //判断上传文件的换行格式，windows换行
+        ByteUtils byteUtils = new ByteUtils();
+        byte[] fileContentBytes = rawfile.getBytes();
+        String fileContentString = byteUtils.bytes2hexString(fileContentBytes);
+        //windows格式的换行编码
+        if (fileContentString.contains("0d0a")) {
+            String formatFileContentString = fileContentString.replace("0d0a", "0a");
+            byte[] formatFileConentBytes = byteUtils.hexStringToByte(formatFileContentString);
+            InputStream formatInputStream = new ByteArrayInputStream(formatFileConentBytes);
+            fotaEntity.setInputStream(formatInputStream);
+        } else {
+            //非windows格式的编码
+            fotaEntity.setInputStream(rawfile.getInputStream());
+        }
+
         GridFS gridFS = new GridFS(getDB(), MongoDBEnum.GridFSBucket_FIRMWARE.getGridFSBucket());
         GridFSInputFile file = gridFS.createFile(fotaEntity.getInputStream());
         //使用uuid生成全局唯一的图片id
-        file.setChunkSize(file.getLength() > 1024 * 1024 ? 2048 * 1024 : 1024 * 1024);//设定固件的ChunkSize文件大小1024K
+//        file.setChunkSize(file.getLength() > 1024 * 1024 ? 2048 * 1024 : 1024 * 1024);//设定固件的ChunkSize文件大小1024K
         file.put("realFileName", fotaEntity.getFileRealName());
         file.put("fileSize", fotaEntity.getFileSize());
         file.put("fileType", fotaEntity.getFileType());
@@ -61,11 +80,11 @@ public class MongoServiceImpl implements MongoService {
         return fileName;
     }
 
-    public boolean deleteFirmwareByImgId(String firmwareId){
+    public boolean deleteFirmwareByImgId(String firmwareId) {
         GridFS gridFS = new GridFS(getDB(), MongoDBEnum.GridFSBucket_FIRMWARE.getGridFSBucket());
         gridFS.remove(firmwareId);
         return true;
-    };
+    }
 
     @Override
     public void deleteGridFS(String bucket, String fileName) {
