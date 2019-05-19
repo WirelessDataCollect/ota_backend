@@ -44,11 +44,11 @@ spring:
 mybatis:
   configuration:
     cache-enabled: false
-  type-aliases-package: com.ruili.fota.dao.entity
+  type-aliases-package: com.ruili.fota.meta.entity
   mapper-locations: classpath:mapper/*.xml
 
 mapper:
-  mappers: com.ruili.fota.dao.util.BaseMapper
+  mappers: com.ruili.fota.common.BaseMapper
   not-empty: false
   identity: MYSQL
 

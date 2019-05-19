@@ -5,19 +5,19 @@ package com.ruili.fota.netty.pk;
  */
 public class ConfigPK {
     private final String type = "config";
-    private String RecID;
-    private String SendID;
+    private int RecID;
+    private int SendID;
     private String imei;
-    private String cannum;
-    private String measure;
+    private int cannum;
+    private int measure;
     private int packSize;
 
-    public ConfigPK(String recID, String sendID, String imei, String cannum, String mesaure, int packSize) {
+    public ConfigPK(int recID, int sendID, String imei, int cannum, int measure, int packSize) {
         RecID = recID;
         SendID = sendID;
         this.imei = imei;
         this.cannum = cannum;
-        this.measure = mesaure;
+        this.measure = measure;
         this.packSize = packSize;
     }
 
@@ -28,19 +28,19 @@ public class ConfigPK {
         return type;
     }
 
-    public String getRecID() {
+    public int getRecID() {
         return RecID;
     }
 
-    public void setRecID(String recID) {
+    public void setRecID(int recID) {
         RecID = recID;
     }
 
-    public String getSendID() {
+    public int getSendID() {
         return SendID;
     }
 
-    public void setSendID(String sendID) {
+    public void setSendID(int sendID) {
         SendID = sendID;
     }
 
@@ -52,20 +52,20 @@ public class ConfigPK {
         this.imei = imei;
     }
 
-    public String getCannum() {
+    public int getCannum() {
         return cannum;
     }
 
-    public void setCannum(String cannum) {
+    public void setCannum(int cannum) {
         this.cannum = cannum;
     }
 
-    public String getMesaure() {
+    public int getMeasure() {
         return measure;
     }
 
-    public void setMesaure(String mesaure) {
-        this.measure = mesaure;
+    public void setMeasure(int measure) {
+        this.measure = measure;
     }
 
     public int getPackSize() {

@@ -114,4 +114,29 @@ public class FotaLoadHistory {
     public void setGmtmodified(Date gmtmodified) {
         this.gmtmodified = gmtmodified;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"gid\":")
+                .append(gid);
+        sb.append(",\"imei\":\"")
+                .append(imei).append('\"');
+        sb.append(",\"requestId\":\"")
+                .append(requestId).append('\"');
+        sb.append(",\"firmwareId\":\"")
+                .append(firmwareId).append('\"');
+        sb.append(",\"loadProcess\":\"")
+                .append(loadProcess).append('\"');
+        sb.append(",\"configBo\":\"")
+                .append(configBo).append('\"');
+        sb.append(",\"gmrcreate\":\"")
+                .append(gmrcreate).append('\"');
+        sb.append(",\"gmtupdate\":\"")
+                .append(gmtupdate).append('\"');
+        sb.append(",\"gmtmodified\":\"")
+                .append(gmtmodified).append('\"');
+        sb.append('}');
+        return sb.toString();
+    }
 }

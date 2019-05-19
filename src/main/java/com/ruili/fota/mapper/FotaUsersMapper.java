@@ -1,7 +1,7 @@
 package com.ruili.fota.mapper;
 
 import com.ruili.fota.meta.po.FotaUsers;
-import com.ruili.fota.meta.util.BaseMapper;
+import com.ruili.fota.common.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

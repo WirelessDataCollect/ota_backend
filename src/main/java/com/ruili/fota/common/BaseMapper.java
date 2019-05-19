@@ -1,4 +1,4 @@
-package com.ruili.fota.mapper;
+package com.ruili.fota.common;
 
 import tk.mybatis.mapper.common.Mapper;
 import tk.mybatis.mapper.common.MySqlMapper;

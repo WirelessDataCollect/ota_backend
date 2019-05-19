@@ -26,7 +26,7 @@
 
 
         <!-- 生成模型的包名和位置,这里配置将生成的实体类放在 com.terabits.account.entity 这个包下 -->
-        <javaModelGenerator targetPackage="com.ruili.fota.dao.po" targetProject="src/main/java">
+        <javaModelGenerator targetPackage="com.ruili.fota.meta.po" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
@@ -38,11 +38,11 @@
         </sqlMapGenerator>
 
         <!--生成DAO的包名和位置-->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.ruili.fota.dao.mapper"
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.ruili.fota.mapper"
                              targetProject="src/main/java">
             <!-- 在 targetPackage 的基础上，根据数据库的 schema 再生成一层 package，最终生成的类放在这个 package 下，默认为 false -->
             <property name="enableSubPackages" value="true"/>
-            <!--<property name="rootInterface" value="com.terabits.account.dao.BaseMapper"/>-->
+            <!--<property name="rootInterface" value="com.terabits.account.meta.BaseMapper"/>-->
         </javaClientGenerator>
         <!-- 要生成的表 tableName是数据库中的表名或视图名 domainObjectName是实体类名-->
 

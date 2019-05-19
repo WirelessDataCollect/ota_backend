@@ -82,4 +82,27 @@ public class FotaImages {
     public void setGmtupdate(Date gmtupdate) {
         this.gmtupdate = gmtupdate;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"gid\":")
+                .append(gid);
+        sb.append(",\"firmwareId\":\"")
+                .append(firmwareId).append('\"');
+        sb.append(",\"uploader\":\"")
+                .append(uploader).append('\"');
+        sb.append(",\"uploadertel\":\"")
+                .append(uploadertel).append('\"');
+        sb.append(",\"firmVersion\":\"")
+                .append(firmVersion).append('\"');
+        sb.append(",\"content\":\"")
+                .append(content).append('\"');
+        sb.append(",\"gmtcreate\":\"")
+                .append(gmtcreate).append('\"');
+        sb.append(",\"gmtupdate\":\"")
+                .append(gmtupdate).append('\"');
+        sb.append('}');
+        return sb.toString();
+    }
 }

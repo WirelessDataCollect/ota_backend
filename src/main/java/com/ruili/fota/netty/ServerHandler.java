@@ -73,6 +73,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             RequestPK requestPK = JSON.parseObject(msg.toString(), RequestPK.class);
             firmwareService.downloadFirmware(requestPK.getImei(), requestPK.getPacknum());
         }
+        //TODO 如果设备升级中途掉线，需要筛查Map中时间戳定期清除升级失败的设备
         if (ifContains(msg.toString(), CommandType.UPDATE_OK)) {
             System.out.println("===设备升级完成===");
             System.out.println(msg.toString());

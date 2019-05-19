@@ -131,9 +131,12 @@ public class FirmwareServiceImpl implements FirmwareService {
         //在下发前计算MD5值
         FirmCheckPK checkPK = new FirmCheckPK(md5Tools.getMD5(sliceByteBuf.copy()), packNum);
         //下发固件信息
+        int len = sliceByteBuf.copy().readableBytes();
         socketChannel.writeAndFlush(sliceByteBuf);
+        System.out.println("已下发设备固件数据：" + len + "字节");
         //下发固件校验包
         socketChannel.writeAndFlush(getWriteBuf(checkPK.toString(), socketChannel));
+        System.out.println("已下发md5校验包");
         entity.setPackNumber(packNum);
         //判断是否烧写完毕在设备上报烧写完成包后
     }

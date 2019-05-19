@@ -71,12 +71,18 @@ public class FotaEntity {
 
     @Override
     public String toString() {
-        return "FotaEntity{" +
-                "fileName='" + fileName + '\'' +
-                ", fileRealName='" + fileRealName + '\'' +
-                ", fileSize=" + fileSize +
-                ", fileType='" + fileType + '\'' +
-                ", inputStream=" + inputStream +
-                '}';
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"fileName\":\"")
+                .append(fileName).append('\"');
+        sb.append(",\"fileRealName\":\"")
+                .append(fileRealName).append('\"');
+        sb.append(",\"fileSize\":")
+                .append(fileSize);
+        sb.append(",\"fileType\":\"")
+                .append(fileType).append('\"');
+        sb.append(",\"inputStream\":")
+                .append(inputStream);
+        sb.append('}');
+        return sb.toString();
     }
 }

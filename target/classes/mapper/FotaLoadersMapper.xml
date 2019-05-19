@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruili.fota.dao.mapper.FotaLoadersMapper">
-  <resultMap id="BaseResultMap" type="com.ruili.fota.dao.po.FotaLoaders">
+<mapper namespace="com.ruili.fota.mapper.FotaLoadersMapper">
+  <resultMap id="BaseResultMap" type="com.ruili.fota.meta.po.FotaLoaders">
     <result column="gid" jdbcType="INTEGER" property="gid" />
     <result column="imei" jdbcType="VARCHAR" property="imei" />
     <result column="imsi" jdbcType="VARCHAR" property="imsi" />
@@ -12,7 +12,7 @@
     <result column="gmtupdate" jdbcType="TIMESTAMP" property="gmtupdate" />
     <result column="gmtmodified" jdbcType="TIMESTAMP" property="gmtmodified" />
   </resultMap>
-  <insert id="insert" parameterType="com.ruili.fota.dao.po.FotaLoaders">
+  <insert id="insert" parameterType="com.ruili.fota.meta.po.FotaLoaders">
     insert into fota_loaders (gid, imei, imsi, 
       csq, load_status, online_status, 
       gmtcreate, gmtupdate, gmtmodified
@@ -22,7 +22,7 @@
       #{gmtcreate,jdbcType=TIMESTAMP}, #{gmtupdate,jdbcType=TIMESTAMP}, #{gmtmodified,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.ruili.fota.dao.po.FotaLoaders">
+  <insert id="insertSelective" parameterType="com.ruili.fota.meta.po.FotaLoaders">
     insert into fota_loaders
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="gid != null">

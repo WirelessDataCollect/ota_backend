@@ -4,11 +4,11 @@ public class ConfigBO {
     /**
      * 接收id
      */
-    private String RecID;
+    private int RecID;
     /**
      * 发送id
      */
-    private String SendID;
+    private int SendID;
     /**
      * 升级设备的imei
      */
@@ -16,11 +16,11 @@ public class ConfigBO {
     /**
      * 配置的can接口
      */
-    private String cannum;
+    private int cannum;
     /**
      * 升级方法，离线或在线，在数据库中进行记录
      */
-    private String measure;
+    private int measure;
     /**
      * 升级的固件id
      */
@@ -30,7 +30,7 @@ public class ConfigBO {
      */
     private String mcuType;
 
-    public ConfigBO(String recID, String sendID, String imei, String cannum, String measure, String firmwareId, String mcuType) {
+    public ConfigBO(int recID, int sendID, String imei, int cannum, int measure, String firmwareId, String mcuType) {
         RecID = recID;
         SendID = sendID;
         this.imei = imei;
@@ -43,19 +43,19 @@ public class ConfigBO {
     public ConfigBO() {
     }
 
-    public String getRecID() {
+    public int getRecID() {
         return RecID;
     }
 
-    public void setRecID(String recID) {
+    public void setRecID(int recID) {
         RecID = recID;
     }
 
-    public String getSendID() {
+    public int getSendID() {
         return SendID;
     }
 
-    public void setSendID(String sendID) {
+    public void setSendID(int sendID) {
         SendID = sendID;
     }
 
@@ -67,12 +67,20 @@ public class ConfigBO {
         this.imei = imei;
     }
 
-    public String getCannum() {
+    public int getCannum() {
         return cannum;
     }
 
-    public void setCannum(String cannum) {
+    public void setCannum(int cannum) {
         this.cannum = cannum;
+    }
+
+    public int getMeasure() {
+        return measure;
+    }
+
+    public void setMeasure(int measure) {
+        this.measure = measure;
     }
 
     public String getFirmwareId() {
@@ -81,14 +89,6 @@ public class ConfigBO {
 
     public void setFirmwareId(String firmwareId) {
         this.firmwareId = firmwareId;
-    }
-
-    public String getMeasure() {
-        return measure;
-    }
-
-    public void setMeasure(String measure) {
-        this.measure = measure;
     }
 
     public String getMcuType() {
@@ -101,14 +101,22 @@ public class ConfigBO {
 
     @Override
     public String toString() {
-        return "ConfigBO{" +
-                "RecID='" + RecID + '\'' +
-                ", SendID='" + SendID + '\'' +
-                ", imei='" + imei + '\'' +
-                ", cannum='" + cannum + '\'' +
-                ", measure='" + measure + '\'' +
-                ", firmwareId='" + firmwareId + '\'' +
-                ", mcuType='" + mcuType + '\'' +
-                '}';
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"RecID\":")
+                .append(RecID);
+        sb.append(",\"SendID\":")
+                .append(SendID);
+        sb.append(",\"imei\":\"")
+                .append(imei).append('\"');
+        sb.append(",\"cannum\":")
+                .append(cannum);
+        sb.append(",\"measure\":")
+                .append(measure);
+        sb.append(",\"firmwareId\":\"")
+                .append(firmwareId).append('\"');
+        sb.append(",\"mcuType\":\"")
+                .append(mcuType).append('\"');
+        sb.append('}');
+        return sb.toString();
     }
 }
