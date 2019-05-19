@@ -14,7 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import tk.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication(scanBasePackages = "com.ruili.fota")
-@MapperScan(basePackages = "com.ruili.fota.dao.mapper")
+@MapperScan(basePackages = "com.ruili.fota.mapper")
 @EnableCaching
 @EnableScheduling
 public class FotaApplication implements CommandLineRunner, DisposableBean {

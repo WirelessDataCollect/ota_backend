@@ -2,20 +2,21 @@ package com.ruili.fota.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.mongodb.gridfs.GridFSDBFile;
-import com.ruili.fota.common.utils.Md5Tools;
-import com.ruili.fota.common.utils.UUIDTools;
+import com.ruili.fota.common.Md5Tools;
+import com.ruili.fota.common.UUIDTools;
 import com.ruili.fota.constant.LoadStatusEnum;
 import com.ruili.fota.constant.MongoDBEnum;
-import com.ruili.fota.dao.bo.ConfigBO;
-import com.ruili.fota.dao.bo.ConfigResPO;
-import com.ruili.fota.dao.bo.LoadProcessBO;
-import com.ruili.fota.dao.po.FotaImages;
-import com.ruili.fota.dao.po.FotaLoadHistory;
+import com.ruili.fota.meta.bo.ConfigBO;
+import com.ruili.fota.meta.bo.ConfigResPO;
+import com.ruili.fota.meta.bo.LoadProcessBO;
+import com.ruili.fota.meta.po.FotaImages;
+import com.ruili.fota.meta.po.FotaLoadHistory;
+import com.ruili.fota.meta.vo.OtaFileVO;
 import com.ruili.fota.netty.pk.ConfigPK;
-import com.ruili.fota.dao.entity.FotaProcessEntity;
-import com.ruili.fota.dao.mapper.FotaImagesMapper;
-import com.ruili.fota.dao.mapper.FotaLoadHistoryMapper;
-import com.ruili.fota.dao.mapper.FotaLoadersMapper;
+import com.ruili.fota.meta.entity.FotaProcessEntity;
+import com.ruili.fota.mapper.FotaImagesMapper;
+import com.ruili.fota.mapper.FotaLoadHistoryMapper;
+import com.ruili.fota.mapper.FotaLoadersMapper;
 import com.ruili.fota.netty.FotaProcessMap;
 import com.ruili.fota.netty.NettyChannelMap;
 import com.ruili.fota.netty.pk.FirmCheckPK;
@@ -30,6 +31,7 @@ import tk.mybatis.mapper.entity.Example;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -55,6 +57,16 @@ public class FirmwareServiceImpl implements FirmwareService {
 
     //每次去数据库IO流取的字节数
     private static int eachBatch = 1024;
+
+    @Override
+    public List<OtaFileVO> queryFirmwareImages() {
+        List<OtaFileVO> otaFileVOList = new ArrayList<>();
+        List<FotaImages> fotaImagesList = fotaImagesMapper.selectAll();
+        for (FotaImages images : fotaImagesList) {
+            otaFileVOList.add(new OtaFileVO(images));
+        }
+        return otaFileVOList;
+    }
 
     @Override
     public int insertFirmwareInfo(FotaImages fotaImages) {

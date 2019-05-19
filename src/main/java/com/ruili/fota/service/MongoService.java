@@ -1,7 +1,6 @@
 package com.ruili.fota.service;
 
 import com.mongodb.gridfs.GridFSDBFile;
-import com.ruili.fota.dao.entity.FotaEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

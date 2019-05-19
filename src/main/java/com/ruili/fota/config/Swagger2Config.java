@@ -49,7 +49,6 @@ public class Swagger2Config {
                 .title("FOTA_接口文档")
                 .description("更多请关注xxx")
                 .termsOfServiceUrl("http://localhost:9099")
-//                .contact(new Contact("殷爽","https://watersupervision.terabits.cn","otherbugys@gmail.com"))
                 .version("1.0")
                 .build();
 

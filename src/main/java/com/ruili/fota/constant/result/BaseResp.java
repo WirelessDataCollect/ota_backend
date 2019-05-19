@@ -1,6 +1,6 @@
 package com.ruili.fota.constant.result;
 
-import com.ruili.fota.common.utils.DateTools;
+import com.ruili.fota.common.DateTools;
 
 /**
  * Created by Yin on 2018/12/20

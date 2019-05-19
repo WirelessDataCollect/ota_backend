@@ -1,9 +1,8 @@
-package com.ruili.fota.dao.entity;
+package com.ruili.fota.meta.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.InputStream;
-import java.util.Arrays;
 
 /**
 * @author: liangjingxiong

@@ -1,6 +1,6 @@
-package com.ruili.fota.dao.po;
+package com.ruili.fota.meta.po;
 
-import com.ruili.fota.dao.entity.FotaProcessEntity;
+import com.ruili.fota.meta.entity.FotaProcessEntity;
 
 import java.util.Date;
 

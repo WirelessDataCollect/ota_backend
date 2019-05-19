@@ -1,4 +1,4 @@
-package com.ruili.fota.common.utils;
+package com.ruili.fota.common;
 
 import io.netty.buffer.ByteBuf;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;

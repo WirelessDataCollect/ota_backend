@@ -1,8 +1,5 @@
 package com.ruili.fota;
 
-import com.ruili.fota.constant.LoadStatusEnum;
-import com.ruili.fota.dao.entity.FotaProcessEntity;
-import com.ruili.fota.netty.FotaProcessMap;
 import org.springframework.boot.test.context.SpringBootTest;
 
 

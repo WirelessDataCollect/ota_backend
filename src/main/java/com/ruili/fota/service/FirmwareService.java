@@ -1,15 +1,22 @@
 package com.ruili.fota.service;
 
-import com.ruili.fota.dao.bo.ConfigBO;
-import com.ruili.fota.dao.bo.ConfigResPO;
-import com.ruili.fota.dao.bo.LoadProcessBO;
-import com.ruili.fota.dao.po.FotaImages;
+import com.ruili.fota.meta.bo.ConfigBO;
+import com.ruili.fota.meta.bo.ConfigResPO;
+import com.ruili.fota.meta.bo.LoadProcessBO;
+import com.ruili.fota.meta.po.FotaImages;
+import com.ruili.fota.meta.vo.OtaFileVO;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public interface FirmwareService {
+
+    /**
+     * 查询固件的列表信息
+     * @return
+     */
+    public List<OtaFileVO> queryFirmwareImages();
 
     /**
      * 写入设备固件信息

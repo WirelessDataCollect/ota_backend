@@ -1,4 +1,4 @@
-package com.ruili.fota.dao.po;
+package com.ruili.fota.meta.po;
 
 import java.util.Date;
 

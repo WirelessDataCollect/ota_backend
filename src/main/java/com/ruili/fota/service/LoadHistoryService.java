@@ -1,6 +1,7 @@
 package com.ruili.fota.service;
 
-import com.ruili.fota.dao.po.FotaLoadHistory;
+import com.ruili.fota.meta.po.FotaLoadHistory;
+import com.ruili.fota.meta.vo.OtaHistoryVO;
 
 import java.util.List;
 
@@ -21,5 +22,5 @@ public interface LoadHistoryService {
      * @param endTime
      * @return
      */
-    public List<FotaLoadHistory> queryLoadHistory(String imei, String beginTime, String endTime);
+    public List<OtaHistoryVO> queryLoadHistory(String imei, String beginTime, String endTime);
 }

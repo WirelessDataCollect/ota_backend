@@ -4,10 +4,10 @@ import com.mongodb.DB;
 import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSInputFile;
-import com.ruili.fota.common.utils.ByteUtils;
-import com.ruili.fota.common.utils.UUIDTools;
+import com.ruili.fota.common.ByteUtils;
+import com.ruili.fota.common.UUIDTools;
 import com.ruili.fota.constant.MongoDBEnum;
-import com.ruili.fota.dao.entity.FotaEntity;
+import com.ruili.fota.meta.entity.FotaEntity;
 import com.ruili.fota.service.MongoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -17,9 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 /**
  * @author: liangjingxiong

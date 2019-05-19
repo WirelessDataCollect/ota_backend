@@ -1,8 +1,6 @@
-package com.ruili.fota.dao.bo;
+package com.ruili.fota.meta.bo;
 
 import com.ruili.fota.constant.LoadStatusEnum;
-
-import java.util.Date;
 
 public class ConfigResPO {
     /**

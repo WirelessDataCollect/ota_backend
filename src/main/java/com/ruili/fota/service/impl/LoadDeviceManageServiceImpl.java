@@ -1,15 +1,17 @@
 package com.ruili.fota.service.impl;
 
-import com.ruili.fota.common.utils.DateTools;
+import com.ruili.fota.common.DateTools;
 import com.ruili.fota.constant.LoadStatusEnum;
 import com.ruili.fota.constant.OnlineStatusEnum;
-import com.ruili.fota.dao.po.FotaLoaders;
+import com.ruili.fota.meta.po.FotaLoaders;
+import com.ruili.fota.meta.vo.DeviceVO;
 import com.ruili.fota.netty.pk.RegisterPK;
-import com.ruili.fota.dao.mapper.FotaLoadersMapper;
+import com.ruili.fota.mapper.FotaLoadersMapper;
 import com.ruili.fota.service.LoadDeviceManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -55,7 +57,12 @@ public class LoadDeviceManageServiceImpl implements LoadDeviceManageService {
     }
 
     @Override
-    public List<FotaLoaders> queryDeviceList() {
-        return fotaLoadersMapper.selectAll();
+    public List<DeviceVO> queryDeviceList() {
+        List<DeviceVO> deviceVOList = new ArrayList<>();
+        List<FotaLoaders> fotaLoadersList = fotaLoadersMapper.selectAll();
+        for (FotaLoaders loaders : fotaLoadersList) {
+            deviceVOList.add(new DeviceVO(loaders));
+        }
+        return deviceVOList;
     }
 }

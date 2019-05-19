@@ -3,12 +3,10 @@ package com.ruili.fota.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.ruili.fota.constant.result.BaseResp;
 import com.ruili.fota.constant.result.ResultStatus;
-import com.ruili.fota.dao.bo.ConfigBO;
-import com.ruili.fota.dao.entity.FotaEntity;
-import com.ruili.fota.dao.mapper.FotaImagesMapper;
-import com.ruili.fota.dao.po.FotaImages;
+import com.ruili.fota.meta.bo.ConfigBO;
+import com.ruili.fota.mapper.FotaImagesMapper;
+import com.ruili.fota.meta.po.FotaImages;
 import com.ruili.fota.service.FirmwareService;
-import com.ruili.fota.service.LoadHistoryService;
 import com.ruili.fota.service.MongoService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -34,15 +32,13 @@ public class FirmwareController {
     private MongoService mongoService;
     @Autowired
     private FirmwareService firmwareService;
-    @Autowired
-    private FotaImagesMapper fotaImagesMapper;
 
     @ApiOperation(value = "固件 查询 固件列表", tags = {"固件管理"}, notes = "进入固件文件管理时，查询固件列表")
     @ApiImplicitParams({
     })
     @PostMapping(value = "/query")
     public BaseResp firmwareQuery() {
-        return new BaseResp(ResultStatus.SUCCESS, fotaImagesMapper.selectAll());
+        return new BaseResp(ResultStatus.SUCCESS, firmwareService.queryFirmwareImages());
     }
 
     @ApiOperation(value = "固件 上传 上传信息", tags = {"固件管理"}, notes = "上传固件版本号、固件对应设备类型、上传人，备注，返回插入条数以及响应状态")

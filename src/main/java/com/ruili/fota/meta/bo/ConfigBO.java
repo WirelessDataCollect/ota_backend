@@ -1,4 +1,4 @@
-package com.ruili.fota.dao.bo;
+package com.ruili.fota.meta.bo;
 
 public class ConfigBO {
     /**

@@ -1,4 +1,4 @@
-package com.ruili.fota.dao.po;
+package com.ruili.fota.meta.po;
 
 public class FotaUsers {
     private Integer gid;

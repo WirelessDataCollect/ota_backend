@@ -1,7 +1,8 @@
 package com.ruili.fota.service;
 
 
-import com.ruili.fota.dao.po.FotaLoaders;
+import com.ruili.fota.meta.po.FotaLoaders;
+import com.ruili.fota.meta.vo.DeviceVO;
 import com.ruili.fota.netty.pk.RegisterPK;
 
 import java.util.List;
@@ -33,6 +34,6 @@ public interface LoadDeviceManageService {
      *
      * @return
      */
-    public List<FotaLoaders> queryDeviceList();
+    public List<DeviceVO> queryDeviceList();
 
 }

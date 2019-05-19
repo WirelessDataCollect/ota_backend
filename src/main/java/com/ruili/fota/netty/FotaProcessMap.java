@@ -1,11 +1,9 @@
 package com.ruili.fota.netty;
 
-import com.ruili.fota.common.utils.UUIDTools;
 import com.ruili.fota.constant.LoadStatusEnum;
-import com.ruili.fota.dao.bo.ConfigBO;
-import com.ruili.fota.dao.entity.FotaProcessEntity;
+import com.ruili.fota.meta.bo.ConfigBO;
+import com.ruili.fota.meta.entity.FotaProcessEntity;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.socket.SocketChannel;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

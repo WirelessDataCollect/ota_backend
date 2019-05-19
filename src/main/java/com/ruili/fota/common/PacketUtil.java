@@ -1,4 +1,4 @@
-package com.ruili.fota.common.utils;
+package com.ruili.fota.common;
 
 /**
 * @author: liangjingxiong

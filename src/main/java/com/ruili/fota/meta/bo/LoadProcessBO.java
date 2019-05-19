@@ -1,47 +1,41 @@
-package com.ruili.fota.dao.entity;
+package com.ruili.fota.meta.bo;
 
 import com.ruili.fota.constant.LoadStatusEnum;
-import com.ruili.fota.dao.bo.ConfigBO;
-import io.netty.buffer.ByteBuf;
+import com.ruili.fota.meta.entity.FotaProcessEntity;
 
 /**
 * @author: liangjingxiong
-* @date: 2019-05-03
-* @description:存储设备的烧录状态实体，与imei号为关系存储在cocurrentMap
- * 在实体中，同时存入了设备需要烧录的固件信息，解决Netty异步的通信问题
+* @date: 2019-05-13
+* @description:记录设备固件升级状态，返回给前端，为FotaProcessEntity的前端简化版本
 */
-public class FotaProcessEntity {
+public class LoadProcessBO {
 
     private String imei;
     private String requestId;//记录本次请求的id
-    private String firmwareId;
     private int packNumber;
     private int totalPack;
     private LoadStatusEnum statusEnum;
-    private ByteBuf firmwareByteBuf;
     private ConfigBO configBO;
 
+    public LoadProcessBO(FotaProcessEntity entity) {
+        this.imei = entity.getImei();
+        this.requestId = entity.getRequestId();
+        this.packNumber = entity.getPackNumber();
+        this.totalPack = entity.getTotalPack();
+        this.statusEnum = entity.getStatusEnum();
+        this.configBO = entity.getConfigBO();
+    }
 
-    public FotaProcessEntity(String imei, String requestId, String firmwareId, int packNumber, int totalPack, LoadStatusEnum statusEnum, ByteBuf firmwareByteBuf, ConfigBO configBO) {
+    public LoadProcessBO(String imei, String requestId, int packNumber, int totalPack, LoadStatusEnum statusEnum, ConfigBO configBO) {
         this.imei = imei;
         this.requestId = requestId;
-        this.firmwareId = firmwareId;
         this.packNumber = packNumber;
         this.totalPack = totalPack;
         this.statusEnum = statusEnum;
-        this.firmwareByteBuf = firmwareByteBuf;
         this.configBO = configBO;
     }
 
-    public FotaProcessEntity() {
-    }
-
-    public String getRequestId() {
-        return requestId;
-    }
-
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
+    public LoadProcessBO() {
     }
 
     public String getImei() {
@@ -52,12 +46,12 @@ public class FotaProcessEntity {
         this.imei = imei;
     }
 
-    public String getFirmwareId() {
-        return firmwareId;
+    public String getRequestId() {
+        return requestId;
     }
 
-    public void setFirmwareId(String firmwareId) {
-        this.firmwareId = firmwareId;
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
     }
 
     public int getPackNumber() {
@@ -84,14 +78,6 @@ public class FotaProcessEntity {
         this.statusEnum = statusEnum;
     }
 
-    public ByteBuf getFirmwareByteBuf() {
-        return firmwareByteBuf;
-    }
-
-    public void setFirmwareByteBuf(ByteBuf firmwareByteBuf) {
-        this.firmwareByteBuf = firmwareByteBuf;
-    }
-
     public ConfigBO getConfigBO() {
         return configBO;
     }
@@ -107,16 +93,12 @@ public class FotaProcessEntity {
                 .append(imei).append('\"');
         sb.append(",\"requestId\":\"")
                 .append(requestId).append('\"');
-        sb.append(",\"firmwareId\":\"")
-                .append(firmwareId).append('\"');
         sb.append(",\"packNumber\":")
                 .append(packNumber);
         sb.append(",\"totalPack\":")
                 .append(totalPack);
         sb.append(",\"statusEnum\":")
                 .append(statusEnum);
-        sb.append(",\"firmwareByteBuf\":")
-                .append(firmwareByteBuf);
         sb.append(",\"configBO\":")
                 .append(configBO);
         sb.append('}');
