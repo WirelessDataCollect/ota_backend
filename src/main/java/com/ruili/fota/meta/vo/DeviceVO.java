@@ -3,10 +3,12 @@ package com.ruili.fota.meta.vo;
 import com.ruili.fota.constant.LoadStatusEnum;
 import com.ruili.fota.constant.OnlineStatusEnum;
 import com.ruili.fota.meta.po.FotaLoaders;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
+@ApiModel(value = "设备列表")
 public class DeviceVO {
 
     @ApiModelProperty(value = "设备id")

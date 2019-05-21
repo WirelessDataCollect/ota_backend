@@ -2,6 +2,7 @@ package com.ruili.fota.controller;
 
 import com.ruili.fota.constant.result.BaseResp;
 import com.ruili.fota.constant.result.ResultStatus;
+import com.ruili.fota.meta.vo.DeviceVO;
 import com.ruili.fota.service.LoadDeviceManageService;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -23,9 +26,7 @@ public class LoadDeviceController {
     @ApiImplicitParams({
     })
     @PostMapping(value = "/query")
-    public BaseResp deviceQuery() {
+    public BaseResp<List<DeviceVO>> deviceQuery() {
         return new BaseResp(ResultStatus.SUCCESS, loadDeviceManageService.queryDeviceList());
     }
-
-
 }

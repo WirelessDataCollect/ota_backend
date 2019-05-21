@@ -1,32 +1,40 @@
 package com.ruili.fota.constant.result;
 
 import com.ruili.fota.common.DateTools;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
- * Created by Yin on 2018/12/20
- */
+* @author: liangjingxiong
+* @date: 2019-05-21
+* @description:基本返回类，需要泛型支持才会被Swagger识别
+*/
+@ApiModel(value = "基本返回类")
 public class BaseResp<T> {
     /**
      * 返回码
      */
-    private int status;
+    @ApiModelProperty(value = "状态码")
+    private int code;
 
     /**
      * 返回信息描述
      */
+    @ApiModelProperty(value = "返回信息描述")
     private String message;
 
     /**
      * 返回数据
      */
+    @ApiModelProperty(value = "返回数据")
     private T data;
 
-    public int getStatus() {
-        return status;
+    public int getCode() {
+        return code;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setCode(int code) {
+        this.code = code;
     }
 
     public String getMessage() {
@@ -37,14 +45,13 @@ public class BaseResp<T> {
         this.message = message;
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
     public void setData(T data) {
         this.data = data;
     }
-
 
     public BaseResp() {
     }
@@ -55,7 +62,7 @@ public class BaseResp<T> {
      * @param data         数据
      */
     public BaseResp(ResultStatus resultStatus, String message, T data) {
-        this.status = resultStatus.getErrorStatus();
+        this.code = resultStatus.getErrorStatus();
         this.message = message;
         this.data = data;
     }
@@ -66,7 +73,7 @@ public class BaseResp<T> {
      * @param resultStatus
      */
     public BaseResp(ResultStatus resultStatus) {
-        this.status = resultStatus.getErrorStatus();
+        this.code = resultStatus.getErrorStatus();
         this.message = resultStatus.getErrorMsg();
         this.data = (T) DateTools.currentTime();
     }
@@ -78,7 +85,7 @@ public class BaseResp<T> {
      * @param data
      */
     public BaseResp(ResultStatus resultStatus, T data) {
-        this.status = resultStatus.getErrorStatus();
+        this.code = resultStatus.getErrorStatus();
         this.message = resultStatus.getErrorMsg();
         this.data = data;
     }

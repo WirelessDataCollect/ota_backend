@@ -5,7 +5,10 @@ import com.ruili.fota.constant.result.BaseResp;
 import com.ruili.fota.constant.result.ResultStatus;
 import com.ruili.fota.meta.bo.ConfigBO;
 import com.ruili.fota.mapper.FotaImagesMapper;
+import com.ruili.fota.meta.bo.ConfigResPO;
+import com.ruili.fota.meta.bo.LoadProcessBO;
 import com.ruili.fota.meta.po.FotaImages;
+import com.ruili.fota.meta.vo.OtaFileVO;
 import com.ruili.fota.service.FirmwareService;
 import com.ruili.fota.service.MongoService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 
 /**
@@ -37,7 +41,7 @@ public class FirmwareController {
     @ApiImplicitParams({
     })
     @PostMapping(value = "/query")
-    public BaseResp firmwareQuery() {
+    public BaseResp<List<OtaFileVO>> firmwareQuery() {
         return new BaseResp(ResultStatus.SUCCESS, firmwareService.queryFirmwareImages());
     }
 
@@ -87,7 +91,7 @@ public class FirmwareController {
     })
     //TODO 需要修改接口的内容
     @PostMapping(value = "/config")
-    public BaseResp downloadFireware(ConfigBO configBO) throws IOException {
+    public BaseResp<ConfigResPO> downloadFireware(ConfigBO configBO) throws IOException {
         return new BaseResp(ResultStatus.SUCCESS, firmwareService.configDownloadPatten(configBO));
     }
 
@@ -97,8 +101,8 @@ public class FirmwareController {
             @ApiImplicitParam(name = "imei", value = "升级设备的imei", required = true)
     })
     @PostMapping(value = "/downloadreport")
-    public BaseResp downloadFireware(@RequestParam("imei") String imei,
-                                     @RequestParam("requestId") String requestId) {
+    public BaseResp<LoadProcessBO> downloadFireware(@RequestParam("imei") String imei,
+                                                    @RequestParam("requestId") String requestId) {
         return new BaseResp(ResultStatus.SUCCESS, firmwareService.downloadFirmwareReport(imei, requestId));
     }
 

@@ -1,8 +1,10 @@
 package com.ruili.fota.meta.vo;
 
 import com.ruili.fota.meta.po.FotaImages;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+@ApiModel(value = "固件列表")
 public class OtaFileVO {
 
     @ApiModelProperty(value = "固件id")
