@@ -29,9 +29,8 @@ import java.util.List;
  */
 
 @RestController
-@CrossOrigin
 @RequestMapping(value = "/firmware")
-public class FirmwareController {
+public class FirmwareController extends BaseController {
     @Autowired
     private MongoService mongoService;
     @Autowired
@@ -48,10 +47,10 @@ public class FirmwareController {
     @ApiOperation(value = "固件 上传 上传信息", tags = {"固件管理"}, notes = "上传固件版本号、固件对应设备类型、上传人，备注，返回插入条数以及响应状态")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "firmwareId", value = "固件唯一id", required = true),
-            @ApiImplicitParam(name = "uploadUserName", value = "上传者姓名"),
-            @ApiImplicitParam(name = "uploadUserPhoneNumber", value = "上传者电话"),
-            @ApiImplicitParam(name = "firmwareVersion", value = "固件版本号"),
-            @ApiImplicitParam(name = "content", value = "固件备注"),
+            @ApiImplicitParam(name = "uploadUserName", value = "上传者姓名",required = true),
+            @ApiImplicitParam(name = "uploadUserPhoneNumber", value = "上传者电话",required = true),
+            @ApiImplicitParam(name = "firmwareVersion", value = "固件版本号",required = true),
+            @ApiImplicitParam(name = "content", value = "固件备注",required = true),
     })
     @PostMapping(value = "/uploadinfo")
     public BaseResp uploadInfo(FotaImages fotaImages) {

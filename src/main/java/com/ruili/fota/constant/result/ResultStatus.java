@@ -104,7 +104,7 @@ public enum ResultStatus {
             return ResultStatus.valueOf(define).status;
         } catch (IllegalArgumentException e) {
             LOGGER.error("undefined error status: {}", define);
-            return FAIL.getErrorStatus();
+            return FAIL.getStatus();
         }
     }
 
@@ -113,7 +113,7 @@ public enum ResultStatus {
             return ResultStatus.valueOf(define).msg;
         } catch (IllegalArgumentException e) {
             LOGGER.error("undefined status code: {}", define);
-            return FAIL.getErrorMsg();
+            return FAIL.getMsg();
         }
 
     }
@@ -127,11 +127,11 @@ public enum ResultStatus {
         return "errorStatus not defined ";
     }
 
-    public int getErrorStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public String getErrorMsg() {
+    public String getMsg() {
         return msg;
     }
 

@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin
 @RequestMapping(value = "/history")
-public class LoadHistoryController {
+public class LoadHistoryController extends BaseController{
 
     @Autowired
     private LoadHistoryService loadHistoryService;

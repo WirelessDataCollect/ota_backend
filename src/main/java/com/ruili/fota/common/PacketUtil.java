@@ -9,6 +9,4 @@ package com.ruili.fota.common;
 public class PacketUtil {
 
 
-
-
 }

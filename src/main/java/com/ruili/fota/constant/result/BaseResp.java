@@ -15,7 +15,7 @@ public class BaseResp<T> {
      * 返回码
      */
     @ApiModelProperty(value = "状态码")
-    private int code;
+    private int status;
 
     /**
      * 返回信息描述
@@ -29,12 +29,12 @@ public class BaseResp<T> {
     @ApiModelProperty(value = "返回数据")
     private T data;
 
-    public int getCode() {
-        return code;
+    public int getStatus() {
+        return status;
     }
 
-    public void setCode(int code) {
-        this.code = code;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getMessage() {
@@ -62,7 +62,7 @@ public class BaseResp<T> {
      * @param data         数据
      */
     public BaseResp(ResultStatus resultStatus, String message, T data) {
-        this.code = resultStatus.getErrorStatus();
+        this.status = resultStatus.getStatus();
         this.message = message;
         this.data = data;
     }
@@ -73,8 +73,8 @@ public class BaseResp<T> {
      * @param resultStatus
      */
     public BaseResp(ResultStatus resultStatus) {
-        this.code = resultStatus.getErrorStatus();
-        this.message = resultStatus.getErrorMsg();
+        this.status = resultStatus.getStatus();
+        this.message = resultStatus.getMsg();
         this.data = (T) DateTools.currentTime();
     }
 
@@ -85,8 +85,8 @@ public class BaseResp<T> {
      * @param data
      */
     public BaseResp(ResultStatus resultStatus, T data) {
-        this.code = resultStatus.getErrorStatus();
-        this.message = resultStatus.getErrorMsg();
+        this.status = resultStatus.getStatus();
+        this.message = resultStatus.getMsg();
         this.data = data;
     }
 
