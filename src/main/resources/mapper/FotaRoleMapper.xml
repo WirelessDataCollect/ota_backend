@@ -11,4 +11,62 @@
     <result column="gmtupdate" jdbcType="TIMESTAMP" property="gmtupdate" />
   </resultMap>
 
+  <resultMap id="MenuVOMap" type="com.ruili.fota.meta.vo.MenuVO">
+    <result column="key1" jdbcType="INTEGER" property="key"/>
+    <result column="title1" jdbcType="VARCHAR" property="title"/>
+    <collection property="children" ofType="com.ruili.fota.meta.vo.MenuVO">
+      <result column="key2" jdbcType="INTEGER" property="key"/>
+      <result column="title2" jdbcType="VARCHAR" property="title"/>
+    </collection>
+  </resultMap>
+
+  <select id="selectRoleByUser" resultMap="BaseResultMap">
+    SELECT role.*
+    FROM fota_role role LEFT JOIN fota_users_role u_r  ON role.id=u_r.role_id
+    <if test="username!=null and username!='' ">
+      AND user_id IN( SELECT id FROM fota_users WHERE username = #{username})
+    </if>
+    GROUP BY role.id
+  </select>
+
+  <select id="selectUserRole" resultType="com.ruili.fota.meta.vo.UserRoleVO">
+        SELECT user.id, username, realname, user.status, GROUP_CONCAT(role.id) rids, GROUP_CONCAT(name) roles
+        FROM fota_users user
+                 LEFT JOIN fota_users_role u_r ON user.id = u_r.user_id
+                 LEFT JOIN fota_role role ON u_r.role_id = role.id
+        GROUP BY user.id;
+    </select>
+
+  <insert id="insertUserRole">
+    INSERT INTO fota_users_role(user_id,role_id) VALUES
+    <foreach collection="roleIds" separator="," item="rid">
+      (#{userId},#{rid})
+    </foreach>
+  </insert>
+
+  <select id="selectMenu" resultMap="MenuVOMap">
+        SELECT m1.id key1, m1.name title1, m2.id key2, m2.name title2
+        FROM fota_permission m1,
+             fota_permission m2
+        WHERE m1.id = m2.p_id
+          AND m1.type = m2.type AND m1.type = #{type}
+          AND m1.status = m2.status AND m1.status = 1
+        ORDER BY m1.sort, m2.sort
+    </select>
+
+  <select id="selectRoleMenu" resultType="com.ruili.fota.meta.vo.RoleMenuVO">
+        SELECT role.id, role.name, value, role.status, GROUP_CONCAT(menu.id) mids
+        FROM fota_role role
+                 LEFT JOIN fota_role_permission r_m ON role.id = r_m.role_id
+                 LEFT JOIN fota_permission menu ON r_m.permission_id = menu.id AND menu.type=#{type}
+        GROUP BY role.id;
+    </select>
+
+  <insert id="insertRoleMenu">
+    INSERT INTO fota_role_permission (role_id, permission_id) VALUES
+    <foreach collection="menuIds" separator="," item="mid">
+      (#{roleId},#{mid})
+    </foreach>
+  </insert>
+
 </mapper>

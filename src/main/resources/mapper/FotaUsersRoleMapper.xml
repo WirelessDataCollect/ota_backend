@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruili.fota.mapper.FotaUsersRoleMapper">
+  <resultMap id="BaseResultMap" type="com.ruili.fota.meta.po.FotaUsersRole">
+    <id column="gid" jdbcType="INTEGER" property="gid" />
+    <result column="admin_id" jdbcType="INTEGER" property="adminId" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="gmtcreate" jdbcType="TIMESTAMP" property="gmtcreate" />
+    <result column="schoolIds" jdbcType="VARCHAR" property="schoolids" />
+  </resultMap>
+
+</mapper>
