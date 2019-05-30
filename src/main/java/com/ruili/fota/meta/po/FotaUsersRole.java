@@ -11,8 +11,6 @@ public class FotaUsersRole {
 
     private Date gmtcreate;
 
-    private String schoolids;
-
     public Integer getGid() {
         return gid;
     }
@@ -45,11 +43,18 @@ public class FotaUsersRole {
         this.gmtcreate = gmtcreate;
     }
 
-    public String getSchoolids() {
-        return schoolids;
-    }
-
-    public void setSchoolids(String schoolids) {
-        this.schoolids = schoolids == null ? null : schoolids.trim();
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"gid\":")
+                .append(gid);
+        sb.append(",\"adminId\":")
+                .append(adminId);
+        sb.append(",\"roleId\":")
+                .append(roleId);
+        sb.append(",\"gmtcreate\":\"")
+                .append(gmtcreate).append('\"');
+        sb.append('}');
+        return sb.toString();
     }
 }

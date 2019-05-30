@@ -21,7 +21,7 @@ public interface FotaRoleMapper extends BaseMapper<FotaRole> {
      * @param userId
      * @return
      */
-    @Select("SELECT menu.id,menu.name,menu.code FROM fota_users_role u_r LEFT JOIN fota_role_permission r_m ON u_r.role_Id=r_m.role_id RIGHT JOIN fota_permission menu ON r_m.permission_id=menu.id AND menu.type=#{type} WHERE user_id=#{userId}")
+    @Select("SELECT menu.gid, menu.name, menu.code FROM fota_users_role u_r LEFT JOIN fota_role_permission r_m ON u_r.role_Id = r_m.role_id RIGHT JOIN fota_permission menu ON r_m.permission_id = menu.gid AND menu.type =#{type} WHERE admin_id=#{userId}")
     List<Map> selectMenuByUser(@Param("type") Integer type, @Param("userId") Integer userId);
 
     /**
@@ -81,7 +81,7 @@ public interface FotaRoleMapper extends BaseMapper<FotaRole> {
      * @param roleId
      * @return
      */
-    @Select("SELECT id 'key',url title FROM fota_permission menu INNER JOIN fota_role_permission r_m ON r_m.permission_id=menu.id AND type=#{type} WHERE role_id=#{roleId}")
+    @Select("SELECT gid 'key', url title FROM fota_permission menu INNER JOIN fota_role_permission r_m ON r_m.permission_id = menu.gid AND type =#{type} WHERE role_id=#{roleId}")
     List<MenuVO> selectMenuByRole(@Param("type") Integer type, @Param("roleId") Integer roleId);
 
     /**
@@ -99,7 +99,7 @@ public interface FotaRoleMapper extends BaseMapper<FotaRole> {
      * @param roleId
      * @return
      */
-    @Delete("DELETE FROM fota_role_permission WHERE role_id=#{roleId} AND permission_id IN(SELECT permission_id FROM (SELECT permission_id FROM fota_role_permission r_m RIGHT JOIN fota_permission menu ON r_m.permission_id=menu.id AND menu.type=#{type} WHERE role_id=#{roleId}) menu_id) ")
+    @Delete("DELETE FROM fota_role_permission WHERE role_id = #{roleId} AND permission_id IN (SELECT permission_id FROM (SELECT permission_id FROM fota_role_permission r_m RIGHT JOIN fota_dev.fota_permission menu ON r_m.permission_id = menu.gid AND menu.type =#{type} WHERE role_id=#{roleId}) menu_id)")
     int deleteRoleMenu(@Param("type") Integer type, @Param("roleId") Integer roleId);
 
     /**
@@ -108,11 +108,12 @@ public interface FotaRoleMapper extends BaseMapper<FotaRole> {
      * @param menuIds
      * @return
      */
-    @Select("SELECT id FROM fota_permission WHERE id IN(${menuIds}) AND is_menu=0")
+    @Select("SELECT gid FROM fota_permission WHERE gid IN(${menuIds}) AND is_menu=0")
     List<Integer> selectMenuByIsMenu(@Param("menuIds") String menuIds);
 
     /**
      * 添加 role-menu 对应关系
+     *
      *
      * @param roleId
      * @param menuIds

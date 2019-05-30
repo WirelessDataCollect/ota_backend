@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "account")
+@RequestMapping(value = "authority")
 public class AccountController extends BaseController {
 
     @Autowired
@@ -29,7 +29,7 @@ public class AccountController extends BaseController {
             @ApiImplicitParam(name = "access_token", value = "access_token", required = true),
             @ApiImplicitParam(name = "username", value = "非必选，usernam的模糊查询内容")
     })
-    @RequestMapping(value = "/query", method = RequestMethod.GET)
+    @PostMapping(value = "/user/get")
     public BaseResp getUser() {
         return new BaseResp(ResultStatus.SUCCESS, accountService.getUser(this.getRequestHelper()));
     }
@@ -45,7 +45,7 @@ public class AccountController extends BaseController {
             @ApiImplicitParam(name = "info", value = "备注"),
             @ApiImplicitParam(name = "roleIds", value = "角色ID", required = true),
     })
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @PostMapping(value = "/user/add")
     public BaseResp addUser(FotaUsers user, @RequestParam("roleIds") List<Integer> roleIds) {
         int addRes = accountService.addUser(user);
         if (addRes == -1) {
@@ -69,7 +69,7 @@ public class AccountController extends BaseController {
             @ApiImplicitParam(name = "info", value = "备注"),
             @ApiImplicitParam(name = "status", value = "状态 0禁用 1启用")
     })
-    @RequestMapping(value = "/account-mgt/account/update", method = RequestMethod.POST)
+    @PostMapping(value = "/user/update")
     public BaseResp updateUser(FotaUsers user) {
         return new BaseResp(ResultStatus.SUCCESS, accountService.updateUser(user));
     }
@@ -79,7 +79,7 @@ public class AccountController extends BaseController {
             @ApiImplicitParam(name = "access_token", value = "access_token")
 
     })
-    @RequestMapping(value = "/account-mgt/authority/user-role/get", method = RequestMethod.GET)
+    @PostMapping(value = "/userRole/get")
     public BaseResp getUserRole() {
 
         return new BaseResp(ResultStatus.SUCCESS, authorityService.getUserRole());
@@ -92,7 +92,7 @@ public class AccountController extends BaseController {
             @ApiImplicitParam(name = "roleIds", value = "角色Id", required = true)
 
     })
-    @RequestMapping(value = "/account-mgt/authority/user-role/update", method = RequestMethod.POST)
+    @PostMapping(value = "/userRole/update")
     public BaseResp updateUserRole(Integer userId, @RequestParam List<Integer> roleIds) {
         return new BaseResp(ResultStatus.SUCCESS, authorityService.updateUserRole(userId, roleIds));
     }
@@ -113,7 +113,7 @@ public class AccountController extends BaseController {
             @ApiImplicitParam(name = "value", value = "角色英文", required = true),
             @ApiImplicitParam(name = "description", value = "角色描述 非必须"),
     })
-    @RequestMapping(value = "/role/add", method = RequestMethod.POST)
+    @PostMapping(value = "/role/add")
     public BaseResp addRole(FotaRole role) {
         int addRes = authorityService.addRole(role);
 
@@ -148,7 +148,7 @@ public class AccountController extends BaseController {
             @ApiImplicitParam(name = "roleId", value = "角色Id", required = true),
             @ApiImplicitParam(name = "menuIds", value = "菜单们Id", required = true)
     })
-    @PostMapping(value = "/role-menu/update")
+    @PostMapping(value = "/roleMenu/update")
     public BaseResp updateRoleMenu(Integer roleId, @RequestParam List<Integer> menuIds) {
         authorityService.updateRoleMenu(AuthorityEnum.MENU_TYPE_PC.getType(), roleId, menuIds);
         return new BaseResp(ResultStatus.SUCCESS);
@@ -158,7 +158,7 @@ public class AccountController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "access_token", value = "access_token")
     })
-    @PostMapping(value = "/role-menu/get")
+    @PostMapping(value = "/roleMenu/get")
     public BaseResp getRoleMenu() {
         return new BaseResp(ResultStatus.SUCCESS, authorityService.getRoleMenu(AuthorityEnum.MENU_TYPE_PC.getType()));
     }

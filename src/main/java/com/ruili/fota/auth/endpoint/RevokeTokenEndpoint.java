@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.oauth2.provider.endpoint.FrameworkEndpoint;
 import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ public class RevokeTokenEndpoint {
     private static final Logger logger = LoggerFactory.getLogger(RevokeTokenEndpoint.class.getName());
 
     @Autowired
+    @Lazy
     private ConsumerTokenServices consumerTokenServices;
 
     @ApiOperation(value = "登出", tags = {"登陆管理"},

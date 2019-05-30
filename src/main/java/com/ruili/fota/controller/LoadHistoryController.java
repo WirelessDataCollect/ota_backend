@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/history")
-public class LoadHistoryController extends BaseController{
+public class LoadHistoryController extends BaseController {
 
     @Autowired
     private LoadHistoryService loadHistoryService;
