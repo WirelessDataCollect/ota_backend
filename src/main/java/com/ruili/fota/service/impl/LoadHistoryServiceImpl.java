@@ -33,13 +33,13 @@ public class LoadHistoryServiceImpl implements LoadHistoryService {
         Example queryLoadHistoryExample = new Example(FotaLoadHistory.class);
         Example.Criteria criteria = queryLoadHistoryExample.createCriteria();
         if (beginTime != null || beginTime != "") {
-            criteria.andGreaterThanOrEqualTo("gmtCreate", beginTime);
+            criteria.andGreaterThanOrEqualTo("gmtcreate", beginTime);
         }
         if (endTime != null || endTime != "") {
-            criteria.andLessThanOrEqualTo("gmtCreate", endTime);
+            criteria.andLessThanOrEqualTo("gmtcreate", endTime);
         }
         if (imei != null || imei != "") {
-            criteria.andEqualTo("imei", imei);
+            criteria.andLike("imei", imei);
         }
         List<FotaLoadHistory> fotaLoadHistoryList = fotaLoadHistoryMapper.selectByExample(queryLoadHistoryExample);
         List<OtaHistoryVO> otaHistoryVOList = new ArrayList<>();

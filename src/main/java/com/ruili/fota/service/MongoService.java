@@ -15,7 +15,7 @@ public interface MongoService {
 
     String insertFirmwareAndGetImgId(MultipartFile file) throws IOException;
 
-    boolean deleteFirmwareByImgId(String firmwareId);
+    int deleteFirmwareByImgId(String firmwareId);
 
     void deleteGridFS(String bucket, String fileName);
 

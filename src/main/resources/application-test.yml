@@ -41,7 +41,7 @@ spring:
       max-file-size: -1
       max-request-size: -1
   redis:
-    host: localhost
+    host: 47.111.9.209
     port: 6379
 
 mybatis:

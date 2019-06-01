@@ -8,16 +8,16 @@
     <result column="firmware_id" jdbcType="VARCHAR" property="firmwareId" />
     <result column="load_process" jdbcType="VARCHAR" property="loadProcess" />
     <result column="config_bo" jdbcType="VARCHAR" property="configBo" />
-    <result column="gmrcreate" jdbcType="TIMESTAMP" property="gmrcreate" />
+    <result column="gmtcreate" jdbcType="TIMESTAMP" property="gmtcreate" />
     <result column="gmtupdate" jdbcType="TIMESTAMP" property="gmtupdate" />
     <result column="gmtmodified" jdbcType="TIMESTAMP" property="gmtmodified" />
   </resultMap>
   <insert id="insert" keyColumn="gid" keyProperty="gid" parameterType="com.ruili.fota.meta.po.FotaLoadHistory" useGeneratedKeys="true">
     insert into fota_load_history (imei, request_id, firmware_id, 
-      load_process, config_bo, gmrcreate, 
+      load_process, config_bo, gmtcreate,
       gmtupdate, gmtmodified)
     values (#{imei,jdbcType=VARCHAR}, #{requestId,jdbcType=VARCHAR}, #{firmwareId,jdbcType=VARCHAR}, 
-      #{loadProcess,jdbcType=VARCHAR}, #{configBo,jdbcType=VARCHAR}, #{gmrcreate,jdbcType=TIMESTAMP}, 
+      #{loadProcess,jdbcType=VARCHAR}, #{configBo,jdbcType=VARCHAR}, #{gmtcreate,jdbcType=TIMESTAMP},
       #{gmtupdate,jdbcType=TIMESTAMP}, #{gmtmodified,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="gid" keyProperty="gid" parameterType="com.ruili.fota.meta.po.FotaLoadHistory" useGeneratedKeys="true">
@@ -38,8 +38,8 @@
       <if test="configBo != null">
         config_bo,
       </if>
-      <if test="gmrcreate != null">
-        gmrcreate,
+      <if test="gmtcreate != null">
+        gmtcreate,
       </if>
       <if test="gmtupdate != null">
         gmtupdate,
@@ -64,8 +64,8 @@
       <if test="configBo != null">
         #{configBo,jdbcType=VARCHAR},
       </if>
-      <if test="gmrcreate != null">
-        #{gmrcreate,jdbcType=TIMESTAMP},
+      <if test="gmtcreate != null">
+        #{gmtcreate,jdbcType=TIMESTAMP},
       </if>
       <if test="gmtupdate != null">
         #{gmtupdate,jdbcType=TIMESTAMP},

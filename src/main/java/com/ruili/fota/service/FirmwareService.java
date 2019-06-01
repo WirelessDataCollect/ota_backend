@@ -4,7 +4,9 @@ import com.ruili.fota.meta.bo.ConfigBO;
 import com.ruili.fota.meta.bo.ConfigResPO;
 import com.ruili.fota.meta.bo.LoadProcessBO;
 import com.ruili.fota.meta.po.FotaImages;
+import com.ruili.fota.meta.po.FotaUsers;
 import com.ruili.fota.meta.vo.OtaFileVO;
+import org.apache.ibatis.javassist.NotFoundException;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -14,6 +16,7 @@ public interface FirmwareService {
 
     /**
      * 查询固件的列表信息
+     *
      * @return
      */
     public List<OtaFileVO> queryFirmwareImages();
@@ -23,7 +26,7 @@ public interface FirmwareService {
      *
      * @return
      */
-    public int insertFirmwareInfo(FotaImages fotaImages);
+    public int insertFirmwareInfo(String firmwareId, String firmwareVersion, String content, FotaUsers currentUser);
 
     /**
      * 设备进行固件烧写前下发配置信息
@@ -49,8 +52,16 @@ public interface FirmwareService {
      * @param imei
      * @return
      */
-    public LoadProcessBO downloadFirmwareReport(String imei, String requestId);
+    public LoadProcessBO downloadFirmwareReport(String imei, String requestId) throws NotFoundException;
 
+
+    /**
+     * 固件删除
+     *
+     * @param firmwareId
+     * @return
+     */
+    public boolean deleteFirmInfoByFirmId(String firmwareId) throws NotFoundException;
 
 
 }

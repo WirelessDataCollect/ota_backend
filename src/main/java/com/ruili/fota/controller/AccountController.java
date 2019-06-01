@@ -27,7 +27,7 @@ public class AccountController extends BaseController {
     @ApiOperation(value = "账户 查询", tags = {"账户管理"}, notes = "账户 查询")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "access_token", value = "access_token", required = true),
-            @ApiImplicitParam(name = "username", value = "非必选，usernam的模糊查询内容")
+            @ApiImplicitParam(name = "username", value = "非必选，不加此字段默认返回所有")
     })
     @PostMapping(value = "/user/get")
     public BaseResp getUser() {
@@ -47,12 +47,14 @@ public class AccountController extends BaseController {
     })
     @PostMapping(value = "/user/add")
     public BaseResp addUser(FotaUsers user, @RequestParam("roleIds") List<Integer> roleIds) {
+        //函数中先检查是否存在，再插入新纪录
         int addRes = accountService.addUser(user);
         if (addRes == -1) {
             return new BaseResp(ResultStatus.error_duplicated_data);
         }
-        if (user.getGid() != null) {
-            authorityService.updateUserRole(user.getGid(), roleIds);
+        if (!roleIds.isEmpty()) {
+            FotaUsers theUser = accountService.findUserByUsername(user.getUsername());
+            authorityService.insertOrUpdateUserRole(theUser.getGid(), roleIds);
             return new BaseResp(ResultStatus.SUCCESS);
         }
         return new BaseResp(ResultStatus.FAIL);
@@ -61,13 +63,13 @@ public class AccountController extends BaseController {
     @ApiOperation(value = "账户 修改", tags = {"账户管理"}, notes = "账户 修改")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "access_token", value = "access_token"),
-            @ApiImplicitParam(name = "id", value = "用户id", required = true),
-            @ApiImplicitParam(name = "password", value = "密码"),
-            @ApiImplicitParam(name = "realname", value = "姓名"),
-            @ApiImplicitParam(name = "phone", value = "电话号码"),
-            @ApiImplicitParam(name = "email", value = "邮箱账号"),
-            @ApiImplicitParam(name = "info", value = "备注"),
-            @ApiImplicitParam(name = "status", value = "状态 0禁用 1启用")
+            @ApiImplicitParam(name = "gid", value = "用户gid", required = true),
+            @ApiImplicitParam(name = "password", value = "密码，可缺省"),
+            @ApiImplicitParam(name = "realname", value = "姓名，可缺省"),
+            @ApiImplicitParam(name = "phone", value = "电话号码，可缺省"),
+            @ApiImplicitParam(name = "email", value = "邮箱账号，可缺省"),
+            @ApiImplicitParam(name = "info", value = "备注，可缺省"),
+            @ApiImplicitParam(name = "status", value = "状态 0禁用 1启用，，可缺省")
     })
     @PostMapping(value = "/user/update")
     public BaseResp updateUser(FotaUsers user) {
@@ -81,7 +83,6 @@ public class AccountController extends BaseController {
     })
     @PostMapping(value = "/userRole/get")
     public BaseResp getUserRole() {
-
         return new BaseResp(ResultStatus.SUCCESS, authorityService.getUserRole());
     }
 
@@ -94,7 +95,7 @@ public class AccountController extends BaseController {
     })
     @PostMapping(value = "/userRole/update")
     public BaseResp updateUserRole(Integer userId, @RequestParam List<Integer> roleIds) {
-        return new BaseResp(ResultStatus.SUCCESS, authorityService.updateUserRole(userId, roleIds));
+        return new BaseResp(ResultStatus.SUCCESS, authorityService.insertOrUpdateUserRole(userId, roleIds));
     }
 
     @ApiOperation(value = "角色 查询", tags = {"账户管理-权限管理"}, notes = "角色 查询")
@@ -111,12 +112,11 @@ public class AccountController extends BaseController {
             @ApiImplicitParam(name = "access_token", value = "access_token"),
             @ApiImplicitParam(name = "name", value = "角色中文 用于展示", required = true),
             @ApiImplicitParam(name = "value", value = "角色英文", required = true),
-            @ApiImplicitParam(name = "description", value = "角色描述 非必须"),
+            @ApiImplicitParam(name = "info", value = "角色描述 非必须"),
     })
     @PostMapping(value = "/role/add")
     public BaseResp addRole(FotaRole role) {
         int addRes = authorityService.addRole(role);
-
         if (addRes == -1) {
             return new BaseResp(ResultStatus.error_duplicated_data);
         }
@@ -139,6 +139,7 @@ public class AccountController extends BaseController {
     })
     @PostMapping(value = "/menu/get")
     public BaseResp getMenu() {
+        //TODO 根据用户的请求身份获取用户信息再请求菜单接口
         return new BaseResp(ResultStatus.SUCCESS, authorityService.getMenu(AuthorityEnum.MENU_TYPE_PC.getType(), null));
     }
 

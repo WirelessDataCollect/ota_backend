@@ -34,13 +34,15 @@
         FROM fota_users user
          LEFT JOIN fota_users_role u_r ON user.gid = u_r.admin_id
          LEFT JOIN fota_role role ON u_r.role_id = role.gid
-        GROUP BY user.gid;
+        GROUP BY user.gid, username, realname, user.status;
     </select>
 
+    <!--    需要在连接数据库时添加多sql语句提交allowMultiQueries=true-->
     <insert id="insertUserRole">
-        INSERT INTO fota_users_role(admin_id,role_id) VALUES
+        DELETE FROM fota_users_role WHERE admin_id = #{userId};
+        INSERT INTO fota_users_role(admin_id,role_id,gmtcreate) VALUES
         <foreach collection="roleIds" separator="," item="rid">
-            (#{userId},#{rid})
+            (#{userId},#{rid},now())
         </foreach>
     </insert>
 
@@ -53,6 +55,17 @@
           AND m1.status = m2.status AND m1.status = 1
         ORDER BY m1.sort, m2.sort
     </select>
+
+    <!--    SELECT m1.gid key1, m1.name title1, m2.gid key2, m2.name title2-->
+    <!--    FROM fota_dev.fota_permission m1,-->
+    <!--    fota_dev.fota_permission m2-->
+    <!--    inner JOIN fota_dev.fota_users_role u_r ON u_r.role_id = m2.p_id and u_r.admin_id = #{roleId}-->
+    <!--    WHERE m1.gid = m2.p_id-->
+    <!--    AND m1.type = m2.type-->
+    <!--    AND m1.type = 1-->
+    <!--    AND m1.status = m2.status-->
+    <!--    AND m1.status = 1-->
+    <!--    ORDER BY m1.sort, m2.sort-->
 
     <select id="selectRoleMenu" resultType="com.ruili.fota.meta.vo.RoleMenuVO">
         SELECT role.gid, role.name, value, role.status, GROUP_CONCAT(menu.gid) mids

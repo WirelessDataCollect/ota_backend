@@ -23,7 +23,6 @@ public class BaseService {
     public List findObjectsByProperty(String property, Object value, Mapper<?> objectMapper, Class<?> objectClass) {
         Example example = new Example(objectClass);
         example.createCriteria().andEqualTo(property, value);
-
         return objectMapper.selectByExample(example);
     }
 

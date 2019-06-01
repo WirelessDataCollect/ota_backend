@@ -77,10 +77,10 @@ public class MongoServiceImpl implements MongoService {
         return fileName;
     }
 
-    public boolean deleteFirmwareByImgId(String firmwareId) {
+    public int deleteFirmwareByImgId(String firmwareId) {
         GridFS gridFS = new GridFS(getDB(), MongoDBEnum.GridFSBucket_FIRMWARE.getGridFSBucket());
         gridFS.remove(firmwareId);
-        return true;
+        return 1;
     }
 
     @Override

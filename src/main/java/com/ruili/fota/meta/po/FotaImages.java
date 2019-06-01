@@ -83,6 +83,17 @@ public class FotaImages {
         this.gmtupdate = gmtupdate;
     }
 
+    public FotaImages(Integer gid, String firmwareId, String uploader, String uploadertel, String firmVersion, String content, Date gmtcreate, Date gmtupdate) {
+        this.gid = gid;
+        this.firmwareId = firmwareId;
+        this.uploader = uploader;
+        this.uploadertel = uploadertel;
+        this.firmVersion = firmVersion;
+        this.content = content;
+        this.gmtcreate = gmtcreate;
+        this.gmtupdate = gmtupdate;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");

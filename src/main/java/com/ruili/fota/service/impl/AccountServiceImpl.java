@@ -1,5 +1,6 @@
 package com.ruili.fota.service.impl;
 
+import com.ruili.fota.common.DateTools;
 import com.ruili.fota.common.RequestHelper;
 import com.ruili.fota.mapper.FotaUsersMapper;
 import com.ruili.fota.meta.po.FotaUsers;
@@ -66,16 +67,24 @@ public class AccountServiceImpl implements AccountService {
         if (theUser != null) {
             return -1;
         }
-        return fotaUsersMapper.insertSelective(user);
+        user.setStatus(1);//账户启用
+        //TODO 当使用微信登陆时，更新其中的openid内容字段
+        user.setGmtcreate(DateTools.currentTime());
+        user.setGmtupdate(DateTools.currentTime());
+        return fotaUsersMapper.insert(user);
     }
 
     @Override
     public int updateUser(FotaUsers user) {
+        Example example = new Example(FotaUsers.class);
+        example.createCriteria().andEqualTo("gid", user.getGid());
         if (!StringUtils.isEmpty(user.getStatus())) {
-            Integer status = fotaUsersMapper.selectByPrimaryKey(user.getGid()).getStatus();
+            //TODO 这里用selectByPrimaryKey会匹配所有的字段有bug
+            //Integer status = fotaUsersMapper.selectByPrimaryKey(user.getGid()).getStatus();
+            int status = fotaUsersMapper.selectOneByExample(example).getStatus();
             status = (status == 1 ? 0 : 1);
             user.setStatus(status);
         }
-        return fotaUsersMapper.updateByPrimaryKeySelective(user);
+        return fotaUsersMapper.updateByExampleSelective(user, example);
     }
 }

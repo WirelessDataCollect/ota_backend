@@ -27,7 +27,7 @@ public class OtaHistoryVO {
         this.imei = history.getImei();
         this.deviceStatus = history.getLoadProcess();
         this.configBO = JSON.parseObject(history.getConfigBo(), ConfigBO.class);
-        this.upgradeTime = history.getGmrcreate();
+        this.upgradeTime = history.getGmtcreate();
     }
 
     public OtaHistoryVO() {

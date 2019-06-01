@@ -2,6 +2,7 @@ package com.ruili.fota.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.mongodb.gridfs.GridFSDBFile;
+import com.ruili.fota.common.DateTools;
 import com.ruili.fota.common.Md5Tools;
 import com.ruili.fota.common.UUIDTools;
 import com.ruili.fota.constant.LoadStatusEnum;
@@ -11,6 +12,7 @@ import com.ruili.fota.meta.bo.ConfigResPO;
 import com.ruili.fota.meta.bo.LoadProcessBO;
 import com.ruili.fota.meta.po.FotaImages;
 import com.ruili.fota.meta.po.FotaLoadHistory;
+import com.ruili.fota.meta.po.FotaUsers;
 import com.ruili.fota.meta.vo.OtaFileVO;
 import com.ruili.fota.netty.pk.ConfigPK;
 import com.ruili.fota.meta.entity.FotaProcessEntity;
@@ -24,6 +26,7 @@ import com.ruili.fota.service.FirmwareService;
 import com.ruili.fota.service.MongoService;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.socket.SocketChannel;
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -69,7 +72,8 @@ public class FirmwareServiceImpl implements FirmwareService {
     }
 
     @Override
-    public int insertFirmwareInfo(FotaImages fotaImages) {
+    public int insertFirmwareInfo(String firmwareId, String firmwareVersion, String content, FotaUsers currentUser) {
+        FotaImages fotaImages = new FotaImages(null, firmwareId, currentUser.getRealname(), currentUser.getPhone(), firmwareVersion, content, DateTools.currentTime(), DateTools.currentTime());
         return fotaImagesMapper.insert(fotaImages);
     }
 
@@ -149,7 +153,7 @@ public class FirmwareServiceImpl implements FirmwareService {
      */
 
     @Override
-    public LoadProcessBO downloadFirmwareReport(String imei, String requestId) {
+    public LoadProcessBO downloadFirmwareReport(String imei, String requestId) throws NotFoundException {
         //直接返回数据库中设备的当前状态
         FotaProcessEntity entity = FotaProcessMap.get(imei);
         //如果设备的升级过程还在进行，则在Map中取出升级状态
@@ -161,10 +165,24 @@ public class FirmwareServiceImpl implements FirmwareService {
             Example.Criteria criteria = example.createCriteria();
             criteria.andEqualTo("requestId", requestId);
             FotaLoadHistory history = fotaLoadHistoryMapper.selectOneByExample(example);
+            if (history==null) throw new NotFoundException("设备未在升级且未查询到设备升级记录");
             LoadProcessBO processBO = JSON.parseObject(history.getLoadProcess(), LoadProcessBO.class);
             return processBO;
         }
 
+    }
+
+    @Override
+    public boolean deleteFirmInfoByFirmId(String firmwareId) throws NotFoundException {
+        Example example = new Example(FotaImages.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("firmwareId", firmwareId);
+        FotaImages image = fotaImagesMapper.selectOneByExample(example);
+        if (image == null) throw new NotFoundException("不存在此固件id:" + firmwareId);
+        int result1 = fotaImagesMapper.deleteByExample(example);
+        int result2 = mongoService.deleteFirmwareByImgId(firmwareId);
+        if (result1 == 1 && result2 == 1) return true;
+        return false;
     }
 
 

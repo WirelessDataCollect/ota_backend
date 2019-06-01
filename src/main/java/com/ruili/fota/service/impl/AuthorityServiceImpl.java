@@ -1,5 +1,6 @@
 package com.ruili.fota.service.impl;
 
+import com.ruili.fota.common.DateTools;
 import com.ruili.fota.constant.AuthorityEnum;
 import com.ruili.fota.mapper.FotaRoleMapper;
 import com.ruili.fota.meta.po.FotaRole;
@@ -8,9 +9,12 @@ import com.ruili.fota.meta.vo.RoleMenuVO;
 import com.ruili.fota.meta.vo.UserRoleVO;
 import com.ruili.fota.service.AuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import tk.mybatis.mapper.entity.Example;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -40,8 +44,11 @@ public class AuthorityServiceImpl extends BaseService implements AuthorityServic
         role.setValue(role.getValue().toUpperCase());
         List roles = findObjectsByProperty("value", role.getValue(), fotaRoleMapper, FotaRole.class);
         if (roles != null && roles.size() != 0) {
-            return -1;
+            throw new DuplicateKeyException("此项已存在，无需重复添加");
         }
+        role.setStatus(1);
+        role.setGmtcreate(DateTools.currentTime());
+        role.setGmtupdate(DateTools.currentTime());
         return fotaRoleMapper.insertSelective(role);
     }
 
@@ -52,7 +59,10 @@ public class AuthorityServiceImpl extends BaseService implements AuthorityServic
         fotaRoleMapper.deleteRoleMenu(AuthorityEnum.MENU_TYPE_WX.getType(), roleId);
         fotaRoleMapper.deleteRoleMenu(AuthorityEnum.MENU_TYPE_PC.getType(), roleId);
         //在删除角色
-        return fotaRoleMapper.deleteByPrimaryKey(roleId);
+        Example example = new Example(FotaRole.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("gid",roleId);
+        return fotaRoleMapper.deleteByExample(example);
     }
 
     @Override
@@ -61,12 +71,9 @@ public class AuthorityServiceImpl extends BaseService implements AuthorityServic
     }
 
     @Override
-    public int updateUserRole(Integer userId, List<Integer> roleIds) {
-        int res;
-        //先删除原有对应关系
-        res = fotaRoleMapper.deleteUserRole(userId);
-        //添加对应关系
-        res = res * fotaRoleMapper.insertUserRole(userId, roleIds);
+    public int insertOrUpdateUserRole(Integer userId, List<Integer> roleIds) {
+        //自动做了更新和插入检测
+        int res = fotaRoleMapper.insertUserRole(userId, roleIds);
         return res;
     }
 

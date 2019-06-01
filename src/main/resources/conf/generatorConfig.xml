@@ -13,6 +13,14 @@
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
 
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <property name="mappers" value="tk.mybatis.mapper.common.Mapper"/>
+            <property name="caseSensitive" value="true"/>
+            <!--<property name="forceAnnotation" value="true"/>-->
+            <!--<property name="beginningDelimiter" value="`"/>-->
+            <!--<property name="endingDelimiter" value="`"/>-->
+        </plugin>
+
         <!--数据库链接URL，用户名、密码 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://47.111.9.209:3306/fota_dev"
                         userId="root"

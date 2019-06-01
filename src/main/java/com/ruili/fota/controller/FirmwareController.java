@@ -8,12 +8,14 @@ import com.ruili.fota.mapper.FotaImagesMapper;
 import com.ruili.fota.meta.bo.ConfigResPO;
 import com.ruili.fota.meta.bo.LoadProcessBO;
 import com.ruili.fota.meta.po.FotaImages;
+import com.ruili.fota.meta.po.FotaUsers;
 import com.ruili.fota.meta.vo.OtaFileVO;
 import com.ruili.fota.service.FirmwareService;
 import com.ruili.fota.service.MongoService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,14 +49,15 @@ public class FirmwareController extends BaseController {
     @ApiOperation(value = "固件 上传 上传信息", tags = {"固件管理"}, notes = "上传固件版本号、固件对应设备类型、上传人，备注，返回插入条数以及响应状态")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "firmwareId", value = "固件唯一id", required = true),
-            @ApiImplicitParam(name = "uploadUserName", value = "上传者姓名",required = true),
-            @ApiImplicitParam(name = "uploadUserPhoneNumber", value = "上传者电话",required = true),
-            @ApiImplicitParam(name = "firmwareVersion", value = "固件版本号",required = true),
-            @ApiImplicitParam(name = "content", value = "固件备注",required = true),
+            @ApiImplicitParam(name = "firmwareVersion", value = "固件版本号", required = true),
+            @ApiImplicitParam(name = "content", value = "固件备注", required = true),
     })
     @PostMapping(value = "/uploadinfo")
-    public BaseResp uploadInfo(FotaImages fotaImages) {
-        return new BaseResp(ResultStatus.SUCCESS, firmwareService.insertFirmwareInfo(fotaImages));
+    public BaseResp uploadInfo(@RequestParam("firmwareId") String firmwareId,
+                               @RequestParam("firmwareVersion") String firmwareVersion,
+                               @RequestParam("content") String content) {
+        FotaUsers currentUser = this.findCurrentUser();
+        return new BaseResp(ResultStatus.SUCCESS, firmwareService.insertFirmwareInfo(firmwareId, firmwareVersion, content, currentUser));
     }
 
     @ApiOperation(value = "固件 上传 上传文件", tags = {"固件管理"}, notes = "上传固件，返回固件唯一32位id")
@@ -74,8 +77,8 @@ public class FirmwareController extends BaseController {
             @ApiImplicitParam(name = "firmwareId", value = "固件唯一id，firmwareId"),
     })
     @PostMapping(value = "/deletebyfirmwareid")
-    public BaseResp firmDelete(@RequestParam("firmwareId") String firmwareId) throws IOException {
-        return new BaseResp(ResultStatus.SUCCESS, "删除成功", mongoService.deleteFirmwareByImgId(firmwareId));
+    public BaseResp firmDelete(@RequestParam("firmwareId") String firmwareId) throws IOException, NotFoundException {
+        return new BaseResp(ResultStatus.SUCCESS, "删除成功", firmwareService.deleteFirmInfoByFirmId(firmwareId));
     }
 
     @ApiOperation(value = "固件 下载 配置", tags = {"固件烧录"}, notes = "烧录固件之前下发配置给设备，后端自动开始烧录")
@@ -101,7 +104,7 @@ public class FirmwareController extends BaseController {
     })
     @PostMapping(value = "/downloadreport")
     public BaseResp<LoadProcessBO> downloadFireware(@RequestParam("imei") String imei,
-                                                    @RequestParam("requestId") String requestId) {
+                                                    @RequestParam("requestId") String requestId) throws NotFoundException {
         return new BaseResp(ResultStatus.SUCCESS, firmwareService.downloadFirmwareReport(imei, requestId));
     }
 

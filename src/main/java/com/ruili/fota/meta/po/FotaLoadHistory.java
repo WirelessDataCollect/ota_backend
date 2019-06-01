@@ -17,20 +17,20 @@ public class FotaLoadHistory {
 
     private String configBo;
 
-    private Date gmrcreate;
+    private Date gmtcreate;
 
     private Date gmtupdate;
 
     private Date gmtmodified;
 
-    public FotaLoadHistory(Integer gid, String imei, String requestId, String firmwareId, String loadProcess, String configBo, Date gmrcreate, Date gmtupdate, Date gmtmodified) {
+    public FotaLoadHistory(Integer gid, String imei, String requestId, String firmwareId, String loadProcess, String configBo, Date gmtcreate, Date gmtupdate, Date gmtmodified) {
         this.gid = gid;
         this.imei = imei;
         this.requestId = requestId;
         this.firmwareId = firmwareId;
         this.loadProcess = loadProcess;
         this.configBo = configBo;
-        this.gmrcreate = gmrcreate;
+        this.gmtcreate = gmtcreate;
         this.gmtupdate = gmtupdate;
         this.gmtmodified = gmtmodified;
     }
@@ -91,12 +91,12 @@ public class FotaLoadHistory {
         this.configBo = configBo == null ? null : configBo.trim();
     }
 
-    public Date getGmrcreate() {
-        return gmrcreate;
+    public Date getGmtcreate() {
+        return gmtcreate;
     }
 
-    public void setGmrcreate(Date gmrcreate) {
-        this.gmrcreate = gmrcreate;
+    public void setGmtcreate(Date gmtcreate) {
+        this.gmtcreate = gmtcreate;
     }
 
     public Date getGmtupdate() {
@@ -130,8 +130,8 @@ public class FotaLoadHistory {
                 .append(loadProcess).append('\"');
         sb.append(",\"configBo\":\"")
                 .append(configBo).append('\"');
-        sb.append(",\"gmrcreate\":\"")
-                .append(gmrcreate).append('\"');
+        sb.append(",\"gmtcreate\":\"")
+                .append(gmtcreate).append('\"');
         sb.append(",\"gmtupdate\":\"")
                 .append(gmtupdate).append('\"');
         sb.append(",\"gmtmodified\":\"")

@@ -11,7 +11,7 @@ public class RoleMenuVO {
     /**
      * 角色id
      */
-    private Integer id;
+    private Integer gid;
     /**
      * 角色 中文名
      */
@@ -29,12 +29,12 @@ public class RoleMenuVO {
      */
     private List<Integer> mids;
 
-    public Integer getId() {
-        return id;
+    public Integer getGid() {
+        return gid;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setGid(Integer gid) {
+        this.gid = gid;
     }
 
     public String getName() {

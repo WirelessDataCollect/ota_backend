@@ -64,7 +64,7 @@ public interface AuthorityService {
      * @param roleIds
      * @return
      */
-    int updateUserRole(Integer userId, List<Integer> roleIds);
+    int insertOrUpdateUserRole(Integer userId, List<Integer> roleIds);
 
     /**
      * 获取所有菜单 或者根据角色获取菜单
