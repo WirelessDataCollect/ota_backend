@@ -5,6 +5,7 @@ import com.ruili.fota.meta.po.FotaUsers;
 import com.ruili.fota.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 
 @RestController
-@RequestMapping(value = "/test")
+@CrossOrigin
 public class BaseController {
 
     @Autowired

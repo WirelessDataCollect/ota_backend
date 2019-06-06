@@ -6,7 +6,6 @@ server:
 spring:
   application:
     name: ruiliFota
-
   main:
     allow-bean-definition-overriding: true
 

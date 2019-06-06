@@ -31,6 +31,7 @@ import java.util.List;
  */
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "/firmware")
 public class FirmwareController extends BaseController {
     @Autowired
