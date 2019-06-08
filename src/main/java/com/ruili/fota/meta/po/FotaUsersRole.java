@@ -43,6 +43,16 @@ public class FotaUsersRole {
         this.gmtcreate = gmtcreate;
     }
 
+    public FotaUsersRole(Integer gid, Integer adminId, Integer roleId, Date gmtcreate) {
+        this.gid = gid;
+        this.adminId = adminId;
+        this.roleId = roleId;
+        this.gmtcreate = gmtcreate;
+    }
+
+    public FotaUsersRole() {
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");

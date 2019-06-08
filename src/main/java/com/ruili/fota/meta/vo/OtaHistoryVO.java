@@ -14,8 +14,8 @@ public class OtaHistoryVO {
     private Integer id;
     @ApiModelProperty(value = "设备imei")
     private String imei;
-    @ApiModelProperty(value = "设备状态")
-    private String deviceStatus;
+    @ApiModelProperty(value = "设备升级状态，66代表升级成功，23代表升级失败")
+    private String loadStatus;
     @ApiModelProperty(value = "固件的配置信息")
     private ConfigBO configBO;
     @ApiModelProperty(value = "固件升级时间")
@@ -25,7 +25,7 @@ public class OtaHistoryVO {
     public OtaHistoryVO(FotaLoadHistory history) {
         this.id = history.getGid();
         this.imei = history.getImei();
-        this.deviceStatus = history.getLoadProcess();
+        this.loadStatus = history.getLoadProcess();
         this.configBO = JSON.parseObject(history.getConfigBo(), ConfigBO.class);
         this.upgradeTime = history.getGmtcreate();
     }
@@ -33,10 +33,10 @@ public class OtaHistoryVO {
     public OtaHistoryVO() {
     }
 
-    public OtaHistoryVO(Integer id, String imei, String deviceStatus, ConfigBO configBO, Date upgradeTime) {
+    public OtaHistoryVO(Integer id, String imei, String loadStatus, ConfigBO configBO, Date upgradeTime) {
         this.id = id;
         this.imei = imei;
-        this.deviceStatus = deviceStatus;
+        this.loadStatus = loadStatus;
         this.configBO = configBO;
         this.upgradeTime = upgradeTime;
     }
@@ -57,12 +57,12 @@ public class OtaHistoryVO {
         this.imei = imei;
     }
 
-    public String getDeviceStatus() {
-        return deviceStatus;
+    public String getLoadStatus() {
+        return loadStatus;
     }
 
-    public void setDeviceStatus(String deviceStatus) {
-        this.deviceStatus = deviceStatus;
+    public void setLoadStatus(String loadStatus) {
+        this.loadStatus = loadStatus;
     }
 
     public ConfigBO getConfigBO() {
@@ -88,10 +88,10 @@ public class OtaHistoryVO {
                 .append(id);
         sb.append(",\"imei\":\"")
                 .append(imei).append('\"');
-        sb.append(",\"deviceStatus\":\"")
-                .append(deviceStatus).append('\"');
-        sb.append(",\"configBO\":\"")
-                .append(configBO).append('\"');
+        sb.append(",\"loadStatus\":\"")
+                .append(loadStatus).append('\"');
+        sb.append(",\"configBO\":")
+                .append(configBO);
         sb.append(",\"upgradeTime\":\"")
                 .append(upgradeTime).append('\"');
         sb.append('}');

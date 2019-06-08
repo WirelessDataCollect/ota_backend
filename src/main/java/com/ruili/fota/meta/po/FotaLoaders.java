@@ -93,6 +93,21 @@ public class FotaLoaders {
         this.gmtmodified = gmtmodified;
     }
 
+    public FotaLoaders(Integer gid, String imei, String imsi, Integer csq, Integer loadStatus, Integer onlineStatus, Date gmtcreate, Date gmtupdate, Date gmtmodified) {
+        this.gid = gid;
+        this.imei = imei;
+        this.imsi = imsi;
+        this.csq = csq;
+        this.loadStatus = loadStatus;
+        this.onlineStatus = onlineStatus;
+        this.gmtcreate = gmtcreate;
+        this.gmtupdate = gmtupdate;
+        this.gmtmodified = gmtmodified;
+    }
+
+    public FotaLoaders() {
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");

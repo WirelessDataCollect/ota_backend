@@ -72,4 +72,38 @@ public class FotaRole {
     public void setGmtupdate(Date gmtupdate) {
         this.gmtupdate = gmtupdate;
     }
+
+    public FotaRole(Integer gid, String name, String value, String info, Integer status, Date gmtcreate, Date gmtupdate) {
+        this.gid = gid;
+        this.name = name;
+        this.value = value;
+        this.info = info;
+        this.status = status;
+        this.gmtcreate = gmtcreate;
+        this.gmtupdate = gmtupdate;
+    }
+
+    public FotaRole() {
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"gid\":")
+                .append(gid);
+        sb.append(",\"name\":\"")
+                .append(name).append('\"');
+        sb.append(",\"value\":\"")
+                .append(value).append('\"');
+        sb.append(",\"info\":\"")
+                .append(info).append('\"');
+        sb.append(",\"status\":")
+                .append(status);
+        sb.append(",\"gmtcreate\":\"")
+                .append(gmtcreate).append('\"');
+        sb.append(",\"gmtupdate\":\"")
+                .append(gmtupdate).append('\"');
+        sb.append('}');
+        return sb.toString();
+    }
 }

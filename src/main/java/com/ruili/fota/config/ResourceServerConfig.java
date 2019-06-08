@@ -23,7 +23,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                         "/swagger-resources/**",
                         "/webjars/**",
                         "/noauth/**",
-                        "/v2/**"
+                        "/v2/**",
+                        "/firmware/upload"
                 ).permitAll();
         http.csrf().disable().authorizeRequests().anyRequest().authenticated();
     }

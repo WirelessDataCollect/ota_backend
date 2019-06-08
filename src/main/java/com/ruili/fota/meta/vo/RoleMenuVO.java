@@ -65,6 +65,17 @@ public class RoleMenuVO {
         return mids;
     }
 
+    public RoleMenuVO(Integer gid, String name, String value, Integer status, List<Integer> mids) {
+        this.gid = gid;
+        this.name = name;
+        this.value = value;
+        this.status = status;
+        this.mids = mids;
+    }
+
+    public RoleMenuVO() {
+    }
+
     public void setMids(String mids) {
         this.mids = new ArrayList<>();
 
@@ -76,6 +87,22 @@ public class RoleMenuVO {
         for (String midStr : midsStr) {
             this.mids.add(Integer.parseInt(midStr));
         }
+    }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"gid\":")
+                .append(gid);
+        sb.append(",\"name\":\"")
+                .append(name).append('\"');
+        sb.append(",\"value\":\"")
+                .append(value).append('\"');
+        sb.append(",\"status\":")
+                .append(status);
+        sb.append(",\"mids\":")
+                .append(mids);
+        sb.append('}');
+        return sb.toString();
     }
 }

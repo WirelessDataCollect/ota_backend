@@ -94,6 +94,9 @@ public class FotaImages {
         this.gmtupdate = gmtupdate;
     }
 
+    public FotaImages() {
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");

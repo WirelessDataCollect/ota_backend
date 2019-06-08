@@ -32,4 +32,26 @@ public class FotaRolePermission {
     public void setGmtcreate(Date gmtcreate) {
         this.gmtcreate = gmtcreate;
     }
+
+    public FotaRolePermission(Integer roleId, Integer permissionId, Date gmtcreate) {
+        this.roleId = roleId;
+        this.permissionId = permissionId;
+        this.gmtcreate = gmtcreate;
+    }
+
+    public FotaRolePermission() {
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"roleId\":")
+                .append(roleId);
+        sb.append(",\"permissionId\":")
+                .append(permissionId);
+        sb.append(",\"gmtcreate\":\"")
+                .append(gmtcreate).append('\"');
+        sb.append('}');
+        return sb.toString();
+    }
 }

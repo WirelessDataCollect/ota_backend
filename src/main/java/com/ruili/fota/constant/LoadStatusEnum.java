@@ -15,10 +15,10 @@ public enum LoadStatusEnum {
     LOAD_FIRMWARE_DEVICE_NO_ACK("烧写固件时设备无ACK应答", 404),
 
     //配置相关的
-    CONFIG_SUCCESS("下发配置成功，等待上报配置结果", 66),
-    CONFIG_ERROR("下发配置失败", 23),
-    CONFIG_NO_STATUS("无配置状态", 0),
-    CONFIG_DEVICE_DISCONNECT("设备掉线", 402),
+    CONFIG_SUCCESS("下发配置成功，等待上报配置结果", 68),
+    CONFIG_ERROR("下发配置失败", 69),
+    CONFIG_NO_STATUS("无配置状态", 70),
+    CONFIG_DEVICE_DISCONNECT("设备掉线", 71),
 
     //设备烧录过程相关的
     CAN_SEND_ERROR("CAN发送失败", 100),
@@ -28,7 +28,7 @@ public enum LoadStatusEnum {
     FILE_WRONG("文件错误", 104),
 
     //状态不在枚举中
-    NOT_FOUND_CODE("code无法识别", 404);
+    NOT_FOUND_CODE("code无法识别", 707);
 
     final String status;
     final int code;

@@ -36,4 +36,26 @@ public class MenuVO {
     public void setChildren(List<MenuVO> children) {
         this.children = children;
     }
+
+    public MenuVO(Integer key, String title, List<MenuVO> children) {
+        this.key = key;
+        this.title = title;
+        this.children = children;
+    }
+
+    public MenuVO() {
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"key\":")
+                .append(key);
+        sb.append(",\"title\":\"")
+                .append(title).append('\"');
+        sb.append(",\"children\":")
+                .append(children);
+        sb.append('}');
+        return sb.toString();
+    }
 }

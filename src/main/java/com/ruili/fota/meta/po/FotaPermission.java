@@ -132,4 +132,56 @@ public class FotaPermission {
     public void setType(Integer type) {
         this.type = type;
     }
+
+    public FotaPermission(Integer gid, String code, String pCode, Integer pId, String name, String url, Integer isMenu, Integer level, Integer sort, Integer status, Date gmtcreate, Date gmtupdate, Integer type) {
+        this.gid = gid;
+        this.code = code;
+        this.pCode = pCode;
+        this.pId = pId;
+        this.name = name;
+        this.url = url;
+        this.isMenu = isMenu;
+        this.level = level;
+        this.sort = sort;
+        this.status = status;
+        this.gmtcreate = gmtcreate;
+        this.gmtupdate = gmtupdate;
+        this.type = type;
+    }
+
+    public FotaPermission() {
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"gid\":")
+                .append(gid);
+        sb.append(",\"code\":\"")
+                .append(code).append('\"');
+        sb.append(",\"pCode\":\"")
+                .append(pCode).append('\"');
+        sb.append(",\"pId\":")
+                .append(pId);
+        sb.append(",\"name\":\"")
+                .append(name).append('\"');
+        sb.append(",\"url\":\"")
+                .append(url).append('\"');
+        sb.append(",\"isMenu\":")
+                .append(isMenu);
+        sb.append(",\"level\":")
+                .append(level);
+        sb.append(",\"sort\":")
+                .append(sort);
+        sb.append(",\"status\":")
+                .append(status);
+        sb.append(",\"gmtcreate\":\"")
+                .append(gmtcreate).append('\"');
+        sb.append(",\"gmtupdate\":\"")
+                .append(gmtupdate).append('\"');
+        sb.append(",\"type\":")
+                .append(type);
+        sb.append('}');
+        return sb.toString();
+    }
 }

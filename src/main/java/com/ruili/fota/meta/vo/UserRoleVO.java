@@ -86,4 +86,35 @@ public class UserRoleVO {
     public void setRoles(String roles) {
         this.roles = roles;
     }
+
+    public UserRoleVO(Integer id, String username, String realname, Integer status, List<Integer> rids, String roles) {
+        this.id = id;
+        this.username = username;
+        this.realname = realname;
+        this.status = status;
+        this.rids = rids;
+        this.roles = roles;
+    }
+
+    public UserRoleVO() {
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"id\":")
+                .append(id);
+        sb.append(",\"username\":\"")
+                .append(username).append('\"');
+        sb.append(",\"realname\":\"")
+                .append(realname).append('\"');
+        sb.append(",\"status\":")
+                .append(status);
+        sb.append(",\"rids\":")
+                .append(rids);
+        sb.append(",\"roles\":\"")
+                .append(roles).append('\"');
+        sb.append('}');
+        return sb.toString();
+    }
 }

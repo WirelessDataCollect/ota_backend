@@ -43,6 +43,9 @@ public class FotaLoadHistory {
         this.configBo = entity.getConfigBO().toString();
     }
 
+    public FotaLoadHistory() {
+    }
+
     public Integer getGid() {
         return gid;
     }

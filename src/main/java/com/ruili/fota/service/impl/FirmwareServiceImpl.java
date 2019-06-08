@@ -103,7 +103,7 @@ public class FirmwareServiceImpl implements FirmwareService {
         //生成唯一的请求id
         String requestId = UUIDTools.getUUID32();
         resPO.setRequestId(requestId);
-        //设备可能存在掉电后平台无法检测还存储在
+        //TODO 设备可能存在掉电后平台无法检测还存储在内容当中，需要对时间进行检测清除内存资源
         FotaProcessMap.initStateFotaProcessEntity(configBO.getImei(), requestId, configBO.getFirmwareId(), totalPackNum, responseBuf, configBO);
         System.out.println(configBO);
         ConfigPK configPK = new ConfigPK(configBO.getRecID(), configBO.getSendID(), configBO.getImei(), configBO.getCannum(), configBO.getMeasure(), totalPackNum);
@@ -174,6 +174,7 @@ public class FirmwareServiceImpl implements FirmwareService {
 
     @Override
     public boolean deleteFirmInfoByFirmId(String firmwareId) throws NotFoundException {
+        //TODO 如果前端上传文件确没有提交固件信息，则需要定期检查删除没有关联到固件列表的固件文件
         Example example = new Example(FotaImages.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("firmwareId", firmwareId);

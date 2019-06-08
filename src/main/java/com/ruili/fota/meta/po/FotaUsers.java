@@ -122,4 +122,53 @@ public class FotaUsers {
     public void setGmtupdate(Date gmtupdate) {
         this.gmtupdate = gmtupdate;
     }
+
+    public FotaUsers(Integer gid, String username, String phone, String openid, String password, String realname, String email, Integer status, String info, String lastloginip, Date gmtcreate, Date gmtupdate) {
+        this.gid = gid;
+        this.username = username;
+        this.phone = phone;
+        this.openid = openid;
+        this.password = password;
+        this.realname = realname;
+        this.email = email;
+        this.status = status;
+        this.info = info;
+        this.lastloginip = lastloginip;
+        this.gmtcreate = gmtcreate;
+        this.gmtupdate = gmtupdate;
+    }
+
+    public FotaUsers() {
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("{");
+        sb.append("\"gid\":")
+                .append(gid);
+        sb.append(",\"username\":\"")
+                .append(username).append('\"');
+        sb.append(",\"phone\":\"")
+                .append(phone).append('\"');
+        sb.append(",\"openid\":\"")
+                .append(openid).append('\"');
+        sb.append(",\"password\":\"")
+                .append(password).append('\"');
+        sb.append(",\"realname\":\"")
+                .append(realname).append('\"');
+        sb.append(",\"email\":\"")
+                .append(email).append('\"');
+        sb.append(",\"status\":")
+                .append(status);
+        sb.append(",\"info\":\"")
+                .append(info).append('\"');
+        sb.append(",\"lastloginip\":\"")
+                .append(lastloginip).append('\"');
+        sb.append(",\"gmtcreate\":\"")
+                .append(gmtcreate).append('\"');
+        sb.append(",\"gmtupdate\":\"")
+                .append(gmtupdate).append('\"');
+        sb.append('}');
+        return sb.toString();
+    }
 }
