@@ -28,7 +28,7 @@ public class LoadDeviceManageServiceImpl implements LoadDeviceManageService {
         FotaLoaders theFotaLoader = fotaLoadersMapper.selectOne(fotaLoader);
 
         if (theFotaLoader != null) {
-            //如果设备是旧设备
+            //设备是旧设备
             theFotaLoader.setOnlineStatus(OnlineStatusEnum.ONLINE_STATUS.getCode());
             theFotaLoader.setGmtcreate(DateTools.currentTime());
             theFotaLoader.setGmtupdate(DateTools.currentTime());
@@ -40,7 +40,7 @@ public class LoadDeviceManageServiceImpl implements LoadDeviceManageService {
             fotaLoader.setCsq(registerPK.getCsq());
             fotaLoader.setLoadStatus(LoadStatusEnum.LOAD_NO_STATUS.getCode());
             fotaLoader.setOnlineStatus(OnlineStatusEnum.ONLINE_STATUS.getCode());
-            theFotaLoader.setGmtcreate(DateTools.currentTime());
+            fotaLoader.setGmtcreate(DateTools.currentTime());
             fotaLoader.setGmtupdate(DateTools.currentTime());
             fotaLoader.setGmtmodified(DateTools.currentTime());
             return fotaLoadersMapper.insert(fotaLoader);
