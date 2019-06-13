@@ -22,7 +22,7 @@ public class LoadDeviceController extends BaseController {
     @Autowired
     private LoadDeviceManageService loadDeviceManageService;
 
-    @ApiOperation(value = "设备 信息 信息查询", tags = {"设备查询"}, notes = "查看设备的基本信息")
+    @ApiOperation(value = "设备 列表 信息查询", tags = {"设备查询"}, notes = "查看设备的列表")
     @ApiImplicitParams({
     })
     @PostMapping(value = "/query")

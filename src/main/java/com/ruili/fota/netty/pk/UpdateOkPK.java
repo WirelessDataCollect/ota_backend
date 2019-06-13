@@ -1,17 +1,11 @@
 package com.ruili.fota.netty.pk;
 
-/**
- * 平台下发给设备的配置信息包
- */
-public class UpdateokPK {
-    private final String type = "updateok";
+public class UpdateOkPK {
+    private final String type = CommandType.UPDATE_OK.getType();
     private String imei;
 
-    public UpdateokPK(String imei) {
+    public UpdateOkPK(String imei) {
         this.imei = imei;
-    }
-
-    public UpdateokPK() {
     }
 
     public String getType() {

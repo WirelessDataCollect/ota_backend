@@ -79,12 +79,20 @@ public class AccountServiceImpl implements AccountService {
         Example example = new Example(FotaUsers.class);
         example.createCriteria().andEqualTo("gid", user.getGid());
         if (!StringUtils.isEmpty(user.getStatus())) {
-            //TODO 这里用selectByPrimaryKey会匹配所有的字段有bug
+            //这里用selectByPrimaryKey会匹配所有的字段有bug，排查出来是mybatisGenerator没有给生成的po对象注解
             //Integer status = fotaUsersMapper.selectByPrimaryKey(user.getGid()).getStatus();
             int status = fotaUsersMapper.selectOneByExample(example).getStatus();
+            //用户是否被禁用
             status = (status == 1 ? 0 : 1);
             user.setStatus(status);
         }
         return fotaUsersMapper.updateByExampleSelective(user, example);
+    }
+
+    @Override
+    public int deleteUserById(int userId) {
+        Example example = new Example(FotaUsers.class);
+        example.createCriteria().andEqualTo("gid", userId);
+        return fotaUsersMapper.deleteByExample(example);
     }
 }

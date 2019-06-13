@@ -1,6 +1,8 @@
 package com.ruili.fota.service.impl;
 
 import com.mongodb.DB;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSInputFile;
@@ -17,6 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author: liangjingxiong
@@ -94,5 +99,17 @@ public class MongoServiceImpl implements MongoService {
         GridFS gridFS = new GridFS(mongoTemplate.getMongoDbFactory().getLegacyDb(), bucket);
         GridFSDBFile gridFSFile = gridFS.findOne(fileName);
         return gridFSFile;
+    }
+
+    @Override
+    public List<String> selectAllImageIds() {
+        List<String> imageIdList = new ArrayList<>();
+        GridFS gridFS = new GridFS(getDB(), MongoDBEnum.GridFSBucket_FIRMWARE.getGridFSBucket());
+        DBCursor cursor = gridFS.getFileList();
+        Iterator<DBObject> dbObjectIterator = cursor.iterator();
+        while (dbObjectIterator.hasNext()) {
+            imageIdList.add(dbObjectIterator.next().get("filename").toString());
+        }
+        return imageIdList;
     }
 }

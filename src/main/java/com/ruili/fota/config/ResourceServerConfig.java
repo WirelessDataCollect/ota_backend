@@ -26,6 +26,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                         "/v2/**",
                         "/firmware/upload"
                 ).permitAll();
-        http.csrf().disable().authorizeRequests().anyRequest().authenticated();
+        http.cors().and().csrf().disable().authorizeRequests().anyRequest().authenticated();
     }
 }

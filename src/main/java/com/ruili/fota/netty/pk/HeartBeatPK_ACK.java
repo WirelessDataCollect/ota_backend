@@ -1,16 +1,11 @@
 package com.ruili.fota.netty.pk;
 
-public class UpdateErrorPK {
-    private final String type = CommandType.UPDATE_ERROR.getType();
+public class HeartBeatPK_ACK {
+    private final String type = CommandType.HEARTBEAT_ACK.getType();
     private String imei;
-    private int code;
 
-    public UpdateErrorPK(String imei, int code) {
+    public HeartBeatPK_ACK(String imei) {
         this.imei = imei;
-        this.code = code;
-    }
-
-    public UpdateErrorPK() {
     }
 
     public String getType() {
@@ -25,14 +20,6 @@ public class UpdateErrorPK {
         this.imei = imei;
     }
 
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");
@@ -40,8 +27,6 @@ public class UpdateErrorPK {
                 .append(type).append('\"');
         sb.append(",\"imei\":\"")
                 .append(imei).append('\"');
-        sb.append(",\"code\":")
-                .append(code);
         sb.append('}');
         return sb.toString();
     }

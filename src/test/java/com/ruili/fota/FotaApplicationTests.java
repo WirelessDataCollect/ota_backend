@@ -1,7 +1,9 @@
 package com.ruili.fota;
 
+import com.ruili.fota.constant.DownloadPattern;
 import com.ruili.fota.mapper.FotaUsersMapper;
 import com.ruili.fota.meta.po.FotaUsers;
+import com.ruili.fota.service.MongoService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,14 +20,14 @@ import java.util.List;
 public class FotaApplicationTests {
 
     @Autowired
-    private FotaUsersMapper fotaUsersMapper;
+    private MongoService mongoService;
+
 
     @Test
     public void test() throws Exception {
 
         // 保存字符串
-        FotaUsers users = fotaUsersMapper.selectByPrimaryKey(11);
-        System.out.println(users);
+        mongoService.selectAllImageIds();
 
     }
 }

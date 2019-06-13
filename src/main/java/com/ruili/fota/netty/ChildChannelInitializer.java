@@ -6,8 +6,12 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.TimeUnit;
 
 /**
 * @author: liangjingxiong
@@ -23,11 +27,19 @@ public class ChildChannelInitializer extends ChannelInitializer<SocketChannel> {
     @Autowired
     private StringDecoder stringDecoder;
 
+    @Value("${netty.heartBeatSecond}")
+    private long heartBeatSecond;
+
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
         ChannelPipeline pipeline = socketChannel.pipeline();
+        //添加读超时的处理Handler
+        pipeline.addLast(new IdleStateHandler((long) (heartBeatSecond*1.5), 0, 0, TimeUnit.SECONDS));
+        //添加logger的handler
         pipeline.addLast(new LoggingHandler(LogLevel.DEBUG));
+        //添加netty的String解码器
         pipeline.addLast(stringDecoder);
+        //添加自定义的服务消息handler
         pipeline.addLast(serverHandler);
     }
 }

@@ -4,7 +4,7 @@ package com.ruili.fota.netty.pk;
  * 平台下发给设备的配置信息包
  */
 public class ConfigPK {
-    private final String type = "config";
+    private final String type = CommandType.CONFIG.getType();
     private int RecID;
     private int SendID;
     private String imei;

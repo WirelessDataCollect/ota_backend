@@ -1,5 +1,8 @@
 package com.ruili.fota.meta.bo;
 
+
+import com.ruili.fota.meta.po.FotaImages;
+
 public class ConfigBO {
     /**
      * 接收id
@@ -30,6 +33,12 @@ public class ConfigBO {
      */
     private String mcuType;
 
+    /**
+     * 下发配置过来，主动去数据库查询
+     */
+    private FotaImages fotaImages;
+
+
     public ConfigBO(int recID, int sendID, String imei, int cannum, int measure, String firmwareId, String mcuType) {
         RecID = recID;
         SendID = sendID;
@@ -41,6 +50,14 @@ public class ConfigBO {
     }
 
     public ConfigBO() {
+    }
+
+    public FotaImages getFotaImages() {
+        return fotaImages;
+    }
+
+    public void setFotaImages(FotaImages fotaImages) {
+        this.fotaImages = fotaImages;
     }
 
     public int getRecID() {

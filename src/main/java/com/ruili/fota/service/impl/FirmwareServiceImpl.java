@@ -5,6 +5,7 @@ import com.mongodb.gridfs.GridFSDBFile;
 import com.ruili.fota.common.DateTools;
 import com.ruili.fota.common.Md5Tools;
 import com.ruili.fota.common.UUIDTools;
+import com.ruili.fota.constant.DownloadPattern;
 import com.ruili.fota.constant.LoadStatusEnum;
 import com.ruili.fota.constant.MongoDBEnum;
 import com.ruili.fota.meta.bo.ConfigBO;
@@ -23,6 +24,7 @@ import com.ruili.fota.netty.FotaProcessMap;
 import com.ruili.fota.netty.NettyChannelMap;
 import com.ruili.fota.netty.pk.FirmCheckPK;
 import com.ruili.fota.service.FirmwareService;
+import com.ruili.fota.service.LoadDeviceManageService;
 import com.ruili.fota.service.MongoService;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.socket.SocketChannel;
@@ -53,13 +55,13 @@ public class FirmwareServiceImpl implements FirmwareService {
     private FotaLoadersMapper fotaLoadersMapper;
 
     @Autowired
+    private LoadDeviceManageService loadDeviceManageService;
+
+    @Autowired
     private MongoService mongoService;
 
-    //每个包的分格数量
-    private static int packageSegmentation = 50;
-
-    //每次去数据库IO流取的字节数
-    private static int eachBatch = 1024;
+    @Autowired
+    private DownloadPattern downloadPattern;
 
     @Override
     public List<OtaFileVO> queryFirmwareImages() {
@@ -72,13 +74,19 @@ public class FirmwareServiceImpl implements FirmwareService {
     }
 
     @Override
-    public int insertFirmwareInfo(String firmwareId, String firmwareVersion, String content, FotaUsers currentUser) {
-        FotaImages fotaImages = new FotaImages(null, firmwareId, currentUser.getRealname(), currentUser.getPhone(), firmwareVersion, content, DateTools.currentTime(), DateTools.currentTime());
+    public int insertFirmwareInfo(String firmwareId, String mcuType, String fileName, String firmwareVersion, String content, FotaUsers currentUser) {
+        FotaImages fotaImages = new FotaImages(firmwareId, mcuType, fileName, currentUser.getRealname(), currentUser.getPhone(), firmwareVersion, content, DateTools.currentTime(), DateTools.currentTime());
         return fotaImagesMapper.insert(fotaImages);
     }
 
     @Override
-    public ConfigResPO configDownloadPatten(ConfigBO configBO) throws IOException {
+    public ConfigResPO configDownloadPatten(ConfigBO configBO) throws IOException, NotFoundException {
+
+        //每个包的分格数量
+        int packageSegmentation = downloadPattern.packageSegmentation;
+        //每次去数据库IO流取的字节数
+        int eachBatch = downloadPattern.eachBatch;
+
         //先检查设备的在线状态，若状态为非在线，则返回false，若设备在线，返回true并开始下发。
         SocketChannel socketChannel = NettyChannelMap.get(configBO.getImei());
         ConfigResPO resPO = new ConfigResPO();
@@ -100,10 +108,11 @@ public class FirmwareServiceImpl implements FirmwareService {
         }
         //将下载固件上下文存储进Map中
         int totalPackNum = (int) (file.getLength() / (eachBatch * packageSegmentation));
-        //生成唯一的请求id
+        //生成唯一的请求id，并更新到设备表中
         String requestId = UUIDTools.getUUID32();
         resPO.setRequestId(requestId);
-        //TODO 设备可能存在掉电后平台无法检测还存储在内容当中，需要对时间进行检测清除内存资源
+        if (loadDeviceManageService.updateRequestIdByImei(configBO.getImei(), requestId) != 1)
+            throw new NotFoundException("更新设备requestId失败");
         FotaProcessMap.initStateFotaProcessEntity(configBO.getImei(), requestId, configBO.getFirmwareId(), totalPackNum, responseBuf, configBO);
         System.out.println(configBO);
         ConfigPK configPK = new ConfigPK(configBO.getRecID(), configBO.getSendID(), configBO.getImei(), configBO.getCannum(), configBO.getMeasure(), totalPackNum);
@@ -121,6 +130,12 @@ public class FirmwareServiceImpl implements FirmwareService {
 
     @Override
     public void downloadFirmware(String imei, int packNum) throws NoSuchAlgorithmException {
+
+        //每个包的分格数量
+        int packageSegmentation = downloadPattern.packageSegmentation;
+        //每次去数据库IO流取的字节数
+        int eachBatch = downloadPattern.eachBatch;
+
         FotaProcessEntity entity = FotaProcessMap.get(imei);
         SocketChannel socketChannel = NettyChannelMap.get(imei);
         //获取到对应的包
@@ -165,11 +180,10 @@ public class FirmwareServiceImpl implements FirmwareService {
             Example.Criteria criteria = example.createCriteria();
             criteria.andEqualTo("requestId", requestId);
             FotaLoadHistory history = fotaLoadHistoryMapper.selectOneByExample(example);
-            if (history==null) throw new NotFoundException("设备未在升级且未查询到设备升级记录");
+            if (history == null) throw new NotFoundException("设备未在升级且未查询到设备升级记录");
             LoadProcessBO processBO = JSON.parseObject(history.getLoadProcess(), LoadProcessBO.class);
             return processBO;
         }
-
     }
 
     @Override
@@ -186,6 +200,13 @@ public class FirmwareServiceImpl implements FirmwareService {
         return false;
     }
 
+    @Override
+    public FotaImages selectImageByImageId(String imageId) {
+        Example example = new Example(FotaImages.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("firmwareId", imageId);
+        return fotaImagesMapper.selectOneByExample(example);
+    }
 
     public <T> ByteBuf getWriteBuf(T res, SocketChannel channel) {
         String resString = JSON.toJSONString(res);

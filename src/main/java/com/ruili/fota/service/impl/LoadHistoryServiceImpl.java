@@ -1,5 +1,6 @@
 package com.ruili.fota.service.impl;
 
+import com.ruili.fota.constant.LoadStatusEnum;
 import com.ruili.fota.meta.entity.FotaProcessEntity;
 import com.ruili.fota.mapper.FotaLoadHistoryMapper;
 import com.ruili.fota.meta.po.FotaLoadHistory;
@@ -22,8 +23,9 @@ public class LoadHistoryServiceImpl implements LoadHistoryService {
     private FotaLoadHistoryMapper fotaLoadHistoryMapper;
 
     @Override
-    public int insertLoadHistoryByProcessEntity(String imei) {
+    public int insertLoadHistoryByLoadStatus(String imei, LoadStatusEnum loadStatusEnum) {
         FotaProcessEntity entity = FotaProcessMap.get(imei);
+        entity.setStatusEnum(loadStatusEnum);
         FotaLoadHistory history = new FotaLoadHistory(entity);
         return fotaLoadHistoryMapper.insertSelective(history);
     }

@@ -63,4 +63,11 @@ public interface AccountService {
      */
     int updateUser(FotaUsers user);
 
+    /**
+     * 通过id删除用户
+     * @param userId
+     * @return
+     */
+    int deleteUserById(int userId);
+
 }

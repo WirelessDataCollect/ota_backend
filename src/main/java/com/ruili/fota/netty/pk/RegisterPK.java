@@ -4,7 +4,7 @@ package com.ruili.fota.netty.pk;
  * 设备上报注册包
  */
 public class RegisterPK {
-    private final String typ = "register";
+    private final String typ = CommandType.RIGISTER.getType();
     private String imei;
     private String imsi;
     private int csq;

@@ -26,7 +26,7 @@ public interface FirmwareService {
      *
      * @return
      */
-    public int insertFirmwareInfo(String firmwareId, String firmwareVersion, String content, FotaUsers currentUser);
+    public int insertFirmwareInfo(String firmwareId, String mcuType, String fileName, String firmwareVersion, String content, FotaUsers currentUser);
 
     /**
      * 设备进行固件烧写前下发配置信息
@@ -35,7 +35,7 @@ public interface FirmwareService {
      * @return
      * @throws IOException
      */
-    public ConfigResPO configDownloadPatten(ConfigBO configBO) throws IOException;
+    public ConfigResPO configDownloadPatten(ConfigBO configBO) throws IOException, NotFoundException;
 
     /**
      * 下发固件给设备
@@ -63,5 +63,11 @@ public interface FirmwareService {
      */
     public boolean deleteFirmInfoByFirmId(String firmwareId) throws NotFoundException;
 
+    /**
+     * 通过imageId查询固件信息
+     * @param imageId
+     * @return
+     */
+    public FotaImages selectImageByImageId(String imageId);
 
 }

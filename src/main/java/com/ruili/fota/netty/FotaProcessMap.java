@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @description:存储设备升级的过程Map
  */
 public class FotaProcessMap {
+
     private static Map<String, FotaProcessEntity> map = new ConcurrentHashMap<String, FotaProcessEntity>();
 
     public static void add(String imei, FotaProcessEntity fotaProcessEntity) {
@@ -51,6 +52,10 @@ public class FotaProcessMap {
             }
         }
         return null;
+    }
+
+    public static Map getMap() {
+        return map;
     }
 
 }

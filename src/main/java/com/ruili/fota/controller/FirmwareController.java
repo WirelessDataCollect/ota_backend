@@ -4,10 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.ruili.fota.constant.result.BaseResp;
 import com.ruili.fota.constant.result.ResultStatus;
 import com.ruili.fota.meta.bo.ConfigBO;
-import com.ruili.fota.mapper.FotaImagesMapper;
 import com.ruili.fota.meta.bo.ConfigResPO;
 import com.ruili.fota.meta.bo.LoadProcessBO;
-import com.ruili.fota.meta.po.FotaImages;
 import com.ruili.fota.meta.po.FotaUsers;
 import com.ruili.fota.meta.vo.OtaFileVO;
 import com.ruili.fota.service.FirmwareService;
@@ -50,15 +48,19 @@ public class FirmwareController extends BaseController {
     @ApiOperation(value = "固件 上传 上传信息", tags = {"固件管理"}, notes = "上传固件版本号、固件对应设备类型、上传人，备注，返回插入条数以及响应状态")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "firmwareId", value = "固件唯一id", required = true),
+            @ApiImplicitParam(name = "mcuType", value = "mcu类型，单通道、双通道、中央控制器", required = true),
+            @ApiImplicitParam(name = "fileName", value = "固件文件名，上传成功后获得回调", required = true),
             @ApiImplicitParam(name = "firmwareVersion", value = "固件版本号", required = true),
             @ApiImplicitParam(name = "content", value = "固件备注", required = true),
     })
     @PostMapping(value = "/uploadinfo")
     public BaseResp uploadInfo(@RequestParam("firmwareId") String firmwareId,
+                               @RequestParam("mcuType") String mcuType,
+                               @RequestParam("fileName") String fileName,
                                @RequestParam("firmwareVersion") String firmwareVersion,
                                @RequestParam("content") String content) {
         FotaUsers currentUser = this.findCurrentUser();
-        return new BaseResp(ResultStatus.SUCCESS, firmwareService.insertFirmwareInfo(firmwareId, firmwareVersion, content, currentUser));
+        return new BaseResp(ResultStatus.SUCCESS, firmwareService.insertFirmwareInfo(firmwareId,mcuType,fileName, firmwareVersion, content, currentUser));
     }
 
     @ApiOperation(value = "固件 上传 上传文件", tags = {"固件管理"}, notes = "上传固件，返回固件唯一32位id")
@@ -88,13 +90,15 @@ public class FirmwareController extends BaseController {
             @ApiImplicitParam(name = "SendID", value = "发送id", required = true),
             @ApiImplicitParam(name = "imei", value = "imei", required = true),
             @ApiImplicitParam(name = "cannum", value = "can接口", required = true),
-            @ApiImplicitParam(name = "measure", value = "升级方法，离线或在线", required = true),
+            @ApiImplicitParam(name = "measure", value = "升级方法，离线或在线，离线23，在线66，离线进度结束即完成，在线还要等升级完成", required = true),
             @ApiImplicitParam(name = "firmwareId", value = "固件id", required = true),
             @ApiImplicitParam(name = "mcuType", value = "mcu类型", required = true),
     })
-    //TODO 需要修改接口的内容
+
     @PostMapping(value = "/config")
-    public BaseResp<ConfigResPO> downloadFireware(ConfigBO configBO) throws IOException {
+    public BaseResp<ConfigResPO> downloadFireware(ConfigBO configBO) throws IOException, NotFoundException {
+        //找到固件信息
+        configBO.setFotaImages(firmwareService.selectImageByImageId(configBO.getFirmwareId()));
         return new BaseResp(ResultStatus.SUCCESS, firmwareService.configDownloadPatten(configBO));
     }
 

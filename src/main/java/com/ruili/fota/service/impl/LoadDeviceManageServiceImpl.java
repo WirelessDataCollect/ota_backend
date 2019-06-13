@@ -10,6 +10,7 @@ import com.ruili.fota.mapper.FotaLoadersMapper;
 import com.ruili.fota.service.LoadDeviceManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +31,7 @@ public class LoadDeviceManageServiceImpl implements LoadDeviceManageService {
         if (theFotaLoader != null) {
             //设备是旧设备
             theFotaLoader.setOnlineStatus(OnlineStatusEnum.ONLINE_STATUS.getCode());
-            theFotaLoader.setGmtcreate(DateTools.currentTime());
             theFotaLoader.setGmtupdate(DateTools.currentTime());
-            theFotaLoader.setGmtmodified(DateTools.currentTime());
             return fotaLoadersMapper.updateByPrimaryKeySelective(theFotaLoader);
         } else {
             //设备是新设备
@@ -64,5 +63,23 @@ public class LoadDeviceManageServiceImpl implements LoadDeviceManageService {
             deviceVOList.add(new DeviceVO(loaders));
         }
         return deviceVOList;
+    }
+
+    @Override
+    public int updateRequestIdByImei(String imei, String requestId) {
+        FotaLoaders fotaLoader = new FotaLoaders();
+        fotaLoader.setImei(imei);
+        fotaLoader.setRequestId(requestId);
+        //如果升级完成修改时间
+        if (requestId == null) fotaLoader.setGmtmodified(DateTools.currentTime());
+        return fotaLoadersMapper.updateByPrimaryKeySelective(fotaLoader);
+    }
+
+    @Override
+    public int deviceHeartBeat(String imei) {
+        FotaLoaders fotaLoader = new FotaLoaders();
+        fotaLoader.setImei(imei);
+        fotaLoader.setGmtupdate(DateTools.currentTime());
+        return fotaLoadersMapper.updateByPrimaryKeySelective(fotaLoader);
     }
 }

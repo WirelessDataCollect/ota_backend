@@ -77,6 +77,16 @@ public class AccountController extends BaseController {
         return new BaseResp(ResultStatus.SUCCESS, accountService.updateUser(user));
     }
 
+    @ApiOperation(value = "账户 删除", tags = {"账户管理"}, notes = "账户 删除")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "access_token", value = "access_token", required = true),
+            @ApiImplicitParam(name = "userId", value = "用户的id，返回用户的gid字段", required = true)
+    })
+    @PostMapping(value = "/user/delete")
+    public BaseResp deleteUser(int userId) {
+        return new BaseResp(ResultStatus.SUCCESS, accountService.deleteUserById(userId));
+    }
+
     @ApiOperation(value = "用户-角色分配关系 查询", tags = {"账户管理-权限管理"}, notes = "用户-角色分配关系 查询")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "access_token", value = "access_token")

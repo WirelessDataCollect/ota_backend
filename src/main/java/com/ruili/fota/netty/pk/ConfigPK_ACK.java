@@ -1,7 +1,7 @@
 package com.ruili.fota.netty.pk;
 
 public class ConfigPK_ACK {
-    private final String type = "configok";
+    private final String type = CommandType.CONFIG_ACK.getType();
     private String imei;
 
     public ConfigPK_ACK(String imei) {

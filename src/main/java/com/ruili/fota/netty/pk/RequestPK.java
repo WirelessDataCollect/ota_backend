@@ -4,7 +4,7 @@ package com.ruili.fota.netty.pk;
  * 设备向平台请求新的固件分片
  */
 public class RequestPK {
-    private final String type = "reqpack";
+    private final String type = CommandType.REQUEST_PACK.getType();
     private String imei;
     private int packnum;
 

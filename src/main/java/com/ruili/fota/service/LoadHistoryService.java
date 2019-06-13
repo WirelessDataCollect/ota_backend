@@ -1,5 +1,6 @@
 package com.ruili.fota.service;
 
+import com.ruili.fota.constant.LoadStatusEnum;
 import com.ruili.fota.meta.po.FotaLoadHistory;
 import com.ruili.fota.meta.vo.OtaHistoryVO;
 
@@ -12,7 +13,7 @@ public interface LoadHistoryService {
      * @param imei
      * @return
      */
-    public int insertLoadHistoryByProcessEntity(String imei);
+    public int insertLoadHistoryByLoadStatus(String imei, LoadStatusEnum loadStatusEnum);
 
     /**
      * 查询设备升级历史记录

@@ -1,16 +1,17 @@
 package com.ruili.fota.netty.pk;
 
-public class UpdateErrorPK {
+public class DownloadErrorPK {
+
     private final String type = CommandType.UPDATE_ERROR.getType();
     private String imei;
     private int code;
 
-    public UpdateErrorPK(String imei, int code) {
+    public DownloadErrorPK(String imei, int code) {
         this.imei = imei;
         this.code = code;
     }
 
-    public UpdateErrorPK() {
+    public DownloadErrorPK() {
     }
 
     public String getType() {

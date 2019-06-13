@@ -9,6 +9,10 @@ public class OtaFileVO {
 
     @ApiModelProperty(value = "固件id")
     private String firmwareId;
+    @ApiModelProperty(value = "固件名称")
+    private String fileName;
+    @ApiModelProperty(value = "目标设备类型mcuType")
+    private String mcuType;
     @ApiModelProperty(value = "上传者")
     private String uploader;
     @ApiModelProperty(value = "上传者手机号码")
@@ -18,8 +22,10 @@ public class OtaFileVO {
     @ApiModelProperty(value = "固件备注")
     private String content;
 
-    public OtaFileVO(String firmwareId, String uploader, String uploaderTel, String firmVersion, String content) {
+    public OtaFileVO(String firmwareId, String fileName, String mcuType, String uploader, String uploaderTel, String firmVersion, String content) {
         this.firmwareId = firmwareId;
+        this.fileName = fileName;
+        this.mcuType = mcuType;
         this.uploader = uploader;
         this.uploaderTel = uploaderTel;
         this.firmVersion = firmVersion;
@@ -28,6 +34,8 @@ public class OtaFileVO {
 
     public OtaFileVO(FotaImages images) {
         this.firmwareId = images.getFirmwareId();
+        this.fileName = images.getFileName();
+        this.mcuType = images.getMcuType();
         this.uploader = images.getUploader();
         this.uploaderTel = images.getUploadertel();
         this.firmVersion = images.getFirmVersion();
@@ -43,6 +51,22 @@ public class OtaFileVO {
 
     public void setFirmwareId(String firmwareId) {
         this.firmwareId = firmwareId;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getMcuType() {
+        return mcuType;
+    }
+
+    public void setMcuType(String mcuType) {
+        this.mcuType = mcuType;
     }
 
     public String getUploader() {
@@ -82,6 +106,10 @@ public class OtaFileVO {
         final StringBuilder sb = new StringBuilder("{");
         sb.append("\"firmwareId\":\"")
                 .append(firmwareId).append('\"');
+        sb.append(",\"fileName\":\"")
+                .append(fileName).append('\"');
+        sb.append(",\"mcuType\":\"")
+                .append(mcuType).append('\"');
         sb.append(",\"uploader\":\"")
                 .append(uploader).append('\"');
         sb.append(",\"uploaderTel\":\"")

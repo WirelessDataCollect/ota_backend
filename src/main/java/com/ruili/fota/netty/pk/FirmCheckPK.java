@@ -6,7 +6,7 @@ package com.ruili.fota.netty.pk;
 * @description:下发给设备固件文件校验包，没下载50k校验一次
 */
 public class FirmCheckPK {
-    private final String type = "check";
+    private final String type = CommandType.FIRMWARE_CHECK.getType();
     private String md5;
     private int packNum;
 

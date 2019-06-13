@@ -4,6 +4,12 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.socket.SocketChannel;
 import org.springframework.stereotype.Component;
 
+/**
+* @author: liangjingxiong
+* @date: 2019-06-11
+* @description:
+ * 封装netty下发到设备的工具类，实现下发消息给特定的设备
+*/
 @Component
 public class PubToDevice {
 

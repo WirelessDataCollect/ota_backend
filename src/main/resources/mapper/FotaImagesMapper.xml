@@ -2,8 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruili.fota.mapper.FotaImagesMapper">
   <resultMap id="BaseResultMap" type="com.ruili.fota.meta.po.FotaImages">
-    <result column="gid" jdbcType="INTEGER" property="gid" />
-    <result column="firmware_id" jdbcType="VARCHAR" property="firmwareId" />
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="gid" jdbcType="INTEGER" property="gid" />
+    <id column="firmware_id" jdbcType="VARCHAR" property="firmwareId" />
+    <result column="mcu_type" jdbcType="VARCHAR" property="mcuType" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
     <result column="uploader" jdbcType="VARCHAR" property="uploader" />
     <result column="uploadertel" jdbcType="VARCHAR" property="uploadertel" />
     <result column="firm_version" jdbcType="VARCHAR" property="firmVersion" />
@@ -11,68 +16,11 @@
     <result column="gmtcreate" jdbcType="TIMESTAMP" property="gmtcreate" />
     <result column="gmtupdate" jdbcType="TIMESTAMP" property="gmtupdate" />
   </resultMap>
-  <insert id="insert" parameterType="com.ruili.fota.meta.po.FotaImages">
-    insert into fota_images (gid, firmware_id, uploader, 
-      uploadertel, firm_version, content, 
-      gmtcreate, gmtupdate)
-    values (#{gid,jdbcType=INTEGER}, #{firmwareId,jdbcType=VARCHAR}, #{uploader,jdbcType=VARCHAR}, 
-      #{uploadertel,jdbcType=VARCHAR}, #{firmVersion,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
-      #{gmtcreate,jdbcType=TIMESTAMP}, #{gmtupdate,jdbcType=TIMESTAMP})
-  </insert>
-  <insert id="insertSelective" parameterType="com.ruili.fota.meta.po.FotaImages">
-    insert into fota_images
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="gid != null">
-        gid,
-      </if>
-      <if test="firmwareId != null">
-        firmware_id,
-      </if>
-      <if test="uploader != null">
-        uploader,
-      </if>
-      <if test="uploadertel != null">
-        uploadertel,
-      </if>
-      <if test="firmVersion != null">
-        firm_version,
-      </if>
-      <if test="content != null">
-        content,
-      </if>
-      <if test="gmtcreate != null">
-        gmtcreate,
-      </if>
-      <if test="gmtupdate != null">
-        gmtupdate,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="gid != null">
-        #{gid,jdbcType=INTEGER},
-      </if>
-      <if test="firmwareId != null">
-        #{firmwareId,jdbcType=VARCHAR},
-      </if>
-      <if test="uploader != null">
-        #{uploader,jdbcType=VARCHAR},
-      </if>
-      <if test="uploadertel != null">
-        #{uploadertel,jdbcType=VARCHAR},
-      </if>
-      <if test="firmVersion != null">
-        #{firmVersion,jdbcType=VARCHAR},
-      </if>
-      <if test="content != null">
-        #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="gmtcreate != null">
-        #{gmtcreate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="gmtupdate != null">
-        #{gmtupdate,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    gid, firmware_id, mcu_type, file_name, uploader, uploadertel, firm_version, content, 
+    gmtcreate, gmtupdate
+  </sql>
 </mapper>
