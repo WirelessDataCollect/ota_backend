@@ -121,6 +121,9 @@ public class FirmwareServiceImpl implements FirmwareService {
         //判断是否已经存在升级过程中，实现配置重复下发不多开资源
         if (FotaProcessMap.get(configBO.getImei()) != null) {
             FotaProcessMap.initStateFotaProcessEntity(configBO.getImei(), requestId, configBO.getFirmwareId(), totalPackNum, configBO);
+        } else {
+            //删除旧的配置项，采用新的配置项
+            FotaProcessMap.updateFotaProcessEntity(configBO.getImei(), requestId, configBO.getFirmwareId(), totalPackNum, configBO);
         }
         System.out.println(configBO);
         ConfigPK configPK = new ConfigPK(configBO.getRecID(), configBO.getSendID(), configBO.getImei(), configBO.getCannum(), configBO.getMeasure(), totalPackNum);
