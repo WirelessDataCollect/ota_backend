@@ -118,7 +118,10 @@ public class FirmwareServiceImpl implements FirmwareService {
         resPO.setRequestId(requestId);
         if (loadDeviceManageService.updateRequestIdByImei(configBO.getImei(), requestId) != 1)
             throw new NotFoundException("更新设备requestId失败");
-        FotaProcessMap.initStateFotaProcessEntity(configBO.getImei(), requestId, configBO.getFirmwareId(), totalPackNum, configBO);
+        //判断是否已经存在升级过程中，实现配置重复下发不多开资源
+        if (FotaProcessMap.get(configBO.getImei()) != null) {
+            FotaProcessMap.initStateFotaProcessEntity(configBO.getImei(), requestId, configBO.getFirmwareId(), totalPackNum, configBO);
+        }
         System.out.println(configBO);
         ConfigPK configPK = new ConfigPK(configBO.getRecID(), configBO.getSendID(), configBO.getImei(), configBO.getCannum(), configBO.getMeasure(), totalPackNum);
         try {
