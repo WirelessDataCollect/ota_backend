@@ -32,6 +32,13 @@ public class FotaProcessMap {
         return get(imei);
     }
 
+    public static FotaProcessEntity updateFotaProcessEntity(String imei, String requestId, String firmwareId, int totalPack, ConfigBO configBO) {
+        removeByImei(imei);
+        FotaProcessEntity fotaProcessEntity = new FotaProcessEntity(imei, requestId, firmwareId, 0, totalPack, LoadStatusEnum.CONFIG_NO_STATUS, configBO, null, null, DateTools.currentTime());
+        add(imei, fotaProcessEntity);
+        return get(imei);
+    }
+
     //移除一条通道数据
     public static String remove(FotaProcessEntity fotaProcessEntity) {
         for (Map.Entry entry : map.entrySet()) {
