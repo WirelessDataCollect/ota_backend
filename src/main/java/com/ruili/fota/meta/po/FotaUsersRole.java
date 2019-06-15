@@ -1,5 +1,8 @@
 package com.ruili.fota.meta.po;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class FotaUsersRole {
@@ -9,6 +12,7 @@ public class FotaUsersRole {
 
     private Integer roleId;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtcreate;
 
     public Integer getGid() {

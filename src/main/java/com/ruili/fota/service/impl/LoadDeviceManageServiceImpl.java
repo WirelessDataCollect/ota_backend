@@ -72,7 +72,10 @@ public class LoadDeviceManageServiceImpl implements LoadDeviceManageService {
         fotaLoader.setRequestId(requestId);
         //如果升级完成修改时间
         if (requestId == null) fotaLoader.setGmtmodified(DateTools.currentTime());
-        return fotaLoadersMapper.updateByPrimaryKeySelective(fotaLoader);
+        Example example = new Example(FotaLoaders.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("imei", imei);
+        return fotaLoadersMapper.updateByExampleSelective(fotaLoader, example);
     }
 
     @Override
@@ -80,6 +83,9 @@ public class LoadDeviceManageServiceImpl implements LoadDeviceManageService {
         FotaLoaders fotaLoader = new FotaLoaders();
         fotaLoader.setImei(imei);
         fotaLoader.setGmtupdate(DateTools.currentTime());
-        return fotaLoadersMapper.updateByPrimaryKeySelective(fotaLoader);
+        Example example = new Example(FotaLoaders.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("imei", imei);
+        return fotaLoadersMapper.updateByExampleSelective(fotaLoader, example);
     }
 }

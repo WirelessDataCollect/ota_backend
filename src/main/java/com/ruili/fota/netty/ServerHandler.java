@@ -2,8 +2,10 @@ package com.ruili.fota.netty;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.ruili.fota.common.DateTools;
 import com.ruili.fota.constant.DownloadPattern;
 import com.ruili.fota.constant.LoadStatusEnum;
+import com.ruili.fota.meta.entity.FotaProcessEntity;
 import com.ruili.fota.netty.pk.*;
 import com.ruili.fota.service.FirmwareService;
 import com.ruili.fota.service.LoadDeviceManageService;
@@ -79,8 +81,13 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             System.out.println("====================");
             System.out.println("开始下发固件");
             ConfigPK_ACK ack = JSON.parseObject(msg.toString(), ConfigPK_ACK.class);
+            //计入升级开始时间
+            FotaProcessEntity entity = FotaProcessMap.get(ack.getImei());
+            //清除配置时间，前端查询进度时无需再计算超时
+            entity.setConfigTime(null);
+            entity.setStartTime(DateTools.currentTime());
+            //开始下发固件
             firmwareService.downloadFirmware(ack.getImei(), 0);
-
         }
         if (ifContains(msg.toString(), CommandType.REQUEST_PACK)) {
             System.out.println("===设备请求包===");
@@ -98,6 +105,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             //判断是离线还是在线升级的方式
             //离线升级方式，直接在数据库写入结果，此时开放给前端查询
             if (FotaProcessMap.get(pk.getImei()).getConfigBO().getMeasure() == downloadPattern.OfflineDownloadPattern) {
+                //计入升级结束时间
+                FotaProcessEntity entity = FotaProcessMap.get(pk.getImei());
+                entity.setEndTime(DateTools.currentTime());
                 //插入数据库一条记录
                 loadHistoryService.insertLoadHistoryByLoadStatus(pk.getImei(), LoadStatusEnum.LOAD_SUCCESS);
                 //清除设备表中的requestId
@@ -163,6 +173,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         if (imei != null) {
             //设备离线记录
             FotaProcessMap.removeByImei(imei);
+            FirmwareBufMap.removeByImei(imei);
             deviceManageService.deviceUnConnect(imei);
         }
         ctx.close();

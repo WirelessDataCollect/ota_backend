@@ -60,7 +60,7 @@ public class FirmwareController extends BaseController {
                                @RequestParam("firmwareVersion") String firmwareVersion,
                                @RequestParam("content") String content) {
         FotaUsers currentUser = this.findCurrentUser();
-        return new BaseResp(ResultStatus.SUCCESS, firmwareService.insertFirmwareInfo(firmwareId,mcuType,fileName, firmwareVersion, content, currentUser));
+        return new BaseResp(ResultStatus.SUCCESS, firmwareService.insertFirmwareInfo(firmwareId, mcuType, fileName, firmwareVersion, content, currentUser));
     }
 
     @ApiOperation(value = "固件 上传 上传文件", tags = {"固件管理"}, notes = "上传固件，返回固件唯一32位id")
@@ -94,7 +94,6 @@ public class FirmwareController extends BaseController {
             @ApiImplicitParam(name = "firmwareId", value = "固件id", required = true),
             @ApiImplicitParam(name = "mcuType", value = "mcu类型", required = true),
     })
-
     @PostMapping(value = "/config")
     public BaseResp<ConfigResPO> downloadFireware(ConfigBO configBO) throws IOException, NotFoundException {
         //找到固件信息
@@ -108,8 +107,8 @@ public class FirmwareController extends BaseController {
             @ApiImplicitParam(name = "imei", value = "升级设备的imei", required = true)
     })
     @PostMapping(value = "/downloadreport")
-    public BaseResp<LoadProcessBO> downloadFireware(@RequestParam("imei") String imei,
-                                                    @RequestParam("requestId") String requestId) throws NotFoundException {
+    public BaseResp<LoadProcessBO> downloadFirewareReport(@RequestParam("imei") String imei,
+                                                          @RequestParam("requestId") String requestId) throws NotFoundException, IOException, ClassNotFoundException {
         return new BaseResp(ResultStatus.SUCCESS, firmwareService.downloadFirmwareReport(imei, requestId));
     }
 

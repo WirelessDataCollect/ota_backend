@@ -1,5 +1,8 @@
 package com.ruili.fota.meta.po;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class FotaUsers {
@@ -23,8 +26,10 @@ public class FotaUsers {
 
     private String lastloginip;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtcreate;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtupdate;
 
     public Integer getGid() {

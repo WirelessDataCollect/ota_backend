@@ -1,5 +1,6 @@
 package com.ruili.fota.netty;
 
+import com.ruili.fota.common.DateTools;
 import com.ruili.fota.constant.LoadStatusEnum;
 import com.ruili.fota.meta.bo.ConfigBO;
 import com.ruili.fota.meta.entity.FotaProcessEntity;
@@ -25,8 +26,8 @@ public class FotaProcessMap {
         return map.get(imei);
     }
 
-    public static FotaProcessEntity initStateFotaProcessEntity(String imei,String requestId,String firmwareId, int totalPack, ByteBuf byteBuf, ConfigBO configBO) {
-        FotaProcessEntity fotaProcessEntity = new FotaProcessEntity(imei, requestId,firmwareId, 0, totalPack, LoadStatusEnum.LOAD_ON_STATUS, byteBuf, configBO);
+    public static FotaProcessEntity initStateFotaProcessEntity(String imei, String requestId, String firmwareId, int totalPack, ConfigBO configBO) {
+        FotaProcessEntity fotaProcessEntity = new FotaProcessEntity(imei, requestId, firmwareId, 0, totalPack, LoadStatusEnum.CONFIG_NO_STATUS, configBO, null, null, DateTools.currentTime());
         add(imei, fotaProcessEntity);
         return get(imei);
     }

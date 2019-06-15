@@ -1,7 +1,9 @@
 package com.ruili.fota.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.mongodb.gridfs.GridFSDBFile;
+import com.ruili.fota.common.CopyTools;
 import com.ruili.fota.common.DateTools;
 import com.ruili.fota.common.Md5Tools;
 import com.ruili.fota.common.UUIDTools;
@@ -15,6 +17,7 @@ import com.ruili.fota.meta.po.FotaImages;
 import com.ruili.fota.meta.po.FotaLoadHistory;
 import com.ruili.fota.meta.po.FotaUsers;
 import com.ruili.fota.meta.vo.OtaFileVO;
+import com.ruili.fota.netty.FirmwareBufMap;
 import com.ruili.fota.netty.pk.ConfigPK;
 import com.ruili.fota.meta.entity.FotaProcessEntity;
 import com.ruili.fota.mapper.FotaImagesMapper;
@@ -106,6 +109,8 @@ public class FirmwareServiceImpl implements FirmwareService {
         while (-1 != reader.read(buffer)) {
             responseBuf.writeBytes(buffer);
         }
+        //将固件存储进固件的map中
+        FirmwareBufMap.add(configBO.getImei(), responseBuf);
         //将下载固件上下文存储进Map中
         int totalPackNum = (int) (file.getLength() / (eachBatch * packageSegmentation));
         //生成唯一的请求id，并更新到设备表中
@@ -113,13 +118,13 @@ public class FirmwareServiceImpl implements FirmwareService {
         resPO.setRequestId(requestId);
         if (loadDeviceManageService.updateRequestIdByImei(configBO.getImei(), requestId) != 1)
             throw new NotFoundException("更新设备requestId失败");
-        FotaProcessMap.initStateFotaProcessEntity(configBO.getImei(), requestId, configBO.getFirmwareId(), totalPackNum, responseBuf, configBO);
+        FotaProcessMap.initStateFotaProcessEntity(configBO.getImei(), requestId, configBO.getFirmwareId(), totalPackNum, configBO);
         System.out.println(configBO);
         ConfigPK configPK = new ConfigPK(configBO.getRecID(), configBO.getSendID(), configBO.getImei(), configBO.getCannum(), configBO.getMeasure(), totalPackNum);
         try {
             //下发配置包给设备
             socketChannel.writeAndFlush(getWriteBuf(configPK, socketChannel));
-            resPO.setLoadStatusEnum(LoadStatusEnum.CONFIG_SUCCESS);
+            resPO.setLoadStatusEnum(LoadStatusEnum.CONFIG_NO_STATUS);
             return resPO;
         } catch (Exception e) {
             System.out.println(e);
@@ -142,10 +147,10 @@ public class FirmwareServiceImpl implements FirmwareService {
         ByteBuf sliceByteBuf;
         if (packNum != entity.getTotalPack()) {
             //当前不是最后一个包
-            sliceByteBuf = entity.getFirmwareByteBuf().copy(packNum * eachBatch * packageSegmentation, eachBatch * packageSegmentation);
+            sliceByteBuf = FirmwareBufMap.get(imei).copy(packNum * eachBatch * packageSegmentation, eachBatch * packageSegmentation);
         } else {
             //当前是最后一个包
-            sliceByteBuf = entity.getFirmwareByteBuf().copy(packNum * eachBatch * packageSegmentation, entity.getFirmwareByteBuf().readableBytes() % (eachBatch * packageSegmentation));
+            sliceByteBuf = FirmwareBufMap.get(imei).copy(packNum * eachBatch * packageSegmentation, FirmwareBufMap.get(imei).readableBytes() % (eachBatch * packageSegmentation));
         }
         //在下发前计算MD5值
         FirmCheckPK checkPK = new FirmCheckPK(md5Tools.getMD5(sliceByteBuf.copy()), packNum);
@@ -168,20 +173,47 @@ public class FirmwareServiceImpl implements FirmwareService {
      */
 
     @Override
-    public LoadProcessBO downloadFirmwareReport(String imei, String requestId) throws NotFoundException {
-        //直接返回数据库中设备的当前状态
-        FotaProcessEntity entity = FotaProcessMap.get(imei);
+    public LoadProcessBO downloadFirmwareReport(String imei, String requestId) throws NotFoundException, IOException, ClassNotFoundException {
+        //对设备的升级状态进行copy，防止由于多线程处理产生的不一致的情况
+        FotaProcessEntity entity = CopyTools.deepClone(FotaProcessMap.get(imei));
+        //判断下发配置包是否成功
+        if (entity.getConfigTime() != null) {
+            //如果超过10s，将前端查询结果变为配置失败，同时清除资源
+            if (DateTools.currentTime().getTime() - entity.getConfigTime().getTime() > 10000) {
+                entity.setStatusEnum(LoadStatusEnum.CONFIG_ERROR);
+                System.out.println(entity.getStatusEnum());
+                LoadProcessBO processBO = new LoadProcessBO(entity);
+                return processBO;
+            }
+        }
         //如果设备的升级过程还在进行，则在Map中取出升级状态
         if (entity != null) {
             LoadProcessBO processBO = new LoadProcessBO(entity);
+            System.out.println(entity.getStatusEnum());
             return processBO;
         } else {
+            System.out.println("开始查询历史记录");
             Example example = new Example(FotaLoadHistory.class);
             Example.Criteria criteria = example.createCriteria();
             criteria.andEqualTo("requestId", requestId);
             FotaLoadHistory history = fotaLoadHistoryMapper.selectOneByExample(example);
+            System.out.println(history.getLoadProcess());
+            //TODO 这边history不停在做序列化和映射，需要对比下和历史查询的关系
             if (history == null) throw new NotFoundException("设备未在升级且未查询到设备升级记录");
-            LoadProcessBO processBO = JSON.parseObject(history.getLoadProcess(), LoadProcessBO.class);
+            LoadProcessBO processBO = new LoadProcessBO();
+            System.out.println(history.getConfigBo());
+            JSONObject configBO = JSON.parseObject(history.getConfigBo());
+            JSONObject fotaImages = (JSONObject) configBO.get("fotaImages");
+            fotaImages.remove("gmtcreate");
+            fotaImages.remove("gmtupdate");
+            FotaImages images = JSON.parseObject(fotaImages.toString(), FotaImages.class);
+            JSONObject loadProcessInHistory = JSON.parseObject(history.getLoadProcess());
+            processBO.setStatusEnum(LoadStatusEnum.searchByCode(loadProcessInHistory.getInteger("code")));
+            ConfigBO configBO1 = new ConfigBO();
+            configBO1.setMeasure(configBO.getInteger("measure"));
+            configBO1.setFotaImages(images);
+            processBO.setConfigBO(configBO1);
+            System.out.println(processBO);
             return processBO;
         }
     }

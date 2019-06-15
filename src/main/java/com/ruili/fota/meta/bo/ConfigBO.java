@@ -3,7 +3,9 @@ package com.ruili.fota.meta.bo;
 
 import com.ruili.fota.meta.po.FotaImages;
 
-public class ConfigBO {
+import java.io.Serializable;
+
+public class ConfigBO implements Serializable {
     /**
      * 接收id
      */
@@ -47,6 +49,17 @@ public class ConfigBO {
         this.measure = measure;
         this.firmwareId = firmwareId;
         this.mcuType = mcuType;
+    }
+
+    public ConfigBO(int recID, int sendID, String imei, int cannum, int measure, String firmwareId, String mcuType, FotaImages fotaImages) {
+        RecID = recID;
+        SendID = sendID;
+        this.imei = imei;
+        this.cannum = cannum;
+        this.measure = measure;
+        this.firmwareId = firmwareId;
+        this.mcuType = mcuType;
+        this.fotaImages = fotaImages;
     }
 
     public ConfigBO() {
@@ -133,8 +146,9 @@ public class ConfigBO {
                 .append(firmwareId).append('\"');
         sb.append(",\"mcuType\":\"")
                 .append(mcuType).append('\"');
+        sb.append(",\"fotaImages\":")
+                .append(fotaImages);
         sb.append('}');
         return sb.toString();
     }
-
 }

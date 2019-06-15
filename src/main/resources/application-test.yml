@@ -34,7 +34,7 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://47.111.9.209:27017/fota_firmware_dev
+      uri: mongodb://47.111.9.209:27017/fota_firmware_dev_dev
   servlet:
     multipart:
       max-file-size: -1

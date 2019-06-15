@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.ruili</groupId>
     <artifactId>fota</artifactId>
-    <version>0.2.2-SNAPSHOT</version>
+    <version>0.2.3-SNAPSHOT</version>
     <name>fota</name>
     <description>Fota project for Ruili</description>
 
@@ -178,6 +178,18 @@
             <artifactId>commons-collections</artifactId>
             <version>3.2.2</version>
         </dependency>
+
+        <!--使用dozer为对象进行映射，实现深copy-->
+<!--        <dependency>-->
+<!--            <groupId>net.sf.dozer</groupId>-->
+<!--            <artifactId>dozer</artifactId>-->
+<!--            <version>5.4.0</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>net.sf.dozer</groupId>-->
+<!--            <artifactId>dozer-spring</artifactId>-->
+<!--            <version>5.5.1</version>-->
+<!--        </dependency>-->
 
     </dependencies>
 

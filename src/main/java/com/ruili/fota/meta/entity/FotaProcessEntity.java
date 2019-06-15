@@ -4,13 +4,15 @@ import com.ruili.fota.constant.LoadStatusEnum;
 import com.ruili.fota.meta.bo.ConfigBO;
 import io.netty.buffer.ByteBuf;
 
+import java.io.*;
+import java.util.Date;
+
 /**
-* @author: liangjingxiong
-* @date: 2019-05-03
-* @description:存储设备的烧录状态实体，与imei号为关系存储在cocurrentMap
- * 在实体中，同时存入了设备需要烧录的固件信息，解决Netty异步的通信问题
-*/
-public class FotaProcessEntity {
+ * @author: liangjingxiong
+ * @date: 2019-05-03
+ * @description:存储设备的烧录状态实体，与imei号为关系存储在cocurrentMap 在实体中，同时存入了设备需要烧录的固件信息，解决Netty异步的通信问题
+ */
+public class FotaProcessEntity implements Serializable {
 
     private String imei;
     private String requestId;//记录本次请求的id
@@ -18,19 +20,22 @@ public class FotaProcessEntity {
     private int packNumber;
     private int totalPack;
     private LoadStatusEnum statusEnum;
-    private ByteBuf firmwareByteBuf;
     private ConfigBO configBO;
+    private Date startTime;
+    private Date endTime;
+    private Date configTime;
 
-
-    public FotaProcessEntity(String imei, String requestId, String firmwareId, int packNumber, int totalPack, LoadStatusEnum statusEnum, ByteBuf firmwareByteBuf, ConfigBO configBO) {
+    public FotaProcessEntity(String imei, String requestId, String firmwareId, int packNumber, int totalPack, LoadStatusEnum statusEnum, ConfigBO configBO, Date startTime, Date endTime, Date configTime) {
         this.imei = imei;
         this.requestId = requestId;
         this.firmwareId = firmwareId;
         this.packNumber = packNumber;
         this.totalPack = totalPack;
         this.statusEnum = statusEnum;
-        this.firmwareByteBuf = firmwareByteBuf;
         this.configBO = configBO;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.configTime = configTime;
     }
 
     public FotaProcessEntity() {
@@ -84,20 +89,36 @@ public class FotaProcessEntity {
         this.statusEnum = statusEnum;
     }
 
-    public ByteBuf getFirmwareByteBuf() {
-        return firmwareByteBuf;
-    }
-
-    public void setFirmwareByteBuf(ByteBuf firmwareByteBuf) {
-        this.firmwareByteBuf = firmwareByteBuf;
-    }
-
     public ConfigBO getConfigBO() {
         return configBO;
     }
 
     public void setConfigBO(ConfigBO configBO) {
         this.configBO = configBO;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public Date getConfigTime() {
+        return configTime;
+    }
+
+    public void setConfigTime(Date configTime) {
+        this.configTime = configTime;
     }
 
     @Override
@@ -115,10 +136,14 @@ public class FotaProcessEntity {
                 .append(totalPack);
         sb.append(",\"statusEnum\":")
                 .append(statusEnum);
-        sb.append(",\"firmwareByteBuf\":")
-                .append(firmwareByteBuf);
         sb.append(",\"configBO\":")
                 .append(configBO);
+        sb.append(",\"startTime\":\"")
+                .append(startTime).append('\"');
+        sb.append(",\"endTime\":\"")
+                .append(endTime).append('\"');
+        sb.append(",\"configTime\":\"")
+                .append(configTime).append('\"');
         sb.append('}');
         return sb.toString();
     }

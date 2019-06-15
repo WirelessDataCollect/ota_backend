@@ -1,6 +1,7 @@
 package com.ruili.fota.meta.vo;
 
 import com.alibaba.fastjson.JSON;
+import com.ruili.fota.constant.LoadStatusEnum;
 import com.ruili.fota.meta.bo.ConfigBO;
 import com.ruili.fota.meta.po.FotaLoadHistory;
 import io.swagger.annotations.ApiModel;
@@ -15,30 +16,34 @@ public class OtaHistoryVO {
     @ApiModelProperty(value = "设备imei")
     private String imei;
     @ApiModelProperty(value = "设备升级状态，66代表升级成功，23代表升级失败")
-    private String loadStatus;
+    private Object loadStatus;
     @ApiModelProperty(value = "固件的配置信息")
     private ConfigBO configBO;
-    @ApiModelProperty(value = "固件升级时间")
-    private Date upgradeTime;
+    @ApiModelProperty(value = "固件升级开始时间")
+    private Date upgradeStartTime;
+    @ApiModelProperty(value = "固件升级结束时间")
+    private Date upgradeEndTime;
 
 
     public OtaHistoryVO(FotaLoadHistory history) {
         this.id = history.getGid();
         this.imei = history.getImei();
-        this.loadStatus = history.getLoadProcess();
+        this.loadStatus = JSON.parseObject(history.getLoadProcess());
         this.configBO = JSON.parseObject(history.getConfigBo(), ConfigBO.class);
-        this.upgradeTime = history.getGmtcreate();
+        this.upgradeStartTime = history.getGmtupdate();
+        this.upgradeEndTime = history.getGmtmodified();
     }
 
     public OtaHistoryVO() {
     }
 
-    public OtaHistoryVO(Integer id, String imei, String loadStatus, ConfigBO configBO, Date upgradeTime) {
+    public OtaHistoryVO(Integer id, String imei, LoadStatusEnum loadStatus, ConfigBO configBO, Date upgradeStartTime, Date upgradeEndTime) {
         this.id = id;
         this.imei = imei;
         this.loadStatus = loadStatus;
         this.configBO = configBO;
-        this.upgradeTime = upgradeTime;
+        this.upgradeStartTime = upgradeStartTime;
+        this.upgradeEndTime = upgradeEndTime;
     }
 
     public Integer getId() {
@@ -57,11 +62,15 @@ public class OtaHistoryVO {
         this.imei = imei;
     }
 
-    public String getLoadStatus() {
+    public Object getLoadStatus() {
         return loadStatus;
     }
 
-    public void setLoadStatus(String loadStatus) {
+    public void setLoadStatus(Object loadStatus) {
+        this.loadStatus = loadStatus;
+    }
+
+    public void setLoadStatus(LoadStatusEnum loadStatus) {
         this.loadStatus = loadStatus;
     }
 
@@ -73,12 +82,20 @@ public class OtaHistoryVO {
         this.configBO = configBO;
     }
 
-    public Date getUpgradeTime() {
-        return upgradeTime;
+    public Date getUpgradeStartTime() {
+        return upgradeStartTime;
     }
 
-    public void setUpgradeTime(Date upgradeTime) {
-        this.upgradeTime = upgradeTime;
+    public void setUpgradeStartTime(Date upgradeStartTime) {
+        this.upgradeStartTime = upgradeStartTime;
+    }
+
+    public Date getUpgradeEndTime() {
+        return upgradeEndTime;
+    }
+
+    public void setUpgradeEndTime(Date upgradeEndTime) {
+        this.upgradeEndTime = upgradeEndTime;
     }
 
     @Override
@@ -88,12 +105,14 @@ public class OtaHistoryVO {
                 .append(id);
         sb.append(",\"imei\":\"")
                 .append(imei).append('\"');
-        sb.append(",\"loadStatus\":\"")
-                .append(loadStatus).append('\"');
+        sb.append(",\"loadStatus\":")
+                .append(loadStatus);
         sb.append(",\"configBO\":")
                 .append(configBO);
-        sb.append(",\"upgradeTime\":\"")
-                .append(upgradeTime).append('\"');
+        sb.append(",\"upgradeStartTime\":\"")
+                .append(upgradeStartTime).append('\"');
+        sb.append(",\"upgradeEndTime\":\"")
+                .append(upgradeEndTime).append('\"');
         sb.append('}');
         return sb.toString();
     }

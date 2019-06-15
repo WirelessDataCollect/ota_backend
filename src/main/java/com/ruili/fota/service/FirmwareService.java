@@ -37,6 +37,7 @@ public interface FirmwareService {
      */
     public ConfigResPO configDownloadPatten(ConfigBO configBO) throws IOException, NotFoundException;
 
+
     /**
      * 下发固件给设备
      *
@@ -52,7 +53,7 @@ public interface FirmwareService {
      * @param imei
      * @return
      */
-    public LoadProcessBO downloadFirmwareReport(String imei, String requestId) throws NotFoundException;
+    public LoadProcessBO downloadFirmwareReport(String imei, String requestId) throws NotFoundException, IOException, ClassNotFoundException;
 
 
     /**

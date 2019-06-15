@@ -1,9 +1,11 @@
 package com.ruili.fota.constant;
 
+import java.io.Serializable;
+
 /**
  * enum class for device burn-flash status storage
  */
-public enum LoadStatusEnum {
+public enum LoadStatusEnum implements Serializable {
     LOAD_SUCCESS("下载成功", 66),
     LOAD_ERROR("下载失败", 23),
     LOAD_NO_STATUS("设备无下载状态", 0),

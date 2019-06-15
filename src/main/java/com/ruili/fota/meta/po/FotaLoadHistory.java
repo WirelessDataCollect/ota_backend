@@ -1,5 +1,7 @@
 package com.ruili.fota.meta.po;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ruili.fota.common.DateTools;
 import com.ruili.fota.meta.entity.FotaProcessEntity;
 
 import java.util.Date;
@@ -17,10 +19,13 @@ public class FotaLoadHistory {
 
     private String configBo;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtcreate;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtupdate;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtmodified;
 
     public FotaLoadHistory(Integer gid, String imei, String requestId, String firmwareId, String loadProcess, String configBo, Date gmtcreate, Date gmtupdate, Date gmtmodified) {
@@ -41,6 +46,9 @@ public class FotaLoadHistory {
         this.firmwareId = entity.getFirmwareId();
         this.loadProcess = entity.getStatusEnum().toString();
         this.configBo = entity.getConfigBO().toString();
+        this.gmtcreate = DateTools.currentTime();
+        this.gmtupdate = entity.getStartTime();
+        this.gmtmodified = entity.getEndTime();
     }
 
     public FotaLoadHistory() {
