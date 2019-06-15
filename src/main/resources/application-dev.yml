@@ -11,9 +11,9 @@ spring:
 
   datasource:
     driver: com.mysql.jdbc.Driver
-    url: jdbc:mysql://47.111.9.209:3306/fev_dev_dev?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&allowMultiQueries=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://47.111.9.209:3306/fota_dev_dev?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&allowMultiQueries=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
     username: root
-    password: 12345678
+    password: Ruili@123456
 
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
