@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruili.fota.mapper.FotaRoleMapper">
+    <resultMap id="BaseResultMap" type="com.ruili.fota.meta.po.FotaRole">
+        <id column="gid" jdbcType="INTEGER" property="gid"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="value" jdbcType="VARCHAR" property="value"/>
+        <result column="info" jdbcType="VARCHAR" property="info"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="gmtcreate" jdbcType="TIMESTAMP" property="gmtcreate"/>
+        <result column="gmtupdate" jdbcType="TIMESTAMP" property="gmtupdate"/>
+    </resultMap>
+
+    <resultMap id="MenuVOMap" type="com.ruili.fota.meta.vo.MenuVO">
+        <result column="key1" jdbcType="INTEGER" property="key"/>
+        <result column="title1" jdbcType="VARCHAR" property="title"/>
+        <collection property="children" ofType="com.ruili.fota.meta.vo.MenuVO">
+            <result column="key2" jdbcType="INTEGER" property="key"/>
+            <result column="title2" jdbcType="VARCHAR" property="title"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectRoleByUser" resultMap="BaseResultMap">
+        SELECT role.*
+        FROM fota_role role LEFT JOIN fota_users_role u_r ON role.gid=u_r.role_id
+        <if test="username!=null and username!='' ">
+            AND admin_id IN( SELECT gid FROM fota_users WHERE username = #{username})
+        </if>
+        GROUP BY role.gid
+    </select>
+
+    <select id="selectUserRole" resultType="com.ruili.fota.meta.vo.UserRoleVO">
+        SELECT user.gid, username, realname, user.status, GROUP_CONCAT(role.gid) rids, GROUP_CONCAT(role.name) roles
+        FROM fota_users user
+         LEFT JOIN fota_users_role u_r ON user.gid = u_r.admin_id
+         LEFT JOIN fota_role role ON u_r.role_id = role.gid
+        GROUP BY user.gid, username, realname, user.status;
+    </select>
+
+    <!--    需要在连接数据库时添加多sql语句提交allowMultiQueries=true-->
+    <insert id="insertUserRole">
+        DELETE FROM fota_users_role WHERE admin_id = #{userId};
+        INSERT INTO fota_users_role(admin_id,role_id,gmtcreate) VALUES
+        <foreach collection="roleIds" separator="," item="rid">
+            (#{userId},#{rid},now())
+        </foreach>
+    </insert>
+
+    <select id="selectMenu" resultMap="MenuVOMap">
+        SELECT m1.gid key1, m1.name title1, m2.gid key2, m2.name title2
+        FROM fota_permission m1,
+             fota_permission m2
+        WHERE m1.gid = m2.p_id
+          AND m1.type = m2.type AND m1.type = #{type}
+          AND m1.status = m2.status AND m1.status = 1
+        ORDER BY m1.sort, m2.sort
+    </select>
+
+    <!--    SELECT m1.gid key1, m1.name title1, m2.gid key2, m2.name title2-->
+    <!--    FROM fota_dev.fota_permission m1,-->
+    <!--    fota_dev.fota_permission m2-->
+    <!--    inner JOIN fota_dev.fota_users_role u_r ON u_r.role_id = m2.p_id and u_r.admin_id = #{roleId}-->
+    <!--    WHERE m1.gid = m2.p_id-->
+    <!--    AND m1.type = m2.type-->
+    <!--    AND m1.type = 1-->
+    <!--    AND m1.status = m2.status-->
+    <!--    AND m1.status = 1-->
+    <!--    ORDER BY m1.sort, m2.sort-->
+
+    <select id="selectRoleMenu" resultType="com.ruili.fota.meta.vo.RoleMenuVO">
+        SELECT role.gid, role.name, value, role.status, GROUP_CONCAT(menu.gid) mids
+        FROM fota_role role
+         LEFT JOIN fota_role_permission r_m ON role.gid = r_m.role_id
+         LEFT JOIN fota_permission menu ON r_m.permission_id = menu.gid AND menu.type = #{type}
+        GROUP BY role.gid;
+    </select>
+
+    <insert id="insertRoleMenu">
+        INSERT INTO fota_role_permission (role_id, permission_id) VALUES
+        <foreach collection="menuIds" separator="," item="mid">
+            (#{roleId},#{mid})
+        </foreach>
+    </insert>
+
+</mapper>

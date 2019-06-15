@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruili.fota.mapper.FotaLoadersMapper">
+  <resultMap id="BaseResultMap" type="com.ruili.fota.meta.po.FotaLoaders">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="gid" jdbcType="INTEGER" property="gid" />
+    <id column="imei" jdbcType="VARCHAR" property="imei" />
+    <result column="imsi" jdbcType="VARCHAR" property="imsi" />
+    <result column="request_id" jdbcType="VARCHAR" property="requestId" />
+    <result column="csq" jdbcType="INTEGER" property="csq" />
+    <result column="load_status" jdbcType="INTEGER" property="loadStatus" />
+    <result column="online_status" jdbcType="INTEGER" property="onlineStatus" />
+    <result column="gmtcreate" jdbcType="TIMESTAMP" property="gmtcreate" />
+    <result column="gmtupdate" jdbcType="TIMESTAMP" property="gmtupdate" />
+    <result column="gmtmodified" jdbcType="TIMESTAMP" property="gmtmodified" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    gid, imei, imsi, request_id, csq, load_status, online_status, gmtcreate, gmtupdate, 
+    gmtmodified
+  </sql>
+</mapper>

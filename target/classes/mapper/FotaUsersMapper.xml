@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruili.fota.mapper.FotaUsersMapper">
+  <resultMap id="BaseResultMap" type="com.ruili.fota.meta.po.FotaUsers">
+    <id column="gid" jdbcType="INTEGER" property="gid" />
+    <id column="username" jdbcType="VARCHAR" property="username" />
+    <id column="phone" jdbcType="VARCHAR" property="phone" />
+    <id column="openid" jdbcType="VARCHAR" property="openid" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="realname" jdbcType="VARCHAR" property="realname" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="info" jdbcType="VARCHAR" property="info" />
+    <result column="lastloginip" jdbcType="VARCHAR" property="lastloginip" />
+    <result column="gmtcreate" jdbcType="TIMESTAMP" property="gmtcreate" />
+    <result column="gmtupdate" jdbcType="TIMESTAMP" property="gmtupdate" />
+  </resultMap>
+</mapper>
