@@ -2,6 +2,7 @@ package com.ruili.fota.meta.po;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ruili.fota.common.DateTools;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -256,9 +257,9 @@ public class FotaImages implements Serializable {
         sb.append(",\"content\":\"")
                 .append(content).append('\"');
         sb.append(",\"gmtcreate\":\"")
-                .append(gmtcreate).append('\"');
+                .append(DateTools.DateToString(gmtcreate,"yyyy-MM-dd HH:mm:ss")).append('\"');
         sb.append(",\"gmtupdate\":\"")
-                .append(gmtupdate).append('\"');
+                .append(DateTools.DateToString(gmtupdate,"yyyy-MM-dd HH:mm:ss")).append('\"');
         sb.append('}');
         return sb.toString();
     }

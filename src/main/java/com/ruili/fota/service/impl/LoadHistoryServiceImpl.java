@@ -1,5 +1,6 @@
 package com.ruili.fota.service.impl;
 
+import com.ruili.fota.common.DateTools;
 import com.ruili.fota.constant.LoadStatusEnum;
 import com.ruili.fota.meta.entity.FotaProcessEntity;
 import com.ruili.fota.mapper.FotaLoadHistoryMapper;
@@ -26,6 +27,8 @@ public class LoadHistoryServiceImpl implements LoadHistoryService {
     public int insertLoadHistoryByLoadStatus(String imei, LoadStatusEnum loadStatusEnum) {
         FotaProcessEntity entity = FotaProcessMap.get(imei);
         entity.setStatusEnum(loadStatusEnum);
+        //计入结束时间
+        entity.setEndTime(DateTools.currentTime());
         FotaLoadHistory history = new FotaLoadHistory(entity);
         return fotaLoadHistoryMapper.insertSelective(history);
     }

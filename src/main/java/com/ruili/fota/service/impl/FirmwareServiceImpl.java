@@ -85,6 +85,11 @@ public class FirmwareServiceImpl implements FirmwareService {
     @Override
     public ConfigResPO configDownloadPatten(ConfigBO configBO) throws IOException, NotFoundException {
 
+        //判断设备是否已经在OTA过程中
+        if (FotaProcessMap.get(configBO.getImei()) != null) {
+            throw new NotFoundException("设备已经在OTA序列当中，可能由他人操作，请勿重复操作");
+        }
+
         //每个包的分格数量
         int packageSegmentation = downloadPattern.packageSegmentation;
         //每次去数据库IO流取的字节数
@@ -148,6 +153,7 @@ public class FirmwareServiceImpl implements FirmwareService {
         int eachBatch = downloadPattern.eachBatch;
 
         FotaProcessEntity entity = FotaProcessMap.get(imei);
+        entity.setStatusEnum(LoadStatusEnum.LOAD_ON_STATUS);
         SocketChannel socketChannel = NettyChannelMap.get(imei);
         //获取到对应的包
         ByteBuf sliceByteBuf;
@@ -181,19 +187,21 @@ public class FirmwareServiceImpl implements FirmwareService {
     @Override
     public LoadProcessBO downloadFirmwareReport(String imei, String requestId) throws NotFoundException, IOException, ClassNotFoundException {
         //对设备的升级状态进行copy，防止由于多线程处理产生的不一致的情况
-        FotaProcessEntity entity = CopyTools.deepClone(FotaProcessMap.get(imei));
-        //判断下发配置包是否成功
-        if (entity.getConfigTime() != null) {
-            //如果超过10s，将前端查询结果变为配置失败，同时清除资源
-            if (DateTools.currentTime().getTime() - entity.getConfigTime().getTime() > 10000) {
-                entity.setStatusEnum(LoadStatusEnum.CONFIG_ERROR);
-                System.out.println(entity.getStatusEnum());
-                LoadProcessBO processBO = new LoadProcessBO(entity);
-                return processBO;
-            }
-        }
+//        FotaProcessEntity entity = CopyTools.deepClone(FotaProcessMap.get(imei));
+        FotaProcessEntity entity = FotaProcessMap.get(imei);
         //如果设备的升级过程还在进行，则在Map中取出升级状态
         if (entity != null) {
+            //判断下发配置包是否成功
+            if (entity.getConfigTime() != null) {
+                //如果超过10s，将前端查询结果变为配置失败，同时清除资源
+                if (DateTools.currentTime().getTime() - entity.getConfigTime().getTime() > 10000) {
+                    entity.setStatusEnum(LoadStatusEnum.CONFIG_ERROR);
+                    System.out.println(entity.getStatusEnum());
+                    LoadProcessBO processBO = new LoadProcessBO(entity);
+                    return processBO;
+                }
+            }
+            //如果已经过了配置期
             LoadProcessBO processBO = new LoadProcessBO(entity);
             System.out.println(entity.getStatusEnum());
             return processBO;
@@ -203,22 +211,13 @@ public class FirmwareServiceImpl implements FirmwareService {
             Example.Criteria criteria = example.createCriteria();
             criteria.andEqualTo("requestId", requestId);
             FotaLoadHistory history = fotaLoadHistoryMapper.selectOneByExample(example);
-            System.out.println(history.getLoadProcess());
             //TODO 这边history不停在做序列化和映射，需要对比下和历史查询的关系
             if (history == null) throw new NotFoundException("设备未在升级且未查询到设备升级记录");
             LoadProcessBO processBO = new LoadProcessBO();
-            System.out.println(history.getConfigBo());
-            JSONObject configBO = JSON.parseObject(history.getConfigBo());
-            JSONObject fotaImages = (JSONObject) configBO.get("fotaImages");
-            fotaImages.remove("gmtcreate");
-            fotaImages.remove("gmtupdate");
-            FotaImages images = JSON.parseObject(fotaImages.toString(), FotaImages.class);
-            JSONObject loadProcessInHistory = JSON.parseObject(history.getLoadProcess());
-            processBO.setStatusEnum(LoadStatusEnum.searchByCode(loadProcessInHistory.getInteger("code")));
-            ConfigBO configBO1 = new ConfigBO();
-            configBO1.setMeasure(configBO.getInteger("measure"));
-            configBO1.setFotaImages(images);
-            processBO.setConfigBO(configBO1);
+            ConfigBO configBO = JSON.parseObject(history.getConfigBo(), ConfigBO.class);
+            JSONObject loadProcess = JSON.parseObject(history.getLoadProcess());
+            processBO.setStatusEnum(LoadStatusEnum.searchByCode(loadProcess.getInteger("code")));
+            processBO.setConfigBO(configBO);
             System.out.println(processBO);
             return processBO;
         }
