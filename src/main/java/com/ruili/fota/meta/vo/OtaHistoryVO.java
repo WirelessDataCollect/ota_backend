@@ -1,6 +1,7 @@
 package com.ruili.fota.meta.vo;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.ruili.fota.constant.LoadStatusEnum;
 import com.ruili.fota.meta.bo.ConfigBO;
 import com.ruili.fota.meta.po.FotaLoadHistory;
@@ -29,6 +30,8 @@ public class OtaHistoryVO {
         this.id = history.getGid();
         this.imei = history.getImei();
         this.loadStatus = JSON.parseObject(history.getLoadProcess());
+        JSONObject configBoObj = JSON.parseObject(history.getConfigBo());
+        
         this.configBO = JSON.parseObject(history.getConfigBo(), ConfigBO.class);
         this.upgradeStartTime = history.getGmtupdate();
         this.upgradeEndTime = history.getGmtmodified();
