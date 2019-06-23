@@ -9,9 +9,10 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
+  # 采用宿主机和docker之间的网段
   datasource:
     driver: com.mysql.jdbc.Driver
-    url: jdbc:mysql://47.111.9.209:3306/fota_dev_dev?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&allowMultiQueries=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://172.17.0.1:3306/fota_dev_dev?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&allowMultiQueries=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
     username: root
     password: Ruili@123456
 
@@ -31,16 +32,18 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
 
-
+  # 采用宿主机和docker之间的网段
   data:
     mongodb:
-      uri: mongodb://47.111.9.209:27017/fota_firmware_dev_dev
+      uri: mongodb://172.17.0.1:27017/fota_firmware_dev_dev
+      username: admin
+      password: Ruili@123456
   servlet:
     multipart:
       max-file-size: -1
       max-request-size: -1
   redis:
-    host: 127.0.0.1
+    host: 172.17.0.1  #宿主机ip
     port: 6379
 
 mybatis:
