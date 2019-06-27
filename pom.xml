@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.ruili</groupId>
     <artifactId>fota</artifactId>
-    <version>0.2.3-SNAPSHOT</version>
+    <version>0.2.6-SNAPSHOT</version>
     <name>fota</name>
     <description>Fota project for Ruili</description>
 
@@ -224,7 +224,7 @@
                 <configuration>
                     <serverId>docker-releases</serverId>
                     <registryUrl>https://${docker.repository}/repository/docker-releases/</registryUrl>
-                    <imageName>${project.groupId}/${project.artifactId}:${project.version}</imageName>
+                    <imageName>${docker.repository}:${project.version}</imageName>
                     <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
                     <!--<baseImage>java</baseImage>-->
                     <!--<entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>-->
