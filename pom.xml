@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.ruili</groupId>
     <artifactId>fota</artifactId>
-    <version>0.2.6-SNAPSHOT</version>
+    <version>0.2.8</version>
     <name>fota</name>
     <description>Fota project for Ruili</description>
 

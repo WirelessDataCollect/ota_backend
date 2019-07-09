@@ -2,6 +2,7 @@ package com.ruili.fota.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+
 import com.mongodb.gridfs.GridFSDBFile;
 import com.ruili.fota.common.CopyTools;
 import com.ruili.fota.common.DateTools;
@@ -42,11 +43,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Service
 public class FirmwareServiceImpl implements FirmwareService {
-
-    Md5Tools md5Tools = new Md5Tools();
 
     @Autowired
     private FotaImagesMapper fotaImagesMapper;
@@ -77,8 +75,10 @@ public class FirmwareServiceImpl implements FirmwareService {
     }
 
     @Override
-    public int insertFirmwareInfo(String firmwareId, String mcuType, String fileName, String firmwareVersion, String content, FotaUsers currentUser) {
-        FotaImages fotaImages = new FotaImages(firmwareId, mcuType, fileName, currentUser.getRealname(), currentUser.getPhone(), firmwareVersion, content, DateTools.currentTime(), DateTools.currentTime());
+    public int insertFirmwareInfo(String firmwareId, String mcuType, String fileName, String firmwareVersion,
+        String content, FotaUsers currentUser) {
+        FotaImages fotaImages = new FotaImages(firmwareId, mcuType, fileName, currentUser.getRealname(),
+            currentUser.getPhone(), firmwareVersion, content, DateTools.currentTime(), DateTools.currentTime());
         return fotaImagesMapper.insert(fotaImages);
     }
 
@@ -103,35 +103,41 @@ public class FirmwareServiceImpl implements FirmwareService {
             return resPO;
         }
         //读取设备的固件信息
-        GridFSDBFile file = mongoService.selectGridFS(MongoDBEnum.GridFSBucket_FIRMWARE.getGridFSBucket(), configBO.getFirmwareId());
+        GridFSDBFile file = mongoService.selectGridFS(MongoDBEnum.GridFSBucket_FIRMWARE.getGridFSBucket(),
+            configBO.getFirmwareId());
         if (file == null) {
             resPO.setLoadStatusEnum(LoadStatusEnum.LOAD_FIRMWARE_NOT_FOUND);
             return resPO;
         }
         BufferedInputStream reader = new BufferedInputStream(file.getInputStream(), 8192);
         byte[] buffer = new byte[eachBatch];
-        ByteBuf responseBuf = socketChannel.alloc().buffer((int) file.getLength() * 4);
+        ByteBuf responseBuf = socketChannel.alloc().buffer((int)file.getLength() * 4);
         while (-1 != reader.read(buffer)) {
             responseBuf.writeBytes(buffer);
         }
         //将固件存储进固件的map中
         FirmwareBufMap.add(configBO.getImei(), responseBuf);
         //将下载固件上下文存储进Map中
-        int totalPackNum = (int) (file.getLength() / (eachBatch * packageSegmentation));
+        int totalPackNum = (int)(file.getLength() / (eachBatch * packageSegmentation));
         //生成唯一的请求id，并更新到设备表中
         String requestId = UUIDTools.getUUID32();
         resPO.setRequestId(requestId);
-        if (loadDeviceManageService.updateRequestIdByImei(configBO.getImei(), requestId) != 1)
+        if (loadDeviceManageService.updateRequestIdByImei(configBO.getImei(), requestId) != 1) {
             throw new NotFoundException("更新设备requestId失败");
+        }
         //判断是否已经存在升级过程中，实现配置重复下发不多开资源
         if (FotaProcessMap.get(configBO.getImei()) != null) {
-            FotaProcessMap.initStateFotaProcessEntity(configBO.getImei(), requestId, configBO.getFirmwareId(), totalPackNum, configBO);
+            FotaProcessMap.initStateFotaProcessEntity(configBO.getImei(), requestId, configBO.getFirmwareId(),
+                totalPackNum, configBO);
         } else {
             //删除旧的配置项，采用新的配置项
-            FotaProcessMap.updateFotaProcessEntity(configBO.getImei(), requestId, configBO.getFirmwareId(), totalPackNum, configBO);
+            FotaProcessMap.updateFotaProcessEntity(configBO.getImei(), requestId, configBO.getFirmwareId(),
+                totalPackNum, configBO);
         }
         System.out.println(configBO);
-        ConfigPK configPK = new ConfigPK(configBO.getRecID(), configBO.getSendID(), configBO.getImei(), configBO.getCannum(), configBO.getMeasure(), totalPackNum);
+        ConfigPK configPK = new ConfigPK(convertByteStr2Int(configBO.getRecID()),
+            convertByteStr2Int(configBO.getSendID()), configBO.getImei(), configBO.getCannum(), configBO.getMeasure(),
+            totalPackNum);
         try {
             //下发配置包给设备
             socketChannel.writeAndFlush(getWriteBuf(configPK, socketChannel));
@@ -159,13 +165,15 @@ public class FirmwareServiceImpl implements FirmwareService {
         ByteBuf sliceByteBuf;
         if (packNum != entity.getTotalPack()) {
             //当前不是最后一个包
-            sliceByteBuf = FirmwareBufMap.get(imei).copy(packNum * eachBatch * packageSegmentation, eachBatch * packageSegmentation);
+            sliceByteBuf = FirmwareBufMap.get(imei).copy(packNum * eachBatch * packageSegmentation,
+                eachBatch * packageSegmentation);
         } else {
             //当前是最后一个包
-            sliceByteBuf = FirmwareBufMap.get(imei).copy(packNum * eachBatch * packageSegmentation, FirmwareBufMap.get(imei).readableBytes() % (eachBatch * packageSegmentation));
+            sliceByteBuf = FirmwareBufMap.get(imei).copy(packNum * eachBatch * packageSegmentation,
+                FirmwareBufMap.get(imei).readableBytes() % (eachBatch * packageSegmentation));
         }
         //在下发前计算MD5值
-        FirmCheckPK checkPK = new FirmCheckPK(md5Tools.getMD5(sliceByteBuf.copy()), packNum);
+        FirmCheckPK checkPK = new FirmCheckPK(Md5Tools.getMD5(sliceByteBuf.copy()), packNum);
         //下发固件信息
         int len = sliceByteBuf.copy().readableBytes();
         socketChannel.writeAndFlush(sliceByteBuf);
@@ -185,9 +193,10 @@ public class FirmwareServiceImpl implements FirmwareService {
      */
 
     @Override
-    public LoadProcessBO downloadFirmwareReport(String imei, String requestId) throws NotFoundException, IOException, ClassNotFoundException {
+    public LoadProcessBO downloadFirmwareReport(String imei, String requestId)
+        throws NotFoundException, IOException, ClassNotFoundException {
         //对设备的升级状态进行copy，防止由于多线程处理产生的不一致的情况
-//        FotaProcessEntity entity = CopyTools.deepClone(FotaProcessMap.get(imei));
+        //        FotaProcessEntity entity = CopyTools.deepClone(FotaProcessMap.get(imei));
         FotaProcessEntity entity = FotaProcessMap.get(imei);
         //如果设备的升级过程还在进行，则在Map中取出升级状态
         if (entity != null) {
@@ -212,7 +221,7 @@ public class FirmwareServiceImpl implements FirmwareService {
             criteria.andEqualTo("requestId", requestId);
             FotaLoadHistory history = fotaLoadHistoryMapper.selectOneByExample(example);
             //TODO 这边history不停在做序列化和映射，需要对比下和历史查询的关系
-            if (history == null) throw new NotFoundException("设备未在升级且未查询到设备升级记录");
+            if (history == null) { throw new NotFoundException("设备未在升级且未查询到设备升级记录"); }
             LoadProcessBO processBO = new LoadProcessBO();
             ConfigBO configBO = JSON.parseObject(history.getConfigBo(), ConfigBO.class);
             JSONObject loadProcess = JSON.parseObject(history.getLoadProcess());
@@ -230,10 +239,10 @@ public class FirmwareServiceImpl implements FirmwareService {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("firmwareId", firmwareId);
         FotaImages image = fotaImagesMapper.selectOneByExample(example);
-        if (image == null) throw new NotFoundException("不存在此固件id:" + firmwareId);
+        if (image == null) { throw new NotFoundException("不存在此固件id:" + firmwareId); }
         int result1 = fotaImagesMapper.deleteByExample(example);
         int result2 = mongoService.deleteFirmwareByImgId(firmwareId);
-        if (result1 == 1 && result2 == 1) return true;
+        if (result1 == 1 && result2 == 1) { return true; }
         return false;
     }
 
@@ -257,6 +266,13 @@ public class FirmwareServiceImpl implements FirmwareService {
         ByteBuf responseBuf = channel.alloc().buffer(4 * res.length());
         responseBuf.writeBytes(res.getBytes());
         return responseBuf;
+    }
+
+    /**
+     * 完成前端发送16进制String转化为10进制的int，下发给前端
+     */
+    private static int convertByteStr2Int(String port) {
+        return Integer.parseInt(port, 16);
     }
 
 }

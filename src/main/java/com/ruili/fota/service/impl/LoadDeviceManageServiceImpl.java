@@ -71,7 +71,7 @@ public class LoadDeviceManageServiceImpl implements LoadDeviceManageService {
         fotaLoader.setImei(imei);
         fotaLoader.setRequestId(requestId);
         //如果升级完成修改时间
-        if (requestId == null) fotaLoader.setGmtmodified(DateTools.currentTime());
+        if (requestId == null) { fotaLoader.setGmtmodified(DateTools.currentTime());}
         Example example = new Example(FotaLoaders.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("imei", imei);

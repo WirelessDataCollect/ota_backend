@@ -9,11 +9,11 @@ public class ConfigBO implements Serializable {
     /**
      * 接收id
      */
-    private int RecID;
+    private String RecID;
     /**
      * 发送id
      */
-    private int SendID;
+    private String SendID;
     /**
      * 升级设备的imei
      */
@@ -41,7 +41,7 @@ public class ConfigBO implements Serializable {
     private FotaImages fotaImages;
 
 
-    public ConfigBO(int recID, int sendID, String imei, int cannum, int measure, String firmwareId, String mcuType) {
+    public ConfigBO(String recID, String sendID, String imei, int cannum, int measure, String firmwareId, String mcuType) {
         RecID = recID;
         SendID = sendID;
         this.imei = imei;
@@ -51,7 +51,7 @@ public class ConfigBO implements Serializable {
         this.mcuType = mcuType;
     }
 
-    public ConfigBO(int recID, int sendID, String imei, int cannum, int measure, String firmwareId, String mcuType, FotaImages fotaImages) {
+    public ConfigBO(String recID, String sendID, String imei, int cannum, int measure, String firmwareId, String mcuType, FotaImages fotaImages) {
         RecID = recID;
         SendID = sendID;
         this.imei = imei;
@@ -73,19 +73,19 @@ public class ConfigBO implements Serializable {
         this.fotaImages = fotaImages;
     }
 
-    public int getRecID() {
+    public String getRecID() {
         return RecID;
     }
 
-    public void setRecID(int recID) {
+    public void setRecID(String recID) {
         RecID = recID;
     }
 
-    public int getSendID() {
+    public String getSendID() {
         return SendID;
     }
 
-    public void setSendID(int sendID) {
+    public void setSendID(String sendID) {
         SendID = sendID;
     }
 
@@ -132,22 +132,22 @@ public class ConfigBO implements Serializable {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");
-        sb.append("\"RecID\":")
-                .append(RecID);
-        sb.append(",\"SendID\":")
-                .append(SendID);
+        sb.append("\"RecID\":\"")
+            .append(RecID).append('\"');
+        sb.append(",\"SendID\":\"")
+            .append(SendID).append('\"');
         sb.append(",\"imei\":\"")
-                .append(imei).append('\"');
+            .append(imei).append('\"');
         sb.append(",\"cannum\":")
-                .append(cannum);
+            .append(cannum);
         sb.append(",\"measure\":")
-                .append(measure);
+            .append(measure);
         sb.append(",\"firmwareId\":\"")
-                .append(firmwareId).append('\"');
+            .append(firmwareId).append('\"');
         sb.append(",\"mcuType\":\"")
-                .append(mcuType).append('\"');
+            .append(mcuType).append('\"');
         sb.append(",\"fotaImages\":")
-                .append(fotaImages);
+            .append(fotaImages);
         sb.append('}');
         return sb.toString();
     }

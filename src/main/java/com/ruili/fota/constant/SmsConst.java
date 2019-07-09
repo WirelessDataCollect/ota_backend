@@ -5,9 +5,9 @@ package com.ruili.fota.constant;
  */
 public class SmsConst {
 
-    public static final String accessKeyId = "LTAI5UxB4b0A7P3K";
+    public static final String ACCESS_KEY_ID = "LTAI5UxB4b0A7P3K";
 
-    public static final String accessKeySecret = "RuwehlW8IrEPwU6khqzK2k6NFDmwS2";
+    public static final String ACCESS_KEY_SECRET = "RuwehlW8IrEPwU6khqzK2k6NFDmwS2";
 
     public static final String CH_SIGNATURE = "钛比监测";
 

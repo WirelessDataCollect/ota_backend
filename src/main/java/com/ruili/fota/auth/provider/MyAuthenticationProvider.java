@@ -67,8 +67,8 @@ public class MyAuthenticationProvider extends MyAbstractUserDetailsAuthenticatio
             String presentedPassword = authentication.getCredentials().toString();
 
             // 验证开始
-            if (MyLoginAuthenticationFilter.SPRING_SECURITY_RESTFUL_TYPE_WeChat.equals(authentication.getType())) {
-                // 微信只需要根据 SPRING_SECURITY_RESTFUL_TYPE_WeChat 查询到微信号即可，所以此处无需验证
+            if (MyLoginAuthenticationFilter.SPRING_SECURITY_RESTFUL_TYPE_WE_CHAT.equals(authentication.getType())) {
+                // 微信只需要根据 SPRING_SECURITY_RESTFUL_TYPE_WE_CHAT 查询到微信号即可，所以此处无需验证
             } else if (MyLoginAuthenticationFilter.SPRING_SECURITY_RESTFUL_TYPE_PHONE.equals(authentication.getType())) {
                 // 手机短信登录
                 // 验证码验证，调用公共服务查询 key 为authentication.getPrincipal()的value， 并判断其与验证码是否匹配

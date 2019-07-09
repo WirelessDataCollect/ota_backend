@@ -35,4 +35,5 @@ public enum CommandType {
     public String getType() {
         return type;
     }
+
 }

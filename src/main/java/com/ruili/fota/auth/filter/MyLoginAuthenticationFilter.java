@@ -2,7 +2,6 @@ package com.ruili.fota.auth.filter;
 
 import com.ruili.fota.auth.token.MyAuthenticationToken;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -23,7 +22,7 @@ public class MyLoginAuthenticationFilter extends AbstractAuthenticationProcessin
      */
     private static final String SPRING_SECURITY_RESTFUL_TYPE_KEY = "type";
 
-    public static final String SPRING_SECURITY_RESTFUL_TYPE_WeChat = "weChat";
+    public static final String SPRING_SECURITY_RESTFUL_TYPE_WE_CHAT = "weChat";
     public static final String SPRING_SECURITY_RESTFUL_TYPE_PHONE = "phone";
     public static final String SPRING_SECURITY_RESTFUL_TYPE_DEFAULT = "user";
 
@@ -65,7 +64,7 @@ public class MyLoginAuthenticationFilter extends AbstractAuthenticationProcessin
         String credentials;
 
         //微信公众号登录
-        if (SPRING_SECURITY_RESTFUL_TYPE_WeChat.equals(type)) {
+        if (SPRING_SECURITY_RESTFUL_TYPE_WE_CHAT.equals(type)) {
 //            String encryptedData = obtainParameter(request, SPRING_SECURITY_RESTFUL_ENCRYPTEDDATA_KEY).replace(" ", "+");
 ////            String encryptedData1 = "9CRJ8cSkFabf2hksdNFUFn9tddTALkAoq+0yKR0jhsWU0YGOqeTSuVqBtSzPm3FObkk/NThmdE2tqNNSTYTc2Eh5X2i9eNdP2TaDw77phUsmTmmS/hYib4nTSRM9kMV6RTdC8nN5UAzJSFzbn6y2LM3khODBOZDx221OuOXr9l7QslLmUKXwTpTtwBItDLnyQTpnrNufylbT7ko7PxwFvZjeOSdw6zHr6TCpGQ6UcKiE/MX/u7R16HxGY5Lq4eX6Dcx0BdRofFqmHy9CvM+2gIqjC0oomftkELA68haB9BYkX2pH2PmHvn/oCG6lH+M/y0H6oeO5aDzMVcrGyj2xvkJbH7NLbhgyq6DJptVtpgR1F7fko/pf25oSBAxKOjQ4RIhbjiebMnkT9dGnntdF70cgUh6B2pk2xSPgRzXDQz2HYMkf+OnFQkGAJ0qFjKRj";
 //            String iv = obtainParameter(request, SPRING_SECURITY_RESTFUL_IV_KEY);

@@ -46,7 +46,7 @@ public class BaseService {
     }
 
     //object转double
-    public double oToD(Object o) {
+    public double object2Double(Object o) {
         double d = Double.parseDouble(o.toString());
         return d;
     }

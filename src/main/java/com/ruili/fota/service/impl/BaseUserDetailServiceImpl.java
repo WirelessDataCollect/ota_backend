@@ -47,7 +47,7 @@ public class BaseUserDetailServiceImpl implements BaseUserDetailService {
             parameter = new String[]{MyLoginAuthenticationFilter.SPRING_SECURITY_RESTFUL_TYPE_DEFAULT, var1};
         }
 
-        if (MyLoginAuthenticationFilter.SPRING_SECURITY_RESTFUL_TYPE_WeChat.equals(parameter[0])) {
+        if (MyLoginAuthenticationFilter.SPRING_SECURITY_RESTFUL_TYPE_WE_CHAT.equals(parameter[0])) {
             // weixin登陆根据openId查询用户
             FotaUsers adminData = accountService.findUserByOpenId(parameter[1]);
 
