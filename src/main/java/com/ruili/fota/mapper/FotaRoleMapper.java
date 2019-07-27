@@ -33,6 +33,14 @@ public interface FotaRoleMapper extends BaseMapper<FotaRole> {
     List<FotaRole> selectRoleByUser(@Param("username") String username);
 
     /**
+     * 查询当前用户的角色信息，上面接口有点问题
+     *
+     * @param username
+     * @return
+     */
+    List<FotaRole> selectRoleTypeByUser(@Param("username") String username);
+
+    /**
      * 查找 user-role 对应关系
      *
      * @return

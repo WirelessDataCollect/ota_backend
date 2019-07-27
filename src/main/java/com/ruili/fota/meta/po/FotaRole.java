@@ -1,5 +1,7 @@
 package com.ruili.fota.meta.po;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -59,5 +61,12 @@ public class FotaRole implements Serializable {
                 .append(gmtupdate).append('\"');
         sb.append('}');
         return sb.toString();
+    }
+
+    public JSONObject toJSONObjContent(){
+        JSONObject object = new JSONObject();
+        object.put("name",this.name);
+        object.put("value",this.value);
+        return object;
     }
 }

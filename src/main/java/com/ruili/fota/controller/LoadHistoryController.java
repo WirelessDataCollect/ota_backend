@@ -18,6 +18,8 @@ import java.util.List;
 @RequestMapping(value = "/history")
 public class LoadHistoryController extends BaseController {
 
+    private static String urlPrefix = "otaHistory";
+
     @Autowired
     private LoadHistoryService loadHistoryService;
 
@@ -31,6 +33,10 @@ public class LoadHistoryController extends BaseController {
     public BaseResp<List<OtaHistoryVO>> historyQuery(@RequestParam("imei") String imei,
         @RequestParam("beginTime") String beginTime,
         @RequestParam("endTime") String endTime) {
+        if (!checkPermission(urlPrefix)) {
+            return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
+        }
+
         String tenantId = this.findCurrentUser().getUsername();
         return new BaseResp(ResultStatus.SUCCESS, loadHistoryService.queryLoadHistory(imei, beginTime, endTime,tenantId));
     }

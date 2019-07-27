@@ -1,13 +1,15 @@
 package com.ruili.fota.auth.handler;
 
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ruili.fota.constant.AuthorityEnum;
 import com.ruili.fota.constant.result.BaseResp;
 import com.ruili.fota.constant.result.ResultStatus;
+import com.ruili.fota.mapper.FotaRoleMapper;
+import com.ruili.fota.meta.po.FotaRole;
 import com.ruili.fota.meta.po.FotaUsers;
 import com.ruili.fota.service.AccountService;
 import com.ruili.fota.service.AuthorityService;
@@ -28,8 +30,10 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 //import org.springframework.security.oauth2.provider.TokenRequest;
 
@@ -49,10 +53,13 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
+    private FotaRoleMapper fotaRoleMapper;
+    @Autowired
     private AuthorizationServerTokenServices authorizationServerTokenServices;
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+        Authentication authentication) throws IOException {
 
         //获取登陆信息
         String header = request.getHeader("Authorization");
@@ -77,22 +84,21 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         }
 
         //添加登陆日志
-//        Log log = new Log();
-//        log.setType(LOG_TYPE_USERLOGIN);
-//        log.setUserId(currentUser.getId());
-//        log.setUsername(currentUser.getUsername());
-//        log.setIpAddress(getIpAddress(request));
-//        log.setTitle("登录");
-//        logService.addLog(log);
+        //        Log log = new Log();
+        //        log.setType(LOG_TYPE_USERLOGIN);
+        //        log.setUserId(currentUser.getId());
+        //        log.setUsername(currentUser.getUsername());
+        //        log.setIpAddress(getIpAddress(request));
+        //        log.setTitle("登录");
+        //        logService.addLog(log);
 
         JSONObject jsonObject = generateToken(authentication, clientId, clientDetails);
 
         //跨域
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(objectMapper.writeValueAsString(new BaseResp(ResultStatus.SUCCESS, getLoginTokenInfo(jsonObject, currentUser))));
-
-
+        response.getWriter().write(objectMapper
+            .writeValueAsString(new BaseResp(ResultStatus.SUCCESS, getLoginTokenInfo(jsonObject, currentUser))));
     }
 
     /**
@@ -104,7 +110,11 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
     private JSONObject getLoginTokenInfo(JSONObject jsonObject, FotaUsers currentUser) {
         jsonObject.put("userId", currentUser.getGid());
         jsonObject.put("realname", currentUser.getRealname());
-        jsonObject.put("menu", authorityService.getMenuByUser(AuthorityEnum.MENU_TYPE_PC.getType(), currentUser.getGid()));
+        //TODO，目前取特例，一个用户只有一个角色，要进行结构的改造
+
+        jsonObject.put("userType", getUserTypeByUserInfo(currentUser));
+        jsonObject.put("menu",
+            authorityService.getMenuByUser(AuthorityEnum.MENU_TYPE_PC.getType(), currentUser.getGid()));
         return jsonObject;
     }
 
@@ -113,10 +123,10 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
      * Decodes the header into a username and password.
      *
      * @throws BadCredentialsException if the Basic header is not present or is not valid
-     *                                 Base64
+     * Base64
      */
     private String[] extractAndDecodeHeader(String header, HttpServletRequest request)
-            throws IOException {
+        throws IOException {
         //Basic aW1vb2M6aW1vb2NzZWNyZXQ= 截取Basic后的
         byte[] base64Token = header.substring(6).getBytes("UTF-8");
         byte[] decoded;
@@ -125,7 +135,7 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
             decoded = Base64.decode(base64Token);
         } catch (IllegalArgumentException e) {
             throw new BadCredentialsException(
-                    "Failed to decode basic authentication token");
+                "Failed to decode basic authentication token");
         }
 
         String token = new String(decoded, "UTF-8");
@@ -140,8 +150,9 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
          * security.oauth2.client.clientId = imooc
          security.oauth2.client.clientSecret = imoocsecret
          */
-        return new String[]{token.substring(0, delim), token.substring(delim + 1)};
+        return new String[] {token.substring(0, delim), token.substring(delim + 1)};
     }
+
     /**
      * 生成token
      *
@@ -149,7 +160,8 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
      * @return
      * @throws JsonProcessingException
      */
-    private JSONObject generateToken(Authentication authentication, String clientId, ClientDetails clientDetails) throws JsonProcessingException {
+    private JSONObject generateToken(Authentication authentication, String clientId, ClientDetails clientDetails)
+        throws JsonProcessingException {
 
         TokenRequest tokenRequest = new TokenRequest(MapUtils.EMPTY_MAP, clientId, clientDetails.getScope(), "custom");
 
@@ -163,6 +175,12 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         JSONObject jsonObject = JSON.parseObject(accessTokenStr);
 
         return jsonObject;
+    }
+
+    private List<JSONObject> getUserTypeByUserInfo(FotaUsers currentUser) {
+        List<FotaRole> fotaRoleList = fotaRoleMapper.selectRoleTypeByUser(currentUser.getUsername());
+        List<JSONObject> content = fotaRoleList.stream().map(FotaRole::toJSONObjContent).collect(Collectors.toList());
+        return content;
     }
 
 }

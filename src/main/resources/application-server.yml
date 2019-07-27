@@ -12,7 +12,7 @@ spring:
   # 采用宿主机和docker之间的网段
   datasource:
     driver: com.mysql.jdbc.Driver
-    url: jdbc:mysql://172.17.0.1:3306/fota_dev_dev?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&allowMultiQueries=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://172.17.0.1:3306/fota_dev_1908?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&allowMultiQueries=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
     username: root
     password: Ruili@123456
 

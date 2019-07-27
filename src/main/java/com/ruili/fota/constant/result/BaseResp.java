@@ -68,6 +68,15 @@ public class BaseResp<T> {
     }
 
     /**
+     * @param resultStatus 状态码
+     * @param message      信息
+     */
+    public BaseResp(ResultStatus resultStatus, String message) {
+        this.status = resultStatus.getStatus();
+        this.message = message;
+    }
+
+    /**
      * 不带数据的返回结果
      *
      * @param resultStatus

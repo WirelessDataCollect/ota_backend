@@ -20,6 +20,8 @@ import java.util.List;
 @RequestMapping(value = "authority")
 public class AccountController extends BaseController {
 
+    private static String urlPrefix = "user";
+
     @Autowired
     private AccountService accountService;
     @Autowired
@@ -32,6 +34,10 @@ public class AccountController extends BaseController {
     })
     @PostMapping(value = "/user/get")
     public BaseResp getUser() {
+        if (!checkPermission(urlPrefix)) {
+            return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
+        }
+
         return new BaseResp(ResultStatus.SUCCESS, accountService.getUser(this.getRequestHelper()));
     }
 
@@ -48,6 +54,10 @@ public class AccountController extends BaseController {
     })
     @PostMapping(value = "/user/add")
     public BaseResp addUser(FotaUsers user, @RequestParam("roleIds") List<Integer> roleIds) {
+        if (!checkPermission(urlPrefix)) {
+            return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
+        }
+
         //函数中先检查是否存在，再插入新纪录
         int addRes = accountService.addUser(user);
         if (addRes == -1) {
@@ -74,6 +84,10 @@ public class AccountController extends BaseController {
     })
     @PostMapping(value = "/user/update")
     public BaseResp updateUser(FotaUsers user) {
+        if (!checkPermission(urlPrefix)) {
+            return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
+        }
+
         return new BaseResp(ResultStatus.SUCCESS, accountService.updateUser(user));
     }
 
@@ -84,6 +98,10 @@ public class AccountController extends BaseController {
     })
     @PostMapping(value = "/user/delete")
     public BaseResp deleteUser(int userId) {
+        if (!checkPermission(urlPrefix)) {
+            return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
+        }
+
         return new BaseResp(ResultStatus.SUCCESS, accountService.deleteUserById(userId));
     }
 
@@ -94,6 +112,10 @@ public class AccountController extends BaseController {
     })
     @PostMapping(value = "/userRole/get")
     public BaseResp getUserRole() {
+        if (!checkPermission(urlPrefix)) {
+            return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
+        }
+
         return new BaseResp(ResultStatus.SUCCESS, authorityService.getUserRole());
     }
 
@@ -106,6 +128,10 @@ public class AccountController extends BaseController {
     })
     @PostMapping(value = "/userRole/update")
     public BaseResp updateUserRole(Integer userId, @RequestParam List<Integer> roleIds) {
+        if (!checkPermission(urlPrefix)) {
+            return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
+        }
+
         return new BaseResp(ResultStatus.SUCCESS, authorityService.insertOrUpdateUserRole(userId, roleIds));
     }
 
@@ -115,6 +141,10 @@ public class AccountController extends BaseController {
     })
     @PostMapping(value = "/role/get")
     public BaseResp getRole() {
+        if (!checkPermission(urlPrefix)) {
+            return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
+        }
+
         return new BaseResp(ResultStatus.SUCCESS, authorityService.getRole());
     }
 
@@ -127,6 +157,10 @@ public class AccountController extends BaseController {
     })
     @PostMapping(value = "/role/add")
     public BaseResp addRole(FotaRole role) {
+        if (!checkPermission(urlPrefix)) {
+            return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
+        }
+
         int addRes = authorityService.addRole(role);
         if (addRes == -1) {
             return new BaseResp(ResultStatus.error_duplicated_data);
@@ -141,6 +175,10 @@ public class AccountController extends BaseController {
     })
     @PostMapping(value = "/role/delete")
     public BaseResp deleteRole(Integer roleId) {
+        if (!checkPermission(urlPrefix)) {
+            return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
+        }
+
         return new BaseResp(ResultStatus.SUCCESS, authorityService.deleteRole(roleId));
     }
 
@@ -150,6 +188,10 @@ public class AccountController extends BaseController {
     })
     @PostMapping(value = "/menu/get")
     public BaseResp getMenu() {
+        if (!checkPermission(urlPrefix)) {
+            return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
+        }
+
         //TODO 根据用户的请求身份获取用户信息再请求菜单接口
         return new BaseResp(ResultStatus.SUCCESS, authorityService.getMenu(AuthorityEnum.MENU_TYPE_PC.getType(), null));
     }
@@ -162,6 +204,10 @@ public class AccountController extends BaseController {
     })
     @PostMapping(value = "/roleMenu/update")
     public BaseResp updateRoleMenu(Integer roleId, @RequestParam List<Integer> menuIds) {
+        if (!checkPermission(urlPrefix)) {
+            return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
+        }
+
         authorityService.updateRoleMenu(AuthorityEnum.MENU_TYPE_PC.getType(), roleId, menuIds);
         return new BaseResp(ResultStatus.SUCCESS);
     }
@@ -172,6 +218,10 @@ public class AccountController extends BaseController {
     })
     @PostMapping(value = "/roleMenu/get")
     public BaseResp getRoleMenu() {
+        if (!checkPermission(urlPrefix)) {
+            return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
+        }
+
         return new BaseResp(ResultStatus.SUCCESS, authorityService.getRoleMenu(AuthorityEnum.MENU_TYPE_PC.getType()));
     }
 

@@ -32,6 +32,9 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping(value = "/firmware")
 public class FirmwareController extends BaseController {
+
+    private static String urlPrefix = "OtaFile";
+
     @Autowired
     private MongoService mongoService;
     @Autowired
@@ -42,6 +45,10 @@ public class FirmwareController extends BaseController {
     })
     @PostMapping(value = "/query")
     public BaseResp<List<OtaFileVO>> firmwareQuery() {
+        if (!checkPermission(urlPrefix)) {
+            return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
+        }
+
         String tenantId = this.findCurrentUser().getUsername();
         return new BaseResp(ResultStatus.SUCCESS, firmwareService.queryFirmwareImages(tenantId));
     }
@@ -60,6 +67,10 @@ public class FirmwareController extends BaseController {
         @RequestParam("fileName") String fileName,
         @RequestParam("firmwareVersion") String firmwareVersion,
         @RequestParam("content") String content) {
+        if (!checkPermission(urlPrefix)) {
+            return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
+        }
+
         FotaUsers currentUser = this.findCurrentUser();
         return new BaseResp(ResultStatus.SUCCESS,
             firmwareService.insertFirmwareInfo(firmwareId, mcuType, fileName, firmwareVersion, content, currentUser));
@@ -71,6 +82,10 @@ public class FirmwareController extends BaseController {
     })
     @PostMapping(value = "/upload")
     public BaseResp firmUpload(@RequestParam("file") MultipartFile file) throws IOException {
+        if (!checkPermission(urlPrefix)) {
+            return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
+        }
+
         String firmwareId = mongoService.insertFirmwareAndGetImgId(file);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("firmwareId", firmwareId);
@@ -83,6 +98,10 @@ public class FirmwareController extends BaseController {
     })
     @PostMapping(value = "/deletebyfirmwareid")
     public BaseResp firmDelete(@RequestParam("firmwareId") String firmwareId) throws IOException, NotFoundException {
+        if (!checkPermission(urlPrefix)) {
+            return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
+        }
+
         String tenantId = this.findCurrentUser().getUsername();
         return new BaseResp(ResultStatus.SUCCESS, "删除成功", firmwareService.deleteFirmInfoByFirmId(firmwareId, tenantId));
     }
@@ -99,6 +118,10 @@ public class FirmwareController extends BaseController {
     })
     @PostMapping(value = "/config")
     public BaseResp<ConfigResPO> downloadFireware(ConfigBO configBO) throws IOException, NotFoundException {
+        if (!checkPermission(urlPrefix)) {
+            return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
+        }
+
         //找到固件信息
         String tenantId = this.findCurrentUser().getUsername();
         configBO.setFotaImages(firmwareService.selectImageByImageId(configBO.getFirmwareId(), tenantId));
@@ -112,6 +135,10 @@ public class FirmwareController extends BaseController {
     @PostMapping(value = "/downloadreport")
     public BaseResp<LoadProcessBO> downloadFirewareReport(@RequestParam("imei") String imei,
         @RequestParam("requestId") String requestId) throws NotFoundException, IOException, ClassNotFoundException {
+        if (!checkPermission(urlPrefix)) {
+            return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
+        }
+
         String tenantId = this.findCurrentUser().getUsername();
         return new BaseResp(ResultStatus.SUCCESS, firmwareService.downloadFirmwareReport(imei, requestId, tenantId));
     }
