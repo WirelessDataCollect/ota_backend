@@ -2,10 +2,28 @@ package com.ruili.fota.meta.po;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Date;
+/**
+* @description:
+*
+* @author: jingxiong.ljx
+* @date: 2019-07-27
+*/
 
-public class FotaRole {
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class FotaRole implements Serializable {
+
+    private static final long serialVersionUID = 2411815820444142434L;
+
     private Integer gid;
 
     private String name;
@@ -21,75 +39,6 @@ public class FotaRole {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtupdate;
-
-    public Integer getGid() {
-        return gid;
-    }
-
-    public void setGid(Integer gid) {
-        this.gid = gid;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value == null ? null : value.trim();
-    }
-
-    public String getInfo() {
-        return info;
-    }
-
-    public void setInfo(String info) {
-        this.info = info == null ? null : info.trim();
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public Date getGmtcreate() {
-        return gmtcreate;
-    }
-
-    public void setGmtcreate(Date gmtcreate) {
-        this.gmtcreate = gmtcreate;
-    }
-
-    public Date getGmtupdate() {
-        return gmtupdate;
-    }
-
-    public void setGmtupdate(Date gmtupdate) {
-        this.gmtupdate = gmtupdate;
-    }
-
-    public FotaRole(Integer gid, String name, String value, String info, Integer status, Date gmtcreate, Date gmtupdate) {
-        this.gid = gid;
-        this.name = name;
-        this.value = value;
-        this.info = info;
-        this.status = status;
-        this.gmtcreate = gmtcreate;
-        this.gmtupdate = gmtupdate;
-    }
-
-    public FotaRole() {
-    }
 
     @Override
     public String toString() {

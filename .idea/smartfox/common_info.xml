@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SmartFoxWorkToolsProjectState">
-    <option name="branch" value="fresh" />
+    <option name="branch" value="update_v8" />
     <option name="gitUrl" value="https://github.com/Hellovolcanoofficial/fota.git" />
-    <option name="localBranch" value="fresh" />
-    <option name="revision" value="f26b6847935f1f42e58c096a95b6a6d75c490bf4" />
+    <option name="localBranch" value="update_v8" />
+    <option name="revision" value="b0dc587349cde546be4b1be4cbe4f9b3694d1043" />
   </component>
 </project>

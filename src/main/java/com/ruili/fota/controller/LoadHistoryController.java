@@ -21,17 +21,17 @@ public class LoadHistoryController extends BaseController {
     @Autowired
     private LoadHistoryService loadHistoryService;
 
-
     @ApiOperation(value = "固件 下载 历史查询", tags = {"固件管理"}, notes = "查询设备固件升级历史")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "imei", value = "升级设备的imei", required = true),
-            @ApiImplicitParam(name = "beginTime", value = "查询开始时间", required = true),
-            @ApiImplicitParam(name = "endTime", value = "查询结束时间", required = true)
+        @ApiImplicitParam(name = "imei", value = "升级设备的imei", required = true),
+        @ApiImplicitParam(name = "beginTime", value = "查询开始时间", required = true),
+        @ApiImplicitParam(name = "endTime", value = "查询结束时间", required = true)
     })
     @PostMapping(value = "/query")
     public BaseResp<List<OtaHistoryVO>> historyQuery(@RequestParam("imei") String imei,
-                                                     @RequestParam("beginTime") String beginTime,
-                                                     @RequestParam("endTime") String endTime) {
-        return new BaseResp(ResultStatus.SUCCESS, loadHistoryService.queryLoadHistory(imei, beginTime, endTime));
+        @RequestParam("beginTime") String beginTime,
+        @RequestParam("endTime") String endTime) {
+        String tenantId = this.findCurrentUser().getUsername();
+        return new BaseResp(ResultStatus.SUCCESS, loadHistoryService.queryLoadHistory(imei, beginTime, endTime,tenantId));
     }
 }

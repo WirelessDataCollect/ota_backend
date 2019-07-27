@@ -2,6 +2,7 @@ package com.ruili.fota.netty;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+
 import com.ruili.fota.common.DateTools;
 import com.ruili.fota.constant.DownloadPattern;
 import com.ruili.fota.constant.LoadStatusEnum;
@@ -72,7 +73,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             System.out.println("===============");
             RegisterPK registerPK = JSON.parseObject(msg.toString(), RegisterPK.class);
             deviceManageService.deviceRegister(registerPK);
-            NettyChannelMap.add(registerPK.getImei(), (SocketChannel) ctx.channel());
+            NettyChannelMap.add(registerPK.getImei(), (SocketChannel)ctx.channel());
             ctx.writeAndFlush(getWriteBuf(CommandType.RIGISTER_ACK.getType(), ctx));
         }
         if (ifContains(msg.toString(), CommandType.CONFIG_ACK)) {
@@ -107,7 +108,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             //离线升级方式，直接在数据库写入结果，此时开放给前端查询
             if (FotaProcessMap.get(pk.getImei()).getConfigBO().getMeasure() == downloadPattern.OfflineDownloadPattern) {
                 //插入数据库一条记录
-                loadHistoryService.insertLoadHistoryByLoadStatus(pk.getImei(), LoadStatusEnum.LOAD_SUCCESS);
+                String tenantId = FotaProcessMap.get(pk.getImei()).getTenantId();
+                loadHistoryService.insertLoadHistoryByLoadStatus(pk.getImei(), LoadStatusEnum.LOAD_SUCCESS, tenantId);
                 //清除设备表中的requestId
                 loadDeviceManageService.updateRequestIdByImei(pk.getImei(), null);
                 //移除Map通道数据
@@ -120,7 +122,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             System.out.println("=================");
             DownloadErrorPK errorPK = JSON.parseObject(msg.toString(), DownloadErrorPK.class);
             //插入数据库一条记录，同时修改内存中的值
-            loadHistoryService.insertLoadHistoryByLoadStatus(errorPK.getImei(), LoadStatusEnum.LOAD_ERROR);
+            String tenantId = FotaProcessMap.get(errorPK.getImei()).getTenantId();
+            loadHistoryService.insertLoadHistoryByLoadStatus(errorPK.getImei(), LoadStatusEnum.LOAD_ERROR, tenantId);
             //删除设备更新的配置内存，从头开始
             FotaProcessMap.removeByImei(errorPK.getImei());
         }
@@ -130,7 +133,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             System.out.println("=================");
             UpdateOkPK pk = JSON.parseObject(msg.toString(), UpdateOkPK.class);
             //插入数据库一条记录，同时修改内存中的值
-            loadHistoryService.insertLoadHistoryByLoadStatus(pk.getImei(), LoadStatusEnum.UPDATE_SUCCESS);
+            String tenantId = FotaProcessMap.get(pk.getImei()).getTenantId();
+            loadHistoryService.insertLoadHistoryByLoadStatus(pk.getImei(), LoadStatusEnum.UPDATE_SUCCESS, tenantId);
             //清除设备表中的requestId
             loadDeviceManageService.updateRequestIdByImei(pk.getImei(), null);
             //移除Map通道数据
@@ -143,7 +147,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             System.out.println("=================");
             UpdateErrorPK pk = JSON.parseObject(msg.toString(), UpdateErrorPK.class);
             //插入数据库一条记录，同时修改内存中的值
-            loadHistoryService.insertLoadHistoryByLoadStatus(pk.getImei(), LoadStatusEnum.searchByCode(pk.getCode()));
+            String tenantId = FotaProcessMap.get(pk.getImei()).getTenantId();
+            loadHistoryService.insertLoadHistoryByLoadStatus(pk.getImei(), LoadStatusEnum.searchByCode(pk.getCode()),tenantId);
             //清除设备表中的requestId
             loadDeviceManageService.updateRequestIdByImei(pk.getImei(), null);
             //移除Map通道数据
@@ -167,7 +172,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         logger.error("***" + ctx.channel().remoteAddress() + " is inactive***");
-        String imei = NettyChannelMap.remove((SocketChannel) ctx.channel());
+        String imei = NettyChannelMap.remove((SocketChannel)ctx.channel());
         if (imei != null) {
             //设备离线记录
             FotaProcessMap.removeByImei(imei);
@@ -187,7 +192,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         if (evt instanceof IdleStateEvent) {
-            IdleStateEvent e = (IdleStateEvent) evt;
+            IdleStateEvent e = (IdleStateEvent)evt;
             switch (e.state()) {
                 case READER_IDLE:
                     //会自动被执行通道关闭的回调函数，执行4次握手回调后面的任务

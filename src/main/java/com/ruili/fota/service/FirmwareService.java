@@ -19,14 +19,15 @@ public interface FirmwareService {
      *
      * @return
      */
-    public List<OtaFileVO> queryFirmwareImages();
+    public List<OtaFileVO> queryFirmwareImages(String tenantId);
 
     /**
-     * 写入设备固件信息
+     * 写入设备固件信息，需要传入租户信息
      *
      * @return
      */
-    public int insertFirmwareInfo(String firmwareId, String mcuType, String fileName, String firmwareVersion, String content, FotaUsers currentUser);
+    public int insertFirmwareInfo(String firmwareId, String mcuType, String fileName, String firmwareVersion,
+        String content, FotaUsers currentUser);
 
     /**
      * 设备进行固件烧写前下发配置信息
@@ -35,8 +36,7 @@ public interface FirmwareService {
      * @return
      * @throws IOException
      */
-    public ConfigResPO configDownloadPatten(ConfigBO configBO) throws IOException, NotFoundException;
-
+    public ConfigResPO configDownloadPatten(ConfigBO configBO, String tenantId) throws IOException, NotFoundException;
 
     /**
      * 下发固件给设备
@@ -53,8 +53,8 @@ public interface FirmwareService {
      * @param imei
      * @return
      */
-    public LoadProcessBO downloadFirmwareReport(String imei, String requestId) throws NotFoundException, IOException, ClassNotFoundException;
-
+    public LoadProcessBO downloadFirmwareReport(String imei, String requestId, String tenantId)
+        throws NotFoundException, IOException, ClassNotFoundException;
 
     /**
      * 固件删除
@@ -62,13 +62,22 @@ public interface FirmwareService {
      * @param firmwareId
      * @return
      */
-    public boolean deleteFirmInfoByFirmId(String firmwareId) throws NotFoundException;
+    public boolean deleteFirmInfoByFirmId(String firmwareId, String tenantId) throws NotFoundException;
 
     /**
      * 通过imageId查询固件信息
+     *
      * @param imageId
      * @return
      */
-    public FotaImages selectImageByImageId(String imageId);
+    public FotaImages selectImageByImageId(String imageId, String tenantId);
+
+    /**
+     * 通过imageId查询固件信息，给系统定时任务，不需要提供租户id
+     *
+     * @param imageId
+     * @return
+     */
+    public FotaImages selectImageByImageIdForWatcher(String imageId);
 
 }

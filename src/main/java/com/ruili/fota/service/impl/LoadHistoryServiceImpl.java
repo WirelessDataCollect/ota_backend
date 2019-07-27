@@ -24,7 +24,7 @@ public class LoadHistoryServiceImpl implements LoadHistoryService {
     private FotaLoadHistoryMapper fotaLoadHistoryMapper;
 
     @Override
-    public int insertLoadHistoryByLoadStatus(String imei, LoadStatusEnum loadStatusEnum) {
+    public int insertLoadHistoryByLoadStatus(String imei, LoadStatusEnum loadStatusEnum, String tenantId) {
         FotaProcessEntity entity = FotaProcessMap.get(imei);
         entity.setStatusEnum(loadStatusEnum);
         //计入结束时间
@@ -34,7 +34,7 @@ public class LoadHistoryServiceImpl implements LoadHistoryService {
     }
 
     @Override
-    public List<OtaHistoryVO> queryLoadHistory(String imei, String beginTime, String endTime) {
+    public List<OtaHistoryVO> queryLoadHistory(String imei, String beginTime, String endTime, String tenantId) {
         Example queryLoadHistoryExample = new Example(FotaLoadHistory.class);
         Example.Criteria criteria = queryLoadHistoryExample.createCriteria();
         if (beginTime != null || beginTime != "") {
@@ -44,7 +44,10 @@ public class LoadHistoryServiceImpl implements LoadHistoryService {
             criteria.andLessThanOrEqualTo("gmtcreate", endTime);
         }
         if (imei != null || imei != "") {
-            criteria.andLike("imei", imei);
+            criteria.andLike("imei", "%" + imei + "%");
+        }
+        if (tenantId != null || tenantId != "") {
+            criteria.andEqualTo("tenantId", tenantId);
         }
         List<FotaLoadHistory> fotaLoadHistoryList = fotaLoadHistoryMapper.selectByExample(queryLoadHistoryExample);
         List<OtaHistoryVO> otaHistoryVOList = new ArrayList<>();

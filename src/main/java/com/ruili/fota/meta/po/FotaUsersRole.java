@@ -2,10 +2,22 @@ package com.ruili.fota.meta.po;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class FotaUsersRole {
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class FotaUsersRole implements Serializable {
+
+    private static final long serialVersionUID = 8888294385617738957L;
+
     private Integer gid;
 
     private Integer adminId;
@@ -14,48 +26,6 @@ public class FotaUsersRole {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtcreate;
-
-    public Integer getGid() {
-        return gid;
-    }
-
-    public void setGid(Integer gid) {
-        this.gid = gid;
-    }
-
-    public Integer getAdminId() {
-        return adminId;
-    }
-
-    public void setAdminId(Integer adminId) {
-        this.adminId = adminId;
-    }
-
-    public Integer getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
-    }
-
-    public Date getGmtcreate() {
-        return gmtcreate;
-    }
-
-    public void setGmtcreate(Date gmtcreate) {
-        this.gmtcreate = gmtcreate;
-    }
-
-    public FotaUsersRole(Integer gid, Integer adminId, Integer roleId, Date gmtcreate) {
-        this.gid = gid;
-        this.adminId = adminId;
-        this.roleId = roleId;
-        this.gmtcreate = gmtcreate;
-    }
-
-    public FotaUsersRole() {
-    }
 
     @Override
     public String toString() {

@@ -1,20 +1,49 @@
 package com.ruili.fota.meta.bo;
 
+import java.io.Serializable;
+
 import com.ruili.fota.constant.LoadStatusEnum;
 import com.ruili.fota.meta.entity.FotaProcessEntity;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
 * @author: liangjingxiong
 * @date: 2019-05-13
-* @description:记录设备固件升级状态，返回给前端，为FotaProcessEntity的前端简化版本
+* @description: 记录设备固件升级状态，返回给前端，为FotaProcessEntity的前端简化版本
 */
-public class LoadProcessBO {
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class LoadProcessBO implements Serializable {
 
+    private static final long serialVersionUID = 896253105021221698L;
+    /**
+     * imei号
+     */
     private String imei;
-    private String requestId;//记录本次请求的id
+    /**
+     * 请求id
+     */
+    private String requestId;
+    /**
+     * 当前包排序number
+     */
     private int packNumber;
+    /**
+     * 总包书
+     */
     private int totalPack;
+    /**
+     * 下载状态
+     */
     private LoadStatusEnum statusEnum;
+    /**
+     * 配置信息
+     */
     private ConfigBO configBO;
 
     public LoadProcessBO(FotaProcessEntity entity) {
@@ -26,65 +55,6 @@ public class LoadProcessBO {
         this.configBO = entity.getConfigBO();
     }
 
-    public LoadProcessBO(String imei, String requestId, int packNumber, int totalPack, LoadStatusEnum statusEnum, ConfigBO configBO) {
-        this.imei = imei;
-        this.requestId = requestId;
-        this.packNumber = packNumber;
-        this.totalPack = totalPack;
-        this.statusEnum = statusEnum;
-        this.configBO = configBO;
-    }
-
-    public LoadProcessBO() {
-    }
-
-    public String getImei() {
-        return imei;
-    }
-
-    public void setImei(String imei) {
-        this.imei = imei;
-    }
-
-    public String getRequestId() {
-        return requestId;
-    }
-
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
-    }
-
-    public int getPackNumber() {
-        return packNumber;
-    }
-
-    public void setPackNumber(int packNumber) {
-        this.packNumber = packNumber;
-    }
-
-    public int getTotalPack() {
-        return totalPack;
-    }
-
-    public void setTotalPack(int totalPack) {
-        this.totalPack = totalPack;
-    }
-
-    public LoadStatusEnum getStatusEnum() {
-        return statusEnum;
-    }
-
-    public void setStatusEnum(LoadStatusEnum statusEnum) {
-        this.statusEnum = statusEnum;
-    }
-
-    public ConfigBO getConfigBO() {
-        return configBO;
-    }
-
-    public void setConfigBO(ConfigBO configBO) {
-        this.configBO = configBO;
-    }
 
     @Override
     public String toString() {

@@ -2,49 +2,28 @@ package com.ruili.fota.meta.po;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class FotaRolePermission {
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class FotaRolePermission implements Serializable {
+
+    private static final long serialVersionUID = 747665693486961857L;
+
     private Integer roleId;
 
     private Integer permissionId;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtcreate;
-
-    public Integer getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
-    }
-
-    public Integer getPermissionId() {
-        return permissionId;
-    }
-
-    public void setPermissionId(Integer permissionId) {
-        this.permissionId = permissionId;
-    }
-
-    public Date getGmtcreate() {
-        return gmtcreate;
-    }
-
-    public void setGmtcreate(Date gmtcreate) {
-        this.gmtcreate = gmtcreate;
-    }
-
-    public FotaRolePermission(Integer roleId, Integer permissionId, Date gmtcreate) {
-        this.roleId = roleId;
-        this.permissionId = permissionId;
-        this.gmtcreate = gmtcreate;
-    }
-
-    public FotaRolePermission() {
-    }
 
     @Override
     public String toString() {

@@ -1,10 +1,21 @@
 package com.ruili.fota.meta.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class MenuVO {
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class MenuVO implements Serializable {
+
+    private static final long serialVersionUID = 9045805604574713456L;
 
     private Integer key;
 
@@ -12,39 +23,6 @@ public class MenuVO {
 
     @JsonInclude(value = JsonInclude.Include.NON_NULL)
     private List<MenuVO> children;
-
-    public Integer getKey() {
-        return key;
-    }
-
-    public void setKey(Integer key) {
-        this.key = key;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public List<MenuVO> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<MenuVO> children) {
-        this.children = children;
-    }
-
-    public MenuVO(Integer key, String title, List<MenuVO> children) {
-        this.key = key;
-        this.title = title;
-        this.children = children;
-    }
-
-    public MenuVO() {
-    }
 
     @Override
     public String toString() {

@@ -11,14 +11,15 @@
     <result column="gmtcreate" jdbcType="TIMESTAMP" property="gmtcreate" />
     <result column="gmtupdate" jdbcType="TIMESTAMP" property="gmtupdate" />
     <result column="gmtmodified" jdbcType="TIMESTAMP" property="gmtmodified" />
+    <result column="tenant_id" jdbcType="VARCHAR" property="tenantId"/>
   </resultMap>
   <insert id="insert" keyColumn="gid" keyProperty="gid" parameterType="com.ruili.fota.meta.po.FotaLoadHistory" useGeneratedKeys="true">
     insert into fota_load_history (imei, request_id, firmware_id, 
       load_process, config_bo, gmtcreate,
-      gmtupdate, gmtmodified)
+      gmtupdate, gmtmodified,tenant_id)
     values (#{imei,jdbcType=VARCHAR}, #{requestId,jdbcType=VARCHAR}, #{firmwareId,jdbcType=VARCHAR}, 
       #{loadProcess,jdbcType=VARCHAR}, #{configBo,jdbcType=VARCHAR}, #{gmtcreate,jdbcType=TIMESTAMP},
-      #{gmtupdate,jdbcType=TIMESTAMP}, #{gmtmodified,jdbcType=TIMESTAMP})
+      #{gmtupdate,jdbcType=TIMESTAMP}, #{gmtmodified,jdbcType=TIMESTAMP},#{tenantId})
   </insert>
   <insert id="insertSelective" keyColumn="gid" keyProperty="gid" parameterType="com.ruili.fota.meta.po.FotaLoadHistory" useGeneratedKeys="true">
     insert into fota_load_history
@@ -47,6 +48,9 @@
       <if test="gmtmodified != null">
         gmtmodified,
       </if>
+      <if test="tenantId != null">
+        tenant_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="imei != null">
@@ -72,6 +76,9 @@
       </if>
       <if test="gmtmodified != null">
         #{gmtmodified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tenantId != null">
+        #{tenant_id,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>

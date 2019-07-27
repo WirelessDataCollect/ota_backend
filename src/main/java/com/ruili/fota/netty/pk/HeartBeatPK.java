@@ -1,32 +1,40 @@
 package com.ruili.fota.netty.pk;
 
-public class HeartBeatPK {
+import java.io.Serializable;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * @description: 设备心跳包
+ * @author: jingxiong.ljx
+ * @date: 2019-07-27
+ */
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class HeartBeatPK implements Serializable {
+    private static final long serialVersionUID = -573486452726762539L;
+
+    /**
+     * 声明包类型
+     */
     private final String type = CommandType.HEARTBEAT.getType();
+    /**
+     * 设备imei号
+     */
     private String imei;
-
-    public HeartBeatPK(String imei) {
-        this.imei = imei;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getImei() {
-        return imei;
-    }
-
-    public void setImei(String imei) {
-        this.imei = imei;
-    }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");
         sb.append("\"type\":\"")
-                .append(type).append('\"');
+            .append(type).append('\"');
         sb.append(",\"imei\":\"")
-                .append(imei).append('\"');
+            .append(imei).append('\"');
         sb.append('}');
         return sb.toString();
     }

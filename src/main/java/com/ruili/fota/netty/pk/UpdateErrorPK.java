@@ -1,37 +1,30 @@
 package com.ruili.fota.netty.pk;
 
-public class UpdateErrorPK {
+import java.io.Serializable;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class UpdateErrorPK implements Serializable {
+    private static final long serialVersionUID = -8305969965092295690L;
+    /**
+     * 申明包类型
+     */
     private final String type = CommandType.UPDATE_ERROR.getType();
+    /**
+     * 设备imei号信息
+     */
     private String imei;
+    /**
+     * 升级失败的状态码
+     */
     private int code;
-
-    public UpdateErrorPK(String imei, int code) {
-        this.imei = imei;
-        this.code = code;
-    }
-
-    public UpdateErrorPK() {
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getImei() {
-        return imei;
-    }
-
-    public void setImei(String imei) {
-        this.imei = imei;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
 
     @Override
     public String toString() {

@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author: liangjingxiong
  * @date: 2019-04-22
- * @description:将设备的imei号和socketChannel存入Mapper中来进行管理与消息的主动下发
+ * @description: 将设备的imei号和socketChannel存入Mapper中来进行管理与消息的主动下发
  */
 public class NettyChannelMap {
     private static Map<String, SocketChannel> map = new ConcurrentHashMap<String, SocketChannel>();
@@ -22,7 +22,11 @@ public class NettyChannelMap {
         return map.get(clientId);
     }
 
-    //移除一条通道数据
+    /**
+     * 移除一条通道数据
+     * @param socketChannel
+     * @return
+     */
     public static String remove(SocketChannel socketChannel) {
         for (Map.Entry entry : map.entrySet()) {
             if (entry.getValue() == socketChannel) {
@@ -34,7 +38,11 @@ public class NettyChannelMap {
         return null;
     }
 
-    //移除一条通道数据
+    /**
+     * 移除一条通道数据
+     * @param ctx
+     * @return
+     */
     public static String remove(ChannelHandlerContext ctx) {
         for (Map.Entry entry : map.entrySet()) {
             if (entry.getValue() == ctx) {
@@ -46,7 +54,11 @@ public class NettyChannelMap {
         return null;
     }
 
-    //根据通道信息获取imei号，适用于终端不上报imei号的场景
+    /**
+     * 根据通道信息获取imei号，适用于终端不上报imei号的场景
+     * @param socketChannel
+     * @return
+     */
     public static String getImei(SocketChannel socketChannel) {
         for (Map.Entry entry : map.entrySet()) {
             if (entry.getValue() == socketChannel) {

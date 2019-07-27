@@ -1,12 +1,23 @@
 package com.ruili.fota.meta.vo;
 
+import java.io.Serializable;
+
 import com.ruili.fota.meta.po.FotaImages;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @ApiModel(value = "固件列表")
-public class OtaFileVO {
+public class OtaFileVO implements Serializable {
 
+    private static final long serialVersionUID = -2493475437771397544L;
     @ApiModelProperty(value = "固件id")
     private String firmwareId;
     @ApiModelProperty(value = "固件名称")
@@ -22,16 +33,6 @@ public class OtaFileVO {
     @ApiModelProperty(value = "固件备注")
     private String content;
 
-    public OtaFileVO(String firmwareId, String fileName, String mcuType, String uploader, String uploaderTel, String firmVersion, String content) {
-        this.firmwareId = firmwareId;
-        this.fileName = fileName;
-        this.mcuType = mcuType;
-        this.uploader = uploader;
-        this.uploaderTel = uploaderTel;
-        this.firmVersion = firmVersion;
-        this.content = content;
-    }
-
     public OtaFileVO(FotaImages images) {
         this.firmwareId = images.getFirmwareId();
         this.fileName = images.getFileName();
@@ -42,82 +43,23 @@ public class OtaFileVO {
         this.content = images.getContent();
     }
 
-    public OtaFileVO() {
-    }
-
-    public String getFirmwareId() {
-        return firmwareId;
-    }
-
-    public void setFirmwareId(String firmwareId) {
-        this.firmwareId = firmwareId;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public String getMcuType() {
-        return mcuType;
-    }
-
-    public void setMcuType(String mcuType) {
-        this.mcuType = mcuType;
-    }
-
-    public String getUploader() {
-        return uploader;
-    }
-
-    public void setUploader(String uploader) {
-        this.uploader = uploader;
-    }
-
-    public String getUploaderTel() {
-        return uploaderTel;
-    }
-
-    public void setUploaderTel(String uploaderTel) {
-        this.uploaderTel = uploaderTel;
-    }
-
-    public String getFirmVersion() {
-        return firmVersion;
-    }
-
-    public void setFirmVersion(String firmVersion) {
-        this.firmVersion = firmVersion;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");
         sb.append("\"firmwareId\":\"")
-                .append(firmwareId).append('\"');
+            .append(firmwareId).append('\"');
         sb.append(",\"fileName\":\"")
-                .append(fileName).append('\"');
+            .append(fileName).append('\"');
         sb.append(",\"mcuType\":\"")
-                .append(mcuType).append('\"');
+            .append(mcuType).append('\"');
         sb.append(",\"uploader\":\"")
-                .append(uploader).append('\"');
+            .append(uploader).append('\"');
         sb.append(",\"uploaderTel\":\"")
-                .append(uploaderTel).append('\"');
+            .append(uploaderTel).append('\"');
         sb.append(",\"firmVersion\":\"")
-                .append(firmVersion).append('\"');
+            .append(firmVersion).append('\"');
         sb.append(",\"content\":\"")
-                .append(content).append('\"');
+            .append(content).append('\"');
         sb.append('}');
         return sb.toString();
     }

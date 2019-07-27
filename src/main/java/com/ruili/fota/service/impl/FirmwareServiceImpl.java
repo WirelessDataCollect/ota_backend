@@ -65,9 +65,12 @@ public class FirmwareServiceImpl implements FirmwareService {
     private DownloadPattern downloadPattern;
 
     @Override
-    public List<OtaFileVO> queryFirmwareImages() {
+    public List<OtaFileVO> queryFirmwareImages(String tenantId) {
         List<OtaFileVO> otaFileVOList = new ArrayList<>();
-        List<FotaImages> fotaImagesList = fotaImagesMapper.selectAll();
+        Example example = new Example(FotaImages.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("uploader", tenantId);
+        List<FotaImages> fotaImagesList = fotaImagesMapper.selectByExample(example);
         for (FotaImages images : fotaImagesList) {
             otaFileVOList.add(new OtaFileVO(images));
         }
@@ -77,13 +80,13 @@ public class FirmwareServiceImpl implements FirmwareService {
     @Override
     public int insertFirmwareInfo(String firmwareId, String mcuType, String fileName, String firmwareVersion,
         String content, FotaUsers currentUser) {
-        FotaImages fotaImages = new FotaImages(firmwareId, mcuType, fileName, currentUser.getRealname(),
+        FotaImages fotaImages = new FotaImages(null, firmwareId, mcuType, fileName, currentUser.getRealname(),
             currentUser.getPhone(), firmwareVersion, content, DateTools.currentTime(), DateTools.currentTime());
         return fotaImagesMapper.insert(fotaImages);
     }
 
     @Override
-    public ConfigResPO configDownloadPatten(ConfigBO configBO) throws IOException, NotFoundException {
+    public ConfigResPO configDownloadPatten(ConfigBO configBO, String tenantId) throws IOException, NotFoundException {
 
         //判断设备是否已经在OTA过程中
         if (FotaProcessMap.get(configBO.getImei()) != null) {
@@ -126,13 +129,17 @@ public class FirmwareServiceImpl implements FirmwareService {
             throw new NotFoundException("更新设备requestId失败");
         }
         //判断是否已经存在升级过程中，实现配置重复下发不多开资源
-        if (FotaProcessMap.get(configBO.getImei()) != null) {
+        if (FotaProcessMap.get(configBO.getImei()) == null) {
             FotaProcessMap.initStateFotaProcessEntity(configBO.getImei(), requestId, configBO.getFirmwareId(),
-                totalPackNum, configBO);
+                totalPackNum, configBO, tenantId);
         } else {
+            if (FotaProcessMap.getByTenantId(configBO.getImei(), tenantId) == null) {
+                //资源被其他租户占用，驳回本次下发请求
+                return ConfigResPO.builder().loadStatusEnum(LoadStatusEnum.DEVICE_IS_IN_USING_BY_OTHERS).build();
+            }
             //删除旧的配置项，采用新的配置项
             FotaProcessMap.updateFotaProcessEntity(configBO.getImei(), requestId, configBO.getFirmwareId(),
-                totalPackNum, configBO);
+                totalPackNum, configBO, tenantId);
         }
         System.out.println(configBO);
         ConfigPK configPK = new ConfigPK(convertByteStr2Int(configBO.getRecID()),
@@ -193,13 +200,17 @@ public class FirmwareServiceImpl implements FirmwareService {
      */
 
     @Override
-    public LoadProcessBO downloadFirmwareReport(String imei, String requestId)
-        throws NotFoundException, IOException, ClassNotFoundException {
+    public LoadProcessBO downloadFirmwareReport(String imei, String requestId, String tenantId)
+        throws NotFoundException {
         //对设备的升级状态进行copy，防止由于多线程处理产生的不一致的情况
         //        FotaProcessEntity entity = CopyTools.deepClone(FotaProcessMap.get(imei));
         FotaProcessEntity entity = FotaProcessMap.get(imei);
         //如果设备的升级过程还在进行，则在Map中取出升级状态
         if (entity != null) {
+            //如果查询不是当前租户的信息，则返回越权信息
+            if (!entity.getTenantId().equals(tenantId)) {
+                throw new NotFoundException("查询用户与当前升级队列资源权限用户不一致，无法查询");
+            }
             //判断下发配置包是否成功
             if (entity.getConfigTime() != null) {
                 //如果超过10s，将前端查询结果变为配置失败，同时清除资源
@@ -219,6 +230,7 @@ public class FirmwareServiceImpl implements FirmwareService {
             Example example = new Example(FotaLoadHistory.class);
             Example.Criteria criteria = example.createCriteria();
             criteria.andEqualTo("requestId", requestId);
+            criteria.andEqualTo("tenantId", tenantId);
             FotaLoadHistory history = fotaLoadHistoryMapper.selectOneByExample(example);
             //TODO 这边history不停在做序列化和映射，需要对比下和历史查询的关系
             if (history == null) { throw new NotFoundException("设备未在升级且未查询到设备升级记录"); }
@@ -233,11 +245,12 @@ public class FirmwareServiceImpl implements FirmwareService {
     }
 
     @Override
-    public boolean deleteFirmInfoByFirmId(String firmwareId) throws NotFoundException {
+    public boolean deleteFirmInfoByFirmId(String firmwareId, String tenantId) throws NotFoundException {
         //TODO 如果前端上传文件确没有提交固件信息，则需要定期检查删除没有关联到固件列表的固件文件
         Example example = new Example(FotaImages.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("firmwareId", firmwareId);
+        criteria.andEqualTo("uploader", tenantId);
         FotaImages image = fotaImagesMapper.selectOneByExample(example);
         if (image == null) { throw new NotFoundException("不存在此固件id:" + firmwareId); }
         int result1 = fotaImagesMapper.deleteByExample(example);
@@ -247,7 +260,17 @@ public class FirmwareServiceImpl implements FirmwareService {
     }
 
     @Override
-    public FotaImages selectImageByImageId(String imageId) {
+    public FotaImages selectImageByImageId(String imageId, String tenantId) {
+        Example example = new Example(FotaImages.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("firmwareId", imageId);
+        criteria.andEqualTo("uploader", tenantId);
+        return fotaImagesMapper.selectOneByExample(example);
+    }
+
+
+    @Override
+    public FotaImages selectImageByImageIdForWatcher(String imageId) {
         Example example = new Example(FotaImages.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("firmwareId", imageId);

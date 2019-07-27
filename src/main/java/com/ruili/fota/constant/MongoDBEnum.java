@@ -2,7 +2,9 @@ package com.ruili.fota.constant;
 
 
 public enum MongoDBEnum {
-    //GridFS存储筒
+    /**
+     * GridFS存储筒
+     */
     GridFSBucket_FIRMWARE("firmware");
 
     private String gridFSBucket;

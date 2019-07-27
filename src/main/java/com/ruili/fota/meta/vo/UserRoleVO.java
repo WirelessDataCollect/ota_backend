@@ -1,13 +1,22 @@
 package com.ruili.fota.meta.vo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Yin on 2019/3/8
- * 用户 和 角色 的分配关系
- */
-public class UserRoleVO {
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserRoleVO implements Serializable {
+
+    private static final long serialVersionUID = 8520469882771571457L;
+
     /**
      * 用户id
      */
@@ -33,38 +42,6 @@ public class UserRoleVO {
      */
     private String roles;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getRealname() {
-        return realname;
-    }
-
-    public void setRealname(String realname) {
-        this.realname = realname;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
     public List<Integer> getRids() {
         return rids;
     }
@@ -79,41 +56,21 @@ public class UserRoleVO {
         }
     }
 
-    public String getRoles() {
-        return roles;
-    }
-
-    public void setRoles(String roles) {
-        this.roles = roles;
-    }
-
-    public UserRoleVO(Integer id, String username, String realname, Integer status, List<Integer> rids, String roles) {
-        this.id = id;
-        this.username = username;
-        this.realname = realname;
-        this.status = status;
-        this.rids = rids;
-        this.roles = roles;
-    }
-
-    public UserRoleVO() {
-    }
-
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");
         sb.append("\"id\":")
-                .append(id);
+            .append(id);
         sb.append(",\"username\":\"")
-                .append(username).append('\"');
+            .append(username).append('\"');
         sb.append(",\"realname\":\"")
-                .append(realname).append('\"');
+            .append(realname).append('\"');
         sb.append(",\"status\":")
-                .append(status);
+            .append(status);
         sb.append(",\"rids\":")
-                .append(rids);
+            .append(rids);
         sb.append(",\"roles\":\"")
-                .append(roles).append('\"');
+            .append(roles).append('\"');
         sb.append('}');
         return sb.toString();
     }

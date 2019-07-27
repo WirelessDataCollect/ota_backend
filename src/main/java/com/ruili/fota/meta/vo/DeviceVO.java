@@ -4,9 +4,17 @@ import com.ruili.fota.constant.OnlineStatusEnum;
 import com.ruili.fota.meta.po.FotaLoaders;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @ApiModel(value = "设备列表")
 public class DeviceVO {
 
@@ -25,16 +33,6 @@ public class DeviceVO {
     @ApiModelProperty(value = "设备固件升级请求id，requestId，未升级时为null，升级时是String")
     private String requestId;
 
-    public DeviceVO(Integer id, String imei, String imsi, String deviceStatus, Date onlineTime, Date downloadTime, String requestId) {
-        this.id = id;
-        this.imei = imei;
-        this.imsi = imsi;
-        this.deviceStatus = deviceStatus;
-        this.onlineTime = onlineTime;
-        this.downloadTime = downloadTime;
-        this.requestId = requestId;
-    }
-
     public DeviceVO(FotaLoaders loaders) {
         this.id = loaders.getGid();
         this.imei = loaders.getImei();
@@ -43,65 +41,6 @@ public class DeviceVO {
         this.onlineTime = loaders.getGmtupdate();
         this.downloadTime = loaders.getGmtmodified();
         this.requestId = loaders.getRequestId();
-    }
-
-    public DeviceVO() {
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getImei() {
-        return imei;
-    }
-
-    public void setImei(String imei) {
-        this.imei = imei;
-    }
-
-    public String getImsi() {
-        return imsi;
-    }
-
-    public void setImsi(String imsi) {
-        this.imsi = imsi;
-    }
-
-    public String getDeviceStatus() {
-        return deviceStatus;
-    }
-
-    public void setDeviceStatus(String deviceStatus) {
-        this.deviceStatus = deviceStatus;
-    }
-
-    public Date getOnlineTime() {
-        return onlineTime;
-    }
-
-    public void setOnlineTime(Date onlineTime) {
-        this.onlineTime = onlineTime;
-    }
-
-    public Date getDownloadTime() {
-        return downloadTime;
-    }
-
-    public void setDownloadTime(Date downloadTime) {
-        this.downloadTime = downloadTime;
-    }
-
-    public String getRequestId() {
-        return requestId;
-    }
-
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
     }
 
     @Override

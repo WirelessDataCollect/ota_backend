@@ -1,98 +1,67 @@
 package com.ruili.fota.netty.pk;
 
+import java.io.Serializable;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * 平台下发给设备的配置信息包
  */
-public class ConfigPK {
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class ConfigPK implements Serializable {
+    private static final long serialVersionUID = 6970659371839542595L;
+    /**
+     * 声明包类型
+     */
     private final String type = CommandType.CONFIG.getType();
+    /**
+     * 接收ID
+     */
     private int RecID;
+    /**
+     * 发送ID
+     */
     private int SendID;
+    /**
+     * imei号信息
+     */
     private String imei;
+    /**
+     * can端口号
+     */
     private int cannum;
+    /**
+     * 下载方法，目前支持离线和在线两种，离线23，在线66
+     */
     private int measure;
+    /**
+     * 总包数
+     */
     private int packSize;
-
-    public ConfigPK(int recID, int sendID, String imei, int cannum, int measure, int packSize) {
-        RecID = recID;
-        SendID = sendID;
-        this.imei = imei;
-        this.cannum = cannum;
-        this.measure = measure;
-        this.packSize = packSize;
-    }
-
-    public ConfigPK() {
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public int getRecID() {
-        return RecID;
-    }
-
-    public void setRecID(int recID) {
-        RecID = recID;
-    }
-
-    public int getSendID() {
-        return SendID;
-    }
-
-    public void setSendID(int sendID) {
-        SendID = sendID;
-    }
-
-    public String getImei() {
-        return imei;
-    }
-
-    public void setImei(String imei) {
-        this.imei = imei;
-    }
-
-    public int getCannum() {
-        return cannum;
-    }
-
-    public void setCannum(int cannum) {
-        this.cannum = cannum;
-    }
-
-    public int getMeasure() {
-        return measure;
-    }
-
-    public void setMeasure(int measure) {
-        this.measure = measure;
-    }
-
-    public int getPackSize() {
-        return packSize;
-    }
-
-    public void setPackSize(int packSize) {
-        this.packSize = packSize;
-    }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");
         sb.append("\"type\":\"")
-                .append(type).append('\"');
+            .append(type).append('\"');
         sb.append(",\"RecID\":\"")
-                .append(RecID).append('\"');
+            .append(RecID).append('\"');
         sb.append(",\"SendID\":\"")
-                .append(SendID).append('\"');
+            .append(SendID).append('\"');
         sb.append(",\"imei\":\"")
-                .append(imei).append('\"');
+            .append(imei).append('\"');
         sb.append(",\"cannum\":\"")
-                .append(cannum).append('\"');
+            .append(cannum).append('\"');
         sb.append(",\"measure\":\"")
-                .append(measure).append('\"');
+            .append(measure).append('\"');
         sb.append(",\"packSize\":")
-                .append(packSize);
+            .append(packSize);
         sb.append('}');
         return sb.toString();
     }

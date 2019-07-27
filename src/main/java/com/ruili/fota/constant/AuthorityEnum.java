@@ -1,9 +1,9 @@
 package com.ruili.fota.constant;
 
-/**
- * Created by Yin on 2019/3/8
- */
-public enum AuthorityEnum {
+import java.io.Serializable;
+
+
+public enum AuthorityEnum implements Serializable {
     /**
      * 菜单类型 微信菜单
      */

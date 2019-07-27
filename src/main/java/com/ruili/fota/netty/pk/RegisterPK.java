@@ -1,51 +1,35 @@
 package com.ruili.fota.netty.pk;
 
+import java.io.Serializable;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * 设备上报注册包
  */
-public class RegisterPK {
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class RegisterPK implements Serializable {
+    private static final long serialVersionUID = -3141595209231065477L;
+    /**
+     * 申明包类型
+     */
     private final String typ = CommandType.RIGISTER.getType();
+    /**
+     * 设备imei
+     */
     private String imei;
+    /**
+     * 设备imsi
+     */
     private String imsi;
+    /**
+     * 设备信号强度，0到31
+     */
     private int csq;
-
-    public String getImei() {
-        return imei;
-    }
-
-    public void setImei(String imei) {
-        this.imei = imei;
-    }
-
-    public String getImsi() {
-        return imsi;
-    }
-
-    public void setImsi(String imsi) {
-        this.imsi = imsi;
-    }
-
-    public int getCsq() {
-        return csq;
-    }
-
-    public void setCsq(int csq) {
-        this.csq = csq;
-    }
-
-    public RegisterPK(String imei, String imsi, int csq) {
-        this.imei = imei;
-        this.imsi = imsi;
-        this.csq = csq;
-    }
-
-    @Override
-    public String toString() {
-        return "RegisterPK{" +
-                "typ='" + typ + '\'' +
-                ", imei='" + imei + '\'' +
-                ", imsi='" + imsi + '\'' +
-                ", csq=" + csq +
-                '}';
-    }
 }

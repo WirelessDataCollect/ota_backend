@@ -5,6 +5,7 @@ import com.ruili.fota.service.MongoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
 import java.util.List;
 
 /**
@@ -36,7 +37,7 @@ public class ScheduleJob {
         List<String> imageIdList = mongoService.selectAllImageIds();
         for (String imageId : imageIdList) {
             //如果固件信息为空
-            if (firmwareService.selectImageByImageId(imageId) == null) {
+            if (firmwareService.selectImageByImageIdForWatcher(imageId) == null) {
                 mongoService.deleteFirmwareByImgId(imageId);
                 System.out.println("定时任务清除存储桶中无效的固件文件内容：" + imageId);
             }

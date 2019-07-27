@@ -1,13 +1,20 @@
 package com.ruili.fota.meta.vo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Yin on 2019/3/8
- * 角色-菜单 对应关系
- */
-public class RoleMenuVO {
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class RoleMenuVO implements Serializable {
+    private static final long serialVersionUID = -5411750465583575649L;
     /**
      * 角色id
      */
@@ -29,51 +36,9 @@ public class RoleMenuVO {
      */
     private List<Integer> mids;
 
-    public Integer getGid() {
-        return gid;
-    }
-
-    public void setGid(Integer gid) {
-        this.gid = gid;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
 
     public List<Integer> getMids() {
         return mids;
-    }
-
-    public RoleMenuVO(Integer gid, String name, String value, Integer status, List<Integer> mids) {
-        this.gid = gid;
-        this.name = name;
-        this.value = value;
-        this.status = status;
-        this.mids = mids;
-    }
-
-    public RoleMenuVO() {
     }
 
     public void setMids(String mids) {

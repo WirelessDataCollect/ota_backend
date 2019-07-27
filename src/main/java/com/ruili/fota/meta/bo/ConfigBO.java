@@ -2,10 +2,19 @@ package com.ruili.fota.meta.bo;
 
 
 import com.ruili.fota.meta.po.FotaImages;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ConfigBO implements Serializable {
+    private static final long serialVersionUID = 9217119683855875609L;
     /**
      * 接收id
      */
@@ -40,94 +49,10 @@ public class ConfigBO implements Serializable {
      */
     private FotaImages fotaImages;
 
-
-    public ConfigBO(String recID, String sendID, String imei, int cannum, int measure, String firmwareId, String mcuType) {
-        RecID = recID;
-        SendID = sendID;
-        this.imei = imei;
-        this.cannum = cannum;
-        this.measure = measure;
-        this.firmwareId = firmwareId;
-        this.mcuType = mcuType;
-    }
-
-    public ConfigBO(String recID, String sendID, String imei, int cannum, int measure, String firmwareId, String mcuType, FotaImages fotaImages) {
-        RecID = recID;
-        SendID = sendID;
-        this.imei = imei;
-        this.cannum = cannum;
-        this.measure = measure;
-        this.firmwareId = firmwareId;
-        this.mcuType = mcuType;
-        this.fotaImages = fotaImages;
-    }
-
-    public ConfigBO() {
-    }
-
-    public FotaImages getFotaImages() {
-        return fotaImages;
-    }
-
-    public void setFotaImages(FotaImages fotaImages) {
-        this.fotaImages = fotaImages;
-    }
-
-    public String getRecID() {
-        return RecID;
-    }
-
-    public void setRecID(String recID) {
-        RecID = recID;
-    }
-
-    public String getSendID() {
-        return SendID;
-    }
-
-    public void setSendID(String sendID) {
-        SendID = sendID;
-    }
-
-    public String getImei() {
-        return imei;
-    }
-
-    public void setImei(String imei) {
-        this.imei = imei;
-    }
-
-    public int getCannum() {
-        return cannum;
-    }
-
-    public void setCannum(int cannum) {
-        this.cannum = cannum;
-    }
-
-    public int getMeasure() {
-        return measure;
-    }
-
-    public void setMeasure(int measure) {
-        this.measure = measure;
-    }
-
-    public String getFirmwareId() {
-        return firmwareId;
-    }
-
-    public void setFirmwareId(String firmwareId) {
-        this.firmwareId = firmwareId;
-    }
-
-    public String getMcuType() {
-        return mcuType;
-    }
-
-    public void setMcuType(String mcuType) {
-        this.mcuType = mcuType;
-    }
+    /**
+     * 租户id
+     */
+    private String tenantId;
 
     @Override
     public String toString() {
@@ -148,6 +73,8 @@ public class ConfigBO implements Serializable {
             .append(mcuType).append('\"');
         sb.append(",\"fotaImages\":")
             .append(fotaImages);
+        sb.append(",\"tenantId\":\"")
+            .append(tenantId).append('\"');
         sb.append('}');
         return sb.toString();
     }

@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * enum class for device burn-flash status storage
+ * @author liangjingxiong
  */
 public enum LoadStatusEnum implements Serializable {
 
@@ -58,6 +59,10 @@ public enum LoadStatusEnum implements Serializable {
      * 下发配置时设备掉线
      */
     CONFIG_DEVICE_DISCONNECT("下发配置时设备掉线", 71),
+    /**
+     * 下发配置时设备掉线
+     */
+    DEVICE_IS_IN_USING_BY_OTHERS("设备正处于其他用户升级队列中，请稍后", 72),
 
     /********** 设备烧录过程相关的 **********/
     /**

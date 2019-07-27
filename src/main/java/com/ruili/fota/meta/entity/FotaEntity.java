@@ -1,8 +1,13 @@
 package com.ruili.fota.meta.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.InputStream;
+import java.io.Serializable;
 
 /**
 * @author: liangjingxiong
@@ -10,78 +15,49 @@ import java.io.InputStream;
 * @description:
  * 固件实体信息
 */
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonIgnoreProperties({"bytes"})
-public class FotaEntity {
+public class FotaEntity implements Serializable {
+    private static final long serialVersionUID = -7605754369035161203L;
+
+    /**
+     * 文件名（mongodb中文件名）
+     */
     private String fileName;
+    /**
+     * 文件原名，真实名称
+     */
     private String fileRealName;
+    /**
+     * 文件大小
+     */
     private long fileSize;
+    /**
+     * 文件类型
+     */
     private String fileType;
+    /**
+     * 文件字节流
+     */
     private InputStream inputStream;
-
-    public FotaEntity(String fileName, String fileRealName, long fileSize, String fileType, InputStream inputStream) {
-        this.fileName = fileName;
-        this.fileRealName = fileRealName;
-        this.fileSize = fileSize;
-        this.fileType = fileType;
-        this.inputStream = inputStream;
-    }
-
-    public FotaEntity() {
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public String getFileRealName() {
-        return fileRealName;
-    }
-
-    public void setFileRealName(String fileRealName) {
-        this.fileRealName = fileRealName;
-    }
-
-    public long getFileSize() {
-        return fileSize;
-    }
-
-    public void setFileSize(long fileSize) {
-        this.fileSize = fileSize;
-    }
-
-    public String getFileType() {
-        return fileType;
-    }
-
-    public void setFileType(String fileType) {
-        this.fileType = fileType;
-    }
-
-    public InputStream getInputStream() {
-        return inputStream;
-    }
-
-    public void setInputStream(InputStream inputStream) {
-        this.inputStream = inputStream;
-    }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("{");
         sb.append("\"fileName\":\"")
-                .append(fileName).append('\"');
+            .append(fileName).append('\"');
         sb.append(",\"fileRealName\":\"")
-                .append(fileRealName).append('\"');
+            .append(fileRealName).append('\"');
         sb.append(",\"fileSize\":")
-                .append(fileSize);
+            .append(fileSize);
         sb.append(",\"fileType\":\"")
-                .append(fileType).append('\"');
+            .append(fileType).append('\"');
         sb.append(",\"inputStream\":")
-                .append(inputStream);
+            .append(inputStream);
         sb.append('}');
         return sb.toString();
     }
