@@ -1,5 +1,6 @@
 package com.ruili.fota.service.impl;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
@@ -20,8 +21,11 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author: liangjingxiong
@@ -51,7 +55,8 @@ public class MongoServiceImpl implements MongoService {
     @Override
     public String insertFirmwareAndGetImgId(MultipartFile rawfile) throws IOException {
         //稍后填充inputStream
-        FotaEntity fotaEntity = new FotaEntity(null, rawfile.getOriginalFilename(), rawfile.getSize(), rawfile.getContentType(), null);
+        FotaEntity fotaEntity = new FotaEntity(null, rawfile.getOriginalFilename(), rawfile.getSize(),
+            rawfile.getContentType(), null);
         //判断上传文件的换行格式，windows换行
         ByteUtils byteUtils = new ByteUtils();
         byte[] fileContentBytes = rawfile.getBytes();
@@ -70,7 +75,8 @@ public class MongoServiceImpl implements MongoService {
         GridFS gridFS = new GridFS(getDB(), MongoDBEnum.GridFSBucket_FIRMWARE.getGridFSBucket());
         GridFSInputFile file = gridFS.createFile(fotaEntity.getInputStream());
         //使用uuid生成全局唯一的图片id
-//        file.setChunkSize(file.getLength() > 1024 * 1024 ? 2048 * 1024 : 1024 * 1024);//设定固件的ChunkSize文件大小1024K
+        //        file.setChunkSize(file.getLength() > 1024 * 1024 ? 2048 * 1024 : 1024 * 1024);
+        // 设定固件的ChunkSize文件大小1024K
         file.put("realFileName", fotaEntity.getFileRealName());
         file.put("fileSize", fotaEntity.getFileSize());
         file.put("fileType", fotaEntity.getFileType());
@@ -82,10 +88,13 @@ public class MongoServiceImpl implements MongoService {
         return fileName;
     }
 
+
     @Override
-    public int deleteFirmwareByImgId(String firmwareId) {
+    public int deleteFirmwareByImgIds(List<String> firmwareIds) {
         GridFS gridFS = new GridFS(getDB(), MongoDBEnum.GridFSBucket_FIRMWARE.getGridFSBucket());
-        gridFS.remove(firmwareId);
+        for (String fId : firmwareIds) {
+            gridFS.remove(fId);
+        }
         return 1;
     }
 

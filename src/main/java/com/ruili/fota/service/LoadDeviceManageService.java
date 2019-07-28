@@ -1,10 +1,12 @@
 package com.ruili.fota.service;
 
-
 import com.ruili.fota.meta.vo.DeviceVO;
 import com.ruili.fota.netty.pk.RegisterPK;
 
 import java.util.List;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public interface LoadDeviceManageService {
     /**
@@ -15,7 +17,7 @@ public interface LoadDeviceManageService {
      * @param registerPK
      * @return
      */
-    public int deviceRegister(RegisterPK registerPK);
+    public int deviceRegister(@NotNull RegisterPK registerPK);
 
     /**
      * 处理设备掉线断开连接的情况：
@@ -26,7 +28,7 @@ public interface LoadDeviceManageService {
      * @param imei
      * @return
      */
-    public int deviceUnConnect(String imei);
+    public int deviceUnConnect(@NotBlank String imei);
 
     /**
      * 查询设备的列表在前端渲染
@@ -38,14 +40,16 @@ public interface LoadDeviceManageService {
     /**
      * 更新设备的requestId
      * 在设备开始ota后，更新设备表中的requestId，前端即可通过判断requestId的内容进行进度查询
+     *
      * @param imei
      * @param requestId
      * @return
      */
-    public int updateRequestIdByImei(String imei,String requestId);
+    public int updateRequestIdByImei(@NotBlank String imei, @NotBlank String requestId);
 
     /**
      * 处理设备心跳
+     *
      * @param imei
      * @return
      */

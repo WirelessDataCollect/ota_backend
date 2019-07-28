@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,12 +36,14 @@ public class ScheduleJob {
      */
     private void cleanFirmwareDB() {
         List<String> imageIdList = mongoService.selectAllImageIds();
+        List<String> cleanList = new ArrayList<>();
         for (String imageId : imageIdList) {
             //如果固件信息为空
             if (firmwareService.selectImageByImageIdForWatcher(imageId) == null) {
-                mongoService.deleteFirmwareByImgId(imageId);
-                System.out.println("定时任务清除存储桶中无效的固件文件内容：" + imageId);
+                cleanList.add(imageId);
             }
         }
+        mongoService.deleteFirmwareByImgIds(cleanList);
+        System.out.println("定时任务清除存储桶中无效的固件文件内容：" + cleanList);
     }
 }

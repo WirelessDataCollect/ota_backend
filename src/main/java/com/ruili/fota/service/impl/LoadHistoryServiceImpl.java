@@ -10,6 +10,7 @@ import com.ruili.fota.netty.FotaProcessMap;
 import com.ruili.fota.service.LoadHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
@@ -37,17 +38,17 @@ public class LoadHistoryServiceImpl implements LoadHistoryService {
     public List<OtaHistoryVO> queryLoadHistory(String imei, String beginTime, String endTime, String tenantId) {
         Example queryLoadHistoryExample = new Example(FotaLoadHistory.class);
         Example.Criteria criteria = queryLoadHistoryExample.createCriteria();
-        if (beginTime != null || beginTime != "") {
+        if (!StringUtils.isEmpty(beginTime)) {
             criteria.andGreaterThanOrEqualTo("gmtcreate", beginTime);
         }
-        if (endTime != null || endTime != "") {
+        if (!StringUtils.isEmpty(endTime)) {
             criteria.andLessThanOrEqualTo("gmtcreate", endTime);
         }
-        if (imei != null || imei != "") {
+        if (!StringUtils.isEmpty(imei)) {
             criteria.andLike("imei", "%" + imei + "%");
         }
-        if (tenantId != null || tenantId != "") {
-            criteria.andEqualTo("tenantId", tenantId);
+        if (!StringUtils.isEmpty(tenantId)) {
+            criteria.andEqualTo("tenantId", "%" + tenantId + "%");
         }
         List<FotaLoadHistory> fotaLoadHistoryList = fotaLoadHistoryMapper.selectByExample(queryLoadHistoryExample);
         List<OtaHistoryVO> otaHistoryVOList = new ArrayList<>();

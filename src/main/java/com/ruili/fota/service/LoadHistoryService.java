@@ -6,6 +6,9 @@ import com.ruili.fota.meta.vo.OtaHistoryVO;
 
 import java.util.List;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public interface LoadHistoryService {
 
     /**
@@ -14,7 +17,7 @@ public interface LoadHistoryService {
      * @param imei
      * @return
      */
-    public int insertLoadHistoryByLoadStatus(String imei, LoadStatusEnum loadStatusEnum, String tenantId);
+    public int insertLoadHistoryByLoadStatus(@NotBlank String imei,@NotNull LoadStatusEnum loadStatusEnum,@NotBlank String tenantId);
 
     /**
      * 查询设备升级历史记录，支持imei前后模糊查询
@@ -24,5 +27,5 @@ public interface LoadHistoryService {
      * @param endTime
      * @return
      */
-    public List<OtaHistoryVO> queryLoadHistory(String imei, String beginTime, String endTime, String tenantId);
+    public List<OtaHistoryVO> queryLoadHistory( String imei, String beginTime, String endTime, String tenantId);
 }

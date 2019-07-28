@@ -5,6 +5,9 @@ import com.ruili.fota.meta.po.FotaUsers;
 
 import java.util.List;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public interface AccountService {
 
     /**
@@ -13,7 +16,7 @@ public interface AccountService {
      * @param username
      * @return
      */
-    public FotaUsers findUserByUsername(String username);
+    public FotaUsers findUserByUsername(@NotBlank String username);
 
     /**
      * 通过电话查询
@@ -21,7 +24,7 @@ public interface AccountService {
      * @param phone
      * @return
      */
-    public FotaUsers findUserByPhone(String phone);
+    public FotaUsers findUserByPhone(@NotBlank String phone);
 
     /**
      * 通过email查询
@@ -29,7 +32,7 @@ public interface AccountService {
      * @param email
      * @return
      */
-    public FotaUsers findUserByEmail(String email);
+    public FotaUsers findUserByEmail(@NotBlank String email);
 
     /**
      * 通过openid查询
@@ -37,7 +40,7 @@ public interface AccountService {
      * @param openid
      * @return
      */
-    public FotaUsers findUserByOpenId(String openid);
+    public FotaUsers findUserByOpenId(@NotBlank String openid);
 
     /**
      * 查询用户信息
@@ -45,7 +48,7 @@ public interface AccountService {
      * @param requestHelper
      * @return
      */
-    public List<FotaUsers> getUser(RequestHelper requestHelper);
+    public List<FotaUsers> getUser(@NotBlank RequestHelper requestHelper);
 
     /**
      * 添加用户信息
@@ -53,7 +56,7 @@ public interface AccountService {
      * @param user
      * @return
      */
-    public int addUser(FotaUsers user);
+    public int addUser(@NotNull FotaUsers user);
 
     /**
      * 修改 用户
@@ -61,13 +64,13 @@ public interface AccountService {
      * @param user
      * @return
      */
-    int updateUser(FotaUsers user);
+    int updateUser(@NotNull FotaUsers user);
 
     /**
      * 通过id删除用户
      * @param userId
      * @return
      */
-    int deleteUserById(int userId);
+    int deleteUserById(@NotNull int userId);
 
 }

@@ -23,11 +23,11 @@ public interface MongoService {
     String insertFirmwareAndGetImgId(MultipartFile file) throws IOException;
 
     /**
-     * 通过固件唯一id删除固件文件
-     * @param firmwareId
+     * 通过固件唯一id删除固件文件，批量遍历删除，后面需要改造
+     * @param firmwareIds
      * @return
      */
-    int deleteFirmwareByImgId(String firmwareId);
+    int deleteFirmwareByImgIds(List<String> firmwareIds);
 
     /**
      * 删除特定存储桶的特定文件

@@ -12,6 +12,10 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 public interface FirmwareService {
 
     /**
@@ -19,15 +23,16 @@ public interface FirmwareService {
      *
      * @return
      */
-    public List<OtaFileVO> queryFirmwareImages(String tenantId);
+    public List<OtaFileVO> queryFirmwareImages(@NotBlank String tenantId);
 
     /**
      * 写入设备固件信息，需要传入租户信息
      *
      * @return
      */
-    public int insertFirmwareInfo(String firmwareId, String mcuType, String fileName, String firmwareVersion,
-        String content, FotaUsers currentUser);
+    public int insertFirmwareInfo(@NotBlank String firmwareId, @NotBlank String mcuType, @NotBlank String fileName,
+        @NotBlank String firmwareVersion,
+        @NotBlank String content, @NotNull FotaUsers currentUser);
 
     /**
      * 设备进行固件烧写前下发配置信息
@@ -36,7 +41,8 @@ public interface FirmwareService {
      * @return
      * @throws IOException
      */
-    public ConfigResPO configDownloadPatten(ConfigBO configBO, String tenantId) throws IOException, NotFoundException;
+    public ConfigResPO configDownloadPatten(@NotNull ConfigBO configBO, @NotBlank String tenantId)
+        throws IOException, NotFoundException;
 
     /**
      * 下发固件给设备
@@ -45,7 +51,7 @@ public interface FirmwareService {
      * @param packNum，需要知道当前请求下发的是哪个包
      * @return
      */
-    public void downloadFirmware(String imei, int packNum) throws NoSuchAlgorithmException;
+    public void downloadFirmware(@NotBlank String imei, @NotNull int packNum) throws NoSuchAlgorithmException;
 
     /**
      * 固件下发结果查询
@@ -53,16 +59,18 @@ public interface FirmwareService {
      * @param imei
      * @return
      */
-    public LoadProcessBO downloadFirmwareReport(String imei, String requestId, String tenantId)
+    public LoadProcessBO downloadFirmwareReport(@NotBlank String imei,@NotBlank String requestId,@NotBlank String tenantId)
         throws NotFoundException, IOException, ClassNotFoundException;
 
     /**
-     * 固件删除
+     * 批量删除固件
      *
      * @param firmwareId
+     * @param tenantId
      * @return
+     * @throws NotFoundException
      */
-    public boolean deleteFirmInfoByFirmId(String firmwareId, String tenantId) throws NotFoundException;
+    public boolean batchDeleteFirmInfoByFirmId(@NotEmpty List<String> firmwareId, @NotBlank String tenantId) throws NotFoundException;
 
     /**
      * 通过imageId查询固件信息
@@ -70,7 +78,7 @@ public interface FirmwareService {
      * @param imageId
      * @return
      */
-    public FotaImages selectImageByImageId(String imageId, String tenantId);
+    public FotaImages selectImageByImageId(@NotBlank String imageId,@NotBlank String tenantId);
 
     /**
      * 通过imageId查询固件信息，给系统定时任务，不需要提供租户id
@@ -78,6 +86,6 @@ public interface FirmwareService {
      * @param imageId
      * @return
      */
-    public FotaImages selectImageByImageIdForWatcher(String imageId);
+    public FotaImages selectImageByImageIdForWatcher(@NotBlank String imageId);
 
 }

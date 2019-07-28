@@ -35,6 +35,8 @@ import io.netty.channel.socket.SocketChannel;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.io.BufferedInputStream;
@@ -69,7 +71,9 @@ public class FirmwareServiceImpl implements FirmwareService {
         List<OtaFileVO> otaFileVOList = new ArrayList<>();
         Example example = new Example(FotaImages.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("uploader", tenantId);
+        if (!StringUtils.isEmpty(tenantId)) {
+            criteria.andLike("uploader", "%" + tenantId + "%");
+        }
         List<FotaImages> fotaImagesList = fotaImagesMapper.selectByExample(example);
         for (FotaImages images : fotaImagesList) {
             otaFileVOList.add(new OtaFileVO(images));
@@ -245,18 +249,20 @@ public class FirmwareServiceImpl implements FirmwareService {
     }
 
     @Override
-    public boolean deleteFirmInfoByFirmId(String firmwareId, String tenantId) throws NotFoundException {
-        //TODO 如果前端上传文件确没有提交固件信息，则需要定期检查删除没有关联到固件列表的固件文件
+    @Transactional
+    public boolean batchDeleteFirmInfoByFirmId(List<String> firmwareIds, String tenantId) throws NotFoundException {
+        //检查租户对这些固件的所有权
         Example example = new Example(FotaImages.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("firmwareId", firmwareId);
+        criteria.andIn("firmwareId", firmwareIds);
         criteria.andEqualTo("uploader", tenantId);
-        FotaImages image = fotaImagesMapper.selectOneByExample(example);
-        if (image == null) { throw new NotFoundException("不存在此固件id:" + firmwareId); }
-        int result1 = fotaImagesMapper.deleteByExample(example);
-        int result2 = mongoService.deleteFirmwareByImgId(firmwareId);
-        if (result1 == 1 && result2 == 1) { return true; }
-        return false;
+        List<FotaImages> fotaImages = fotaImagesMapper.selectByExample(example);
+        if (fotaImages.size() != firmwareIds.size()) {
+            throw new NotFoundException("租户删除不属于自己的固件，此次请求无效");
+        }
+        fotaImagesMapper.deleteByExample(example);
+        mongoService.deleteFirmwareByImgIds(firmwareIds);
+        return true;
     }
 
     @Override
@@ -267,7 +273,6 @@ public class FirmwareServiceImpl implements FirmwareService {
         criteria.andEqualTo("uploader", tenantId);
         return fotaImagesMapper.selectOneByExample(example);
     }
-
 
     @Override
     public FotaImages selectImageByImageIdForWatcher(String imageId) {

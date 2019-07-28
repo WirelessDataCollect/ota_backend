@@ -4,6 +4,6 @@
     <option name="branch" value="update_v8" />
     <option name="gitUrl" value="https://github.com/Hellovolcanoofficial/fota.git" />
     <option name="localBranch" value="update_v8" />
-    <option name="revision" value="4cee0899e29d1e8d5ca027b0967a159a206057c8" />
+    <option name="revision" value="bd59d4be2cd93c24d292b68e44ede1ff4f303e86" />
   </component>
 </project>

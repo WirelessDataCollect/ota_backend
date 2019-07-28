@@ -2,13 +2,17 @@ package com.ruili.fota.controller;
 
 import com.alibaba.fastjson.JSONObject;
 
+import com.ruili.fota.constant.UserTypeEnum;
 import com.ruili.fota.constant.result.BaseResp;
 import com.ruili.fota.constant.result.ResultStatus;
 import com.ruili.fota.meta.bo.ConfigBO;
 import com.ruili.fota.meta.bo.ConfigResPO;
 import com.ruili.fota.meta.bo.LoadProcessBO;
+import com.ruili.fota.meta.po.FotaRole;
 import com.ruili.fota.meta.po.FotaUsers;
 import com.ruili.fota.meta.vo.OtaFileVO;
+import com.ruili.fota.service.AccountService;
+import com.ruili.fota.service.AuthorityService;
 import com.ruili.fota.service.FirmwareService;
 import com.ruili.fota.service.MongoService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -39,18 +43,26 @@ public class FirmwareController extends BaseController {
     private MongoService mongoService;
     @Autowired
     private FirmwareService firmwareService;
+    @Autowired
+    private AuthorityService authorityService;
+
 
     @ApiOperation(value = "固件 查询 固件列表", tags = {"固件管理"}, notes = "进入固件文件管理时，查询固件列表")
     @ApiImplicitParams({
     })
     @PostMapping(value = "/query")
-    public BaseResp<List<OtaFileVO>> firmwareQuery() {
+    public BaseResp<List<OtaFileVO>> firmwareQuery(@RequestParam("userName") String userName) {
         if (!checkPermission(urlPrefix)) {
             return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
         }
-
-        String tenantId = this.findCurrentUser().getUsername();
-        return new BaseResp(ResultStatus.SUCCESS, firmwareService.queryFirmwareImages(tenantId));
+        String currentUser = this.findCurrentUser().getUsername();
+        List<FotaRole> roles = authorityService.getRoleByUser(userName);
+        for (FotaRole role : roles) {
+            if (role.getValue().equals(UserTypeEnum.ADMIN.getType())) {
+                return new BaseResp(ResultStatus.SUCCESS, firmwareService.queryFirmwareImages(userName));
+            }
+        }
+        return new BaseResp(ResultStatus.SUCCESS, firmwareService.queryFirmwareImages(currentUser));
     }
 
     @ApiOperation(value = "固件 上传 上传信息", tags = {"固件管理"}, notes = "上传固件版本号、固件对应设备类型、上传人，备注，返回插入条数以及响应状态")
@@ -97,13 +109,15 @@ public class FirmwareController extends BaseController {
         @ApiImplicitParam(name = "firmwareId", value = "固件唯一id，firmwareId"),
     })
     @PostMapping(value = "/deletebyfirmwareid")
-    public BaseResp firmDelete(@RequestParam("firmwareId") String firmwareId) throws IOException, NotFoundException {
+    public BaseResp firmDelete(@RequestParam("firmwareIds") List<String> firmwareIds)
+        throws NotFoundException {
         if (!checkPermission(urlPrefix)) {
             return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
         }
 
         String tenantId = this.findCurrentUser().getUsername();
-        return new BaseResp(ResultStatus.SUCCESS, "删除成功", firmwareService.deleteFirmInfoByFirmId(firmwareId, tenantId));
+        return new BaseResp(ResultStatus.SUCCESS, "删除成功",
+            firmwareService.batchDeleteFirmInfoByFirmId(firmwareIds, tenantId));
     }
 
     @ApiOperation(value = "固件 下载 配置", tags = {"固件烧录"}, notes = "烧录固件之前下发配置给设备，后端自动开始烧录")
