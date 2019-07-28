@@ -94,10 +94,6 @@ public class FirmwareController extends BaseController {
     })
     @PostMapping(value = "/upload")
     public BaseResp firmUpload(@RequestParam("file") MultipartFile file) throws IOException {
-        if (!checkPermission(urlPrefix)) {
-            return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
-        }
-
         String firmwareId = mongoService.insertFirmwareAndGetImgId(file);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("firmwareId", firmwareId);
