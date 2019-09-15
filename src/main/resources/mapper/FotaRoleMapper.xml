@@ -23,18 +23,14 @@
     <select id="selectRoleByUser" resultMap="BaseResultMap">
         SELECT role.*
         FROM fota_role role LEFT JOIN fota_users_role u_r ON role.gid=u_r.role_id
-        <if test="username!=null and username!='' ">
-            AND admin_id IN( SELECT gid FROM fota_users WHERE username = #{username})
-        </if>
+        AND admin_id IN( SELECT gid FROM fota_users WHERE username = #{username})
         GROUP BY role.gid
     </select>
 
     <select id="selectRoleTypeByUser" resultMap="BaseResultMap">
         SELECT role.*
         FROM fota_role role INNER JOIN fota_users_role u_r ON role.gid=u_r.role_id
-        <if test="username!=null and username!='' ">
-            AND admin_id IN( SELECT gid FROM fota_users WHERE username = #{username})
-        </if>
+        AND admin_id IN( SELECT gid FROM fota_users WHERE username = #{username})
         GROUP BY role.gid
     </select>
 

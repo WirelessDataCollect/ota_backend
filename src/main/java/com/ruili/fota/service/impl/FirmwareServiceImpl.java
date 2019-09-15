@@ -84,7 +84,7 @@ public class FirmwareServiceImpl implements FirmwareService {
     @Override
     public int insertFirmwareInfo(String firmwareId, String mcuType, String fileName, String firmwareVersion,
         String content, FotaUsers currentUser) {
-        FotaImages fotaImages = new FotaImages(null, firmwareId, mcuType, fileName, currentUser.getRealname(),
+        FotaImages fotaImages = new FotaImages(null, firmwareId, mcuType, fileName, currentUser.getUsername(),
             currentUser.getPhone(), firmwareVersion, content, DateTools.currentTime(), DateTools.currentTime());
         return fotaImagesMapper.insert(fotaImages);
     }

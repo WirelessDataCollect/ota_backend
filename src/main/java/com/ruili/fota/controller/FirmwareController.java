@@ -56,7 +56,7 @@ public class FirmwareController extends BaseController {
             return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
         }
         String currentUser = this.findCurrentUser().getUsername();
-        List<FotaRole> roles = authorityService.getRoleByUser(userName);
+        List<FotaRole> roles = authorityService.getRoleByUser(currentUser);
         for (FotaRole role : roles) {
             if (role.getValue().equals(UserTypeEnum.ADMIN.getType())) {
                 return new BaseResp(ResultStatus.SUCCESS, firmwareService.queryFirmwareImages(userName));
