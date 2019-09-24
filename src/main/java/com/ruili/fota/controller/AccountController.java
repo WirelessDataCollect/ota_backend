@@ -1,5 +1,7 @@
 package com.ruili.fota.controller;
 
+import java.util.List;
+
 import com.ruili.fota.constant.AuthorityEnum;
 import com.ruili.fota.constant.result.BaseResp;
 import com.ruili.fota.constant.result.ResultStatus;
@@ -11,9 +13,11 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin
@@ -221,7 +225,6 @@ public class AccountController extends BaseController {
         if (!checkPermission(urlPrefix)) {
             return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
         }
-
         return new BaseResp(ResultStatus.SUCCESS, authorityService.getRoleMenu(AuthorityEnum.MENU_TYPE_PC.getType()));
     }
 

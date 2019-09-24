@@ -1,5 +1,8 @@
 package com.ruili.fota.controller;
 
+import java.io.IOException;
+import java.util.List;
+
 import com.alibaba.fastjson.JSONObject;
 
 import com.ruili.fota.constant.UserTypeEnum;
@@ -11,7 +14,6 @@ import com.ruili.fota.meta.bo.LoadProcessBO;
 import com.ruili.fota.meta.po.FotaRole;
 import com.ruili.fota.meta.po.FotaUsers;
 import com.ruili.fota.meta.vo.OtaFileVO;
-import com.ruili.fota.service.AccountService;
 import com.ruili.fota.service.AuthorityService;
 import com.ruili.fota.service.FirmwareService;
 import com.ruili.fota.service.MongoService;
@@ -20,11 +22,12 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.List;
 
 /**
  * @author: liangjingxiong
@@ -102,7 +105,7 @@ public class FirmwareController extends BaseController {
 
     @ApiOperation(value = "固件 删除 删除文件", tags = {"固件管理"}, notes = "删除固件，根据固件唯一firmwareId")
     @ApiImplicitParams({
-        @ApiImplicitParam(name = "firmwareId", value = "固件唯一id，firmwareId"),
+        @ApiImplicitParam(name = "firmwareIds", value = "固件唯一id,采用，，分割，firmwareIds"),
     })
     @PostMapping(value = "/deletebyfirmwareid")
     public BaseResp firmDelete(@RequestParam("firmwareIds") List<String> firmwareIds)
