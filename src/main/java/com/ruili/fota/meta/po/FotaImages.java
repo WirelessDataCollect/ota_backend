@@ -70,10 +70,10 @@ public class FotaImages implements Serializable {
      */
     private String content;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtcreate;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtupdate;
 
     @Override
@@ -96,9 +96,9 @@ public class FotaImages implements Serializable {
         sb.append(",\"content\":\"")
             .append(content).append('\"');
         sb.append(",\"gmtcreate\":\"")
-            .append(gmtcreate).append('\"');
+            .append(DateTools.DateToString(gmtcreate, "yyyy-MM-dd HH:mm:ss")).append('\"');
         sb.append(",\"gmtupdate\":\"")
-            .append(gmtupdate).append('\"');
+            .append(DateTools.DateToString(gmtupdate, "yyyy-MM-dd HH:mm:ss")).append('\"');
         sb.append('}');
         return sb.toString();
     }

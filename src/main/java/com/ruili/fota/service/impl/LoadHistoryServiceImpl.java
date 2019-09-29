@@ -1,10 +1,15 @@
 package com.ruili.fota.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.ruili.fota.common.DateTools;
 import com.ruili.fota.constant.LoadStatusEnum;
-import com.ruili.fota.meta.entity.FotaProcessEntity;
 import com.ruili.fota.mapper.FotaLoadHistoryMapper;
+import com.ruili.fota.mapper.FotaLoadersMapper;
+import com.ruili.fota.meta.entity.FotaProcessEntity;
 import com.ruili.fota.meta.po.FotaLoadHistory;
+import com.ruili.fota.meta.po.FotaLoaders;
 import com.ruili.fota.meta.vo.OtaHistoryVO;
 import com.ruili.fota.netty.FotaProcessMap;
 import com.ruili.fota.service.LoadHistoryService;
@@ -13,9 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 查询管理设备更新的历史记录
  */
@@ -23,6 +25,8 @@ import java.util.List;
 public class LoadHistoryServiceImpl implements LoadHistoryService {
     @Autowired
     private FotaLoadHistoryMapper fotaLoadHistoryMapper;
+    @Autowired
+    private FotaLoadersMapper fotaLoadersMapper;
 
     @Override
     public int insertLoadHistoryByLoadStatus(String imei, LoadStatusEnum loadStatusEnum) {
@@ -30,6 +34,13 @@ public class LoadHistoryServiceImpl implements LoadHistoryService {
         entity.setStatusEnum(loadStatusEnum);
         //计入结束时间
         entity.setEndTime(DateTools.currentTime());
+        //清除设备的表的requestId内容
+        Example example = new Example(FotaLoaders.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("imei", imei);
+        FotaLoaders loaders = fotaLoadersMapper.selectOneByExample(example);
+        loaders.setRequestId(null);
+        fotaLoadersMapper.updateByExample(loaders, example);
         FotaLoadHistory history = new FotaLoadHistory(entity);
         return fotaLoadHistoryMapper.insertSelective(history);
     }
