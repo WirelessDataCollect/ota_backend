@@ -17,7 +17,7 @@ public interface LoadHistoryService {
      * @param imei
      * @return
      */
-    public int insertLoadHistoryByLoadStatus(@NotBlank String imei,@NotNull LoadStatusEnum loadStatusEnum,@NotBlank String tenantId);
+    public int insertLoadHistoryByLoadStatus(@NotBlank String imei,@NotNull LoadStatusEnum loadStatusEnum);
 
     /**
      * 查询设备升级历史记录，支持imei前后模糊查询

@@ -25,7 +25,7 @@ public class LoadHistoryServiceImpl implements LoadHistoryService {
     private FotaLoadHistoryMapper fotaLoadHistoryMapper;
 
     @Override
-    public int insertLoadHistoryByLoadStatus(String imei, LoadStatusEnum loadStatusEnum, String tenantId) {
+    public int insertLoadHistoryByLoadStatus(String imei, LoadStatusEnum loadStatusEnum) {
         FotaProcessEntity entity = FotaProcessMap.get(imei);
         entity.setStatusEnum(loadStatusEnum);
         //计入结束时间

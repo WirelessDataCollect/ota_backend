@@ -72,7 +72,7 @@ public class ConfigBO implements Serializable {
         sb.append(",\"mcuType\":\"")
             .append(mcuType).append('\"');
         sb.append(",\"fotaImages\":")
-            .append(fotaImages);
+            .append(fotaImages.toString());
         sb.append(",\"tenantId\":\"")
             .append(tenantId).append('\"');
         sb.append('}');

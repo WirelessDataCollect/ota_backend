@@ -108,8 +108,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             //离线升级方式，直接在数据库写入结果，此时开放给前端查询
             if (FotaProcessMap.get(pk.getImei()).getConfigBO().getMeasure() == downloadPattern.OfflineDownloadPattern) {
                 //插入数据库一条记录
-                String tenantId = FotaProcessMap.get(pk.getImei()).getTenantId();
-                loadHistoryService.insertLoadHistoryByLoadStatus(pk.getImei(), LoadStatusEnum.LOAD_SUCCESS, tenantId);
+                loadHistoryService.insertLoadHistoryByLoadStatus(pk.getImei(), LoadStatusEnum.LOAD_SUCCESS);
                 //清除设备表中的requestId
                 loadDeviceManageService.updateRequestIdByImei(pk.getImei(), null);
                 //移除Map通道数据
@@ -122,8 +121,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             System.out.println("=================");
             DownloadErrorPK errorPK = JSON.parseObject(msg.toString(), DownloadErrorPK.class);
             //插入数据库一条记录，同时修改内存中的值
-            String tenantId = FotaProcessMap.get(errorPK.getImei()).getTenantId();
-            loadHistoryService.insertLoadHistoryByLoadStatus(errorPK.getImei(), LoadStatusEnum.LOAD_ERROR, tenantId);
+            loadHistoryService.insertLoadHistoryByLoadStatus(errorPK.getImei(), LoadStatusEnum.LOAD_ERROR);
             //删除设备更新的配置内存，从头开始
             FotaProcessMap.removeByImei(errorPK.getImei());
         }
@@ -133,8 +131,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             System.out.println("=================");
             UpdateOkPK pk = JSON.parseObject(msg.toString(), UpdateOkPK.class);
             //插入数据库一条记录，同时修改内存中的值
-            String tenantId = FotaProcessMap.get(pk.getImei()).getTenantId();
-            loadHistoryService.insertLoadHistoryByLoadStatus(pk.getImei(), LoadStatusEnum.UPDATE_SUCCESS, tenantId);
+            loadHistoryService.insertLoadHistoryByLoadStatus(pk.getImei(), LoadStatusEnum.UPDATE_SUCCESS);
             //清除设备表中的requestId
             loadDeviceManageService.updateRequestIdByImei(pk.getImei(), null);
             //移除Map通道数据
@@ -147,8 +144,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             System.out.println("=================");
             UpdateErrorPK pk = JSON.parseObject(msg.toString(), UpdateErrorPK.class);
             //插入数据库一条记录，同时修改内存中的值
-            String tenantId = FotaProcessMap.get(pk.getImei()).getTenantId();
-            loadHistoryService.insertLoadHistoryByLoadStatus(pk.getImei(), LoadStatusEnum.searchByCode(pk.getCode()),tenantId);
+            loadHistoryService.insertLoadHistoryByLoadStatus(pk.getImei(), LoadStatusEnum.searchByCode(pk.getCode()));
             //清除设备表中的requestId
             loadDeviceManageService.updateRequestIdByImei(pk.getImei(), null);
             //移除Map通道数据

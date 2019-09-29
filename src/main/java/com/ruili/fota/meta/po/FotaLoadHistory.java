@@ -54,6 +54,7 @@ public class FotaLoadHistory implements Serializable {
         this.gmtcreate = DateTools.currentTime();
         this.gmtupdate = entity.getStartTime();
         this.gmtmodified = entity.getEndTime();
+        this.tenantId = entity.getTenantId();
     }
 
     @Override

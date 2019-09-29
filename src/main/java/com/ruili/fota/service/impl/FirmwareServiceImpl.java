@@ -139,9 +139,11 @@ public class FirmwareServiceImpl implements FirmwareService {
         } else {
             if (FotaProcessMap.getByTenantId(configBO.getImei(), tenantId) == null) {
                 //资源被其他租户占用，驳回本次下发请求
+                System.out.println("资源被其他租户占用，驳回本次下发请求");
                 return ConfigResPO.builder().loadStatusEnum(LoadStatusEnum.DEVICE_IS_IN_USING_BY_OTHERS).build();
             }
             //删除旧的配置项，采用新的配置项
+            System.out.println("删除旧的配置项，采用新的配置项");
             FotaProcessMap.updateFotaProcessEntity(configBO.getImei(), requestId, configBO.getFirmwareId(),
                 totalPackNum, configBO, tenantId);
         }

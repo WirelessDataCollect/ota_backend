@@ -78,7 +78,7 @@
         #{gmtmodified,jdbcType=TIMESTAMP},
       </if>
       <if test="tenantId != null">
-        #{tenant_id,jdbcType=VARCHAR},
+        #{tenantId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
