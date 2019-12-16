@@ -75,6 +75,9 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             deviceManageService.deviceRegister(registerPK);
             NettyChannelMap.add(registerPK.getImei(), (SocketChannel)ctx.channel());
             ctx.writeAndFlush(getWriteBuf(CommandType.RIGISTER_ACK.getType(), ctx));
+            //移除Map通道数据
+            FotaProcessMap.removeByImei(registerPK.getImei());
+            FirmwareBufMap.removeByImei(registerPK.getImei());
         }
         if (ifContains(msg.toString(), CommandType.CONFIG_ACK)) {
             System.out.println("===设备配置指令回复===");
@@ -113,6 +116,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
                 loadDeviceManageService.updateRequestIdByImei(pk.getImei(), null);
                 //移除Map通道数据
                 FotaProcessMap.removeByImei(pk.getImei());
+                FirmwareBufMap.removeByImei(pk.getImei());
             }
         }
         if (ifContains(msg.toString(), CommandType.DOWMLOAD_ERROR)) {
@@ -124,6 +128,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             loadHistoryService.insertLoadHistoryByLoadStatus(errorPK.getImei(), LoadStatusEnum.LOAD_ERROR);
             //删除设备更新的配置内存，从头开始
             FotaProcessMap.removeByImei(errorPK.getImei());
+            FirmwareBufMap.removeByImei(errorPK.getImei());
         }
         if (ifContains(msg.toString(), CommandType.UPDATE_OK)) {
             System.out.println("===固件升级成功===");
@@ -136,6 +141,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             loadDeviceManageService.updateRequestIdByImei(pk.getImei(), null);
             //移除Map通道数据
             FotaProcessMap.removeByImei(pk.getImei());
+            FirmwareBufMap.removeByImei(pk.getImei());
         }
         //离线方式会不会上传升级成功包的
         if (ifContains(msg.toString(), CommandType.UPDATE_ERROR)) {
@@ -149,6 +155,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             loadDeviceManageService.updateRequestIdByImei(pk.getImei(), null);
             //移除Map通道数据
             FotaProcessMap.removeByImei(pk.getImei());
+            FirmwareBufMap.removeByImei(pk.getImei());
         }
     }
 

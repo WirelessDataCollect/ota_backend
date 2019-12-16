@@ -38,7 +38,7 @@ spring:
       uri: mongodb://172.17.0.1:27017/fota_firmware_dev_dev
       username: admin
       password: Ruili@123456
-  servlet:
+  servlet:s
     multipart:
       max-file-size: -1
       max-request-size: -1

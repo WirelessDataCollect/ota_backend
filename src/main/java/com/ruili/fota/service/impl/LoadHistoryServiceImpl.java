@@ -59,7 +59,7 @@ public class LoadHistoryServiceImpl implements LoadHistoryService {
             criteria.andLike("imei", "%" + imei + "%");
         }
         if (!StringUtils.isEmpty(tenantId)) {
-            criteria.andEqualTo("tenantId", "%" + tenantId + "%");
+            criteria.andLike("tenantId", "%" + tenantId + "%");
         }
         List<FotaLoadHistory> fotaLoadHistoryList = fotaLoadHistoryMapper.selectByExample(queryLoadHistoryExample);
         List<OtaHistoryVO> otaHistoryVOList = new ArrayList<>();

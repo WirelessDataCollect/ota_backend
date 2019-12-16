@@ -20,9 +20,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
 @SpringBootTest
 public class Test {
+    private final AtomicLong count = new AtomicLong(0);
 
     public static void main() throws Exception {
         String uri = "111"; // 参照文档中, 样例 /access/spot/saveSpotPriceStrategy

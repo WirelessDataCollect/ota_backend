@@ -137,6 +137,14 @@ public class FirmwareController extends BaseController {
 
         //找到固件信息
         String tenantId = this.findCurrentUser().getUsername();
+        List<FotaRole> roles = authorityService.getRoleByUser(tenantId);
+        for (FotaRole role : roles) {
+            if (role.getValue().equals(UserTypeEnum.ADMIN.getType())) {
+                // 如果是超级管理员，则可以查询所有固件
+                configBO.setFotaImages(firmwareService.selectImageByImageIdForAdmin(configBO.getFirmwareId()));
+                return new BaseResp(ResultStatus.SUCCESS, firmwareService.configDownloadPatten(configBO, tenantId));
+            }
+        }
         configBO.setFotaImages(firmwareService.selectImageByImageId(configBO.getFirmwareId(), tenantId));
         return new BaseResp(ResultStatus.SUCCESS, firmwareService.configDownloadPatten(configBO, tenantId));
     }

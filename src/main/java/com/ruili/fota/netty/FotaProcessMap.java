@@ -89,15 +89,13 @@ public class FotaProcessMap {
     }
 
     //移除一条通道数据
-    public static String remove(FotaProcessEntity fotaProcessEntity) {
+    public static void remove(FotaProcessEntity fotaProcessEntity) {
         for (Map.Entry entry : map.entrySet()) {
             if (entry.getValue() == fotaProcessEntity) {
                 String key = (String)entry.getKey();
                 map.remove(entry.getKey());
-                return key;
             }
         }
-        return null;
     }
 
     /**
@@ -106,15 +104,12 @@ public class FotaProcessMap {
      * @param imei
      * @return
      */
-    public static String removeByImei(String imei) {
+    public static void removeByImei(String imei) {
         for (Map.Entry entry : map.entrySet()) {
             if (entry.getValue() == map.get(imei)) {
-                String key = (String)entry.getKey();
                 map.remove(entry.getKey());
-                return key;
             }
         }
-        return null;
     }
 
     public static Map getMap() {

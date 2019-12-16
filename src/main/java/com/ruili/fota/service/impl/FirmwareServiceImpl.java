@@ -94,6 +94,9 @@ public class FirmwareServiceImpl implements FirmwareService {
 
         //判断设备是否已经在OTA过程中
         if (FotaProcessMap.get(configBO.getImei()) != null) {
+            System.out.println("debug++++++");
+            System.out.println(FotaProcessMap.get(configBO.getImei()).getFirmwareId());
+            System.out.println("debug++++++");
             throw new NotFoundException("设备已经在OTA序列当中，可能由他人操作，请勿重复操作");
         }
 
@@ -273,6 +276,14 @@ public class FirmwareServiceImpl implements FirmwareService {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("firmwareId", imageId);
         criteria.andEqualTo("uploader", tenantId);
+        return fotaImagesMapper.selectOneByExample(example);
+    }
+
+    @Override
+    public FotaImages selectImageByImageIdForAdmin(String imageId) {
+        Example example = new Example(FotaImages.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("firmwareId", imageId);
         return fotaImagesMapper.selectOneByExample(example);
     }
 

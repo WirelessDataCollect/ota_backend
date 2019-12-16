@@ -81,6 +81,14 @@ public interface FirmwareService {
     public FotaImages selectImageByImageId(@NotBlank String imageId,@NotBlank String tenantId);
 
     /**
+     * 给Admin账号使用
+     *
+     * @param imageId
+     * @return
+     */
+    public FotaImages selectImageByImageIdForAdmin(String imageId);
+
+    /**
      * 通过imageId查询固件信息，给系统定时任务，不需要提供租户id
      *
      * @param imageId
