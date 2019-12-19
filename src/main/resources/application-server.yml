@@ -12,9 +12,9 @@ spring:
   # 采用宿主机和docker之间的网段
   datasource:
     driver: com.mysql.jdbc.Driver
-    url: jdbc:mysql://172.17.0.1:3306/fota_dev_1908?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&allowMultiQueries=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
-    username: root
-    password: Ruili@123456
+    url: jdbc:${MYSQL_URL:mysql://172.17.0.1:3306/fota_dev_1908}?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&allowMultiQueries=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+    username: ${MYSQL_USRNAME:root}
+    password: ${MYSQL_PASSWD:Ruili@123456}
 
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
@@ -35,16 +35,15 @@ spring:
   # 采用宿主机和docker之间的网段
   data:
     mongodb:
-      uri: mongodb://172.17.0.1:27017/fota_firmware_dev_dev
-      username: admin
-      password: Ruili@123456
-  servlet:s
+      uri: ${MONGODB_URL:mongodb://172.17.0.1:27017/fota_firmware_dev_dev}
+      username: ${MONGODB_USRNAME:admin}
+      password: ${MONGODB_PASSWD:Ruili@123456}
     multipart:
       max-file-size: -1
       max-request-size: -1
   redis:
-    host: 172.17.0.1  #宿主机ip
-    port: 6379
+    host: ${REDIS_URL:172.17.0.1}  #宿主机ip
+    port: ${REDIS_PORT:6379}
 
 mybatis:
   configuration:
