@@ -262,7 +262,7 @@ public class FirmwareServiceImpl implements FirmwareService {
         criteria.andIn("firmwareId", firmwareIds);
         criteria.andEqualTo("uploader", tenantId);
         List<FotaImages> fotaImages = fotaImagesMapper.selectByExample(example);
-        if (fotaImages.size() != firmwareIds.size()) {
+        if (fotaImages.size() > firmwareIds.size()) {
             throw new NotFoundException("租户删除不属于自己的固件，此次请求无效");
         }
         fotaImagesMapper.deleteByExample(example);
