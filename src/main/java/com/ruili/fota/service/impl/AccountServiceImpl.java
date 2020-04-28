@@ -125,6 +125,6 @@ public class AccountServiceImpl implements AccountService {
         Example example = new Example(FotaUsersRole.class);
         example.createCriteria().andEqualTo("adminId", gid);
         FotaUsersRole fotaUsersRole = fotaUserRoleMapper.selectOneByExample(example);
-        return fotaUsersRole.getAdminId().equals(UserTypeEnum.ADMIN.getCode());
+        return fotaUsersRole.getRoleId().equals(UserTypeEnum.ADMIN.getCode());
     }
 }

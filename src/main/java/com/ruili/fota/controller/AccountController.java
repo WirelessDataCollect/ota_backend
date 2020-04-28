@@ -105,7 +105,11 @@ public class AccountController extends BaseController {
             return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
         }
         // 防止将所有管理员都删除
-        if (accountService.isManagerUser(userId) && accountService.countManagerUser() <= 1) {
+        boolean isManager = accountService.isManagerUser(userId);
+        boolean managerLE1 = accountService.countManagerUser() <= 1;
+        System.out.println(isManager);
+        System.out.println(managerLE1);
+        if (isManager && managerLE1) {
             return new BaseResp(ResultStatus.http_status_forbidden, "系统中至少包含一位管理员");
         }
         return new BaseResp(ResultStatus.SUCCESS, accountService.deleteUserById(userId));
