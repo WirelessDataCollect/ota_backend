@@ -10,6 +10,13 @@ import javax.validation.constraints.NotNull;
 
 public interface AccountService {
 
+
+    /**
+     * 根据Gid查询
+     * @param gid
+     * @return
+     */
+    public FotaUsers findUserByGid(@NotBlank int gid);
     /**
      * 通过userName查询
      *
@@ -78,5 +85,12 @@ public interface AccountService {
      * @return 管理员用户个数
      */
     int countManagerUser();
+
+    /**
+     * 通过gid查询是否是管理员
+     * @param gid
+     * @return
+     */
+    boolean isManagerUser(int gid);
 
 }

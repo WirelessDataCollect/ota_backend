@@ -3,6 +3,8 @@ package com.ruili.fota.service.impl;
 import com.ruili.fota.common.DateTools;
 import com.ruili.fota.common.RequestHelper;
 import com.ruili.fota.constant.UserTypeEnum;
+import com.ruili.fota.mapper.FotaRoleMapper;
+import com.ruili.fota.mapper.FotaUserRoleMapper;
 import com.ruili.fota.mapper.FotaUsersMapper;
 import com.ruili.fota.meta.po.FotaUsers;
 import com.ruili.fota.meta.po.FotaUsersRole;
@@ -20,6 +22,16 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private FotaUsersMapper fotaUsersMapper;
 
+    @Autowired
+    private FotaUserRoleMapper fotaUserRoleMapper;
+
+    @Override
+    public FotaUsers findUserByGid(int gid) {
+        Example example = new Example(FotaUsers.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("gid", gid);
+        return fotaUsersMapper.selectOneByExample(example);
+    }
     @Override
     public FotaUsers findUserByUsername(String username) {
         Example example = new Example(FotaUsers.class);
@@ -97,14 +109,22 @@ public class AccountServiceImpl implements AccountService {
         exampleFotaUsers.createCriteria().andEqualTo("gid", userId);
         // 删除FotaUsersRole中的信息
         Example exampleFotaUsersRole = new Example(FotaUsersRole.class);
-        exampleFotaUsersRole.createCriteria().andEqualTo("admin_id", userId);
+        exampleFotaUsersRole.createCriteria().andEqualTo("adminId", userId);
+        fotaUserRoleMapper.deleteByExample(exampleFotaUsersRole);
         return fotaUsersMapper.deleteByExample(exampleFotaUsers);
     }
 
     @Override
     public int countManagerUser() {
-        Example example = new Example(FotaUsers.class);
-        example.createCriteria().andEqualTo("role_id", UserTypeEnum.ADMIN.getCode());
-        return fotaUsersMapper.selectCountByExample(example);
+        Example example = new Example(FotaUsersRole.class);
+        example.createCriteria().andEqualTo("roleId", UserTypeEnum.ADMIN.getCode());
+        return fotaUserRoleMapper.selectCountByExample(example);
+    }
+    @Override
+    public boolean isManagerUser(int gid) {
+        Example example = new Example(FotaUsersRole.class);
+        example.createCriteria().andEqualTo("adminId", gid);
+        FotaUsersRole fotaUsersRole = fotaUserRoleMapper.selectOneByExample(example);
+        return fotaUsersRole.getAdminId().equals(UserTypeEnum.ADMIN.getCode());
     }
 }

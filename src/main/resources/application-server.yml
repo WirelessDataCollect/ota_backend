@@ -12,7 +12,7 @@ spring:
   # 采用宿主机和docker之间的网段
   datasource:
     driver: com.mysql.jdbc.Driver
-    url: jdbc:${MYSQL_URL:mysql://172.17.0.1:3306/fota_dev_dev}?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&allowMultiQueries=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+    url: jdbc:${MYSQL_URL:mysql://114.55.104.50:3306/fota_dev_dev}?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&allowMultiQueries=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
     username: ${MYSQL_USRNAME:root}
     password: ${MYSQL_PASSWD:Ruili@123456}
 
@@ -36,7 +36,7 @@ spring:
   data:
     mongodb:
       # MongoDB管理员验证（普通管理员）
-      host: ${MONGODB_HOST:172.17.0.1}
+      host: ${MONGODB_HOST:114.55.104.50}
       port: ${MONGODB_PORT:27017}
       username: ${MONGODB_USRNAME:ota_admin}
       password: ${MONGODB_PASSWD:Ruili123456}
@@ -45,7 +45,7 @@ spring:
       max-file-size: -1
       max-request-size: -1
   redis:
-    host: ${REDIS_URL:172.17.0.1}  #宿主机ip
+    host: ${REDIS_URL:114.55.104.50}  #宿主机ip
     port: ${REDIS_PORT:6379}
 
 mybatis:
