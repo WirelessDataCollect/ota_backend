@@ -2,8 +2,10 @@ package com.ruili.fota.service.impl;
 
 import com.ruili.fota.common.DateTools;
 import com.ruili.fota.common.RequestHelper;
+import com.ruili.fota.constant.UserTypeEnum;
 import com.ruili.fota.mapper.FotaUsersMapper;
 import com.ruili.fota.meta.po.FotaUsers;
+import com.ruili.fota.meta.po.FotaUsersRole;
 import com.ruili.fota.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -87,10 +89,22 @@ public class AccountServiceImpl implements AccountService {
         return fotaUsersMapper.updateByExampleSelective(user, example);
     }
 
+
     @Override
     public int deleteUserById(int userId) {
+        // 删除用户信息
+        Example exampleFotaUsers = new Example(FotaUsers.class);
+        exampleFotaUsers.createCriteria().andEqualTo("gid", userId);
+        // 删除FotaUsersRole中的信息
+        Example exampleFotaUsersRole = new Example(FotaUsersRole.class);
+        exampleFotaUsersRole.createCriteria().andEqualTo("admin_id", userId);
+        return fotaUsersMapper.deleteByExample(exampleFotaUsers);
+    }
+
+    @Override
+    public int countManagerUser() {
         Example example = new Example(FotaUsers.class);
-        example.createCriteria().andEqualTo("gid", userId);
-        return fotaUsersMapper.deleteByExample(example);
+        example.createCriteria().andEqualTo("role_id", UserTypeEnum.ADMIN.getCode());
+        return fotaUsersMapper.selectCountByExample(example);
     }
 }

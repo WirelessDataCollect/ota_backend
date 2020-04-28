@@ -105,7 +105,6 @@ public class AccountController extends BaseController {
         if (!checkPermission(urlPrefix)) {
             return new BaseResp(ResultStatus.http_status_unauthorized, "此用户无访问该接口权限，请联系管理员");
         }
-
         return new BaseResp(ResultStatus.SUCCESS, accountService.deleteUserById(userId));
     }
 

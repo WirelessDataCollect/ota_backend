@@ -73,4 +73,10 @@ public interface AccountService {
      */
     int deleteUserById(@NotNull int userId);
 
+    /**
+     * 管理员用户个数
+     * @return 管理员用户个数
+     */
+    int countManagerUser();
+
 }
