@@ -3,6 +3,19 @@
 ## 项目介绍
 远程升级项目
 
+## 服务器准备
+* **安装maven**
+
+```bash
+wget https://mirrors.tuna.tsinghua.edu.cn/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+tar zxf apache-maven-3.6.3-bin.tar.gz
+mv apache-maven-3.6.3 /usr/local/maven3/
+```
+
+* **安装Docker**
+
+见安装包
+
 ## 项目打包
 以下过程均可通过IDEA图形界面实现，
 
