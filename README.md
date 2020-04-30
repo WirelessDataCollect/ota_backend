@@ -57,6 +57,9 @@ yum -y install java-1.8.0-openjdk*
 # 更新maven依赖，一般只需要执行一次
 mvn -f pom.xml dependency:copy-dependencies
 
+# 更仓库
+git pull
+
 # 清除target
 mvn clean
 
