@@ -48,4 +48,6 @@ docker build -t ota_backend:0.3.5 .
 15. 只测试而不编译，也不测试编译：mvn test -skipping compile -skipping test-compile 
       ( -skipping 的灵活运用，当然也可以用于其他组合命令)  
 16. 清除eclipse的一些系统设置:mvn eclipse:clean  
+17. Maven下载依赖
+    mvn -f pom.xml dependency:copy-dependencies
 ```
