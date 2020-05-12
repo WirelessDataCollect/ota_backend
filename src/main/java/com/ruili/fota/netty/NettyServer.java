@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
  * @author: liangjingxiong
  * @date: 2019-04-09
  * @description:
- * NettyServer使用到了定义的ChildChannel pipline
+ * NettyServer使用到了定义的ChildChannel pipeline
  * 服务器启动的相关配置
- * 将Channel、pipline和EventLoop结合的方法，使用Bootstrap引导类，对启动配置进行引导
+ * 将Channel、pipeline和EventLoop结合的方法，使用Bootstrap引导类，对启动配置进行引导
  */
 
 @Component
@@ -44,7 +44,13 @@ public class NettyServer {
             serverBootstrap
                     .group(bossGroup, workGroup)
                     .channel(NioServerSocketChannel.class)
+                    /**
+                     * 该值设置Nagle算法的启用，该算法将小的碎片数据连接成更大的报文来最小化所发送的报文的数量，如果需要发送一些较小的报文，则需要禁用该算法。
+                     */
                     .option(ChannelOption.TCP_NODELAY, initNetty.isNodelay())
+                    /**
+                     * 设置最大连接队列
+                     */
                     .option(ChannelOption.SO_BACKLOG, initNetty.getBacklog())
                     .childHandler(childChannelInitializer);
             /**

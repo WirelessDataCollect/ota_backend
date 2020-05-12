@@ -26,6 +26,9 @@ public class FotaApplication implements CommandLineRunner, DisposableBean {
 
     public static void main(String[] args) {
         SpringApplication springApplication = new SpringApplication(FotaApplication.class);
+        /**
+         * 输出Banner到控制台
+         */
         springApplication.setBannerMode(Banner.Mode.CONSOLE);
         springApplication.run(args);
     }
