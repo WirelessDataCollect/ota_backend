@@ -19,7 +19,7 @@
         <docker.repository>registry.cn-hangzhou.aliyuncs.com/ruili/ota</docker.repository>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-security.version>4.2.3.RELEASE</spring-security.version>
+        <spring-security.version>5.3.3.RELEASE</spring-security.version>
         <spring-security-oauth.version>2.3.3.RELEASE</spring-security-oauth.version>
     </properties>
 
